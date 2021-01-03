@@ -3,29 +3,26 @@ package it.progettois.brewday.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
-
-@Entity
 @Data
-public class Recipe {
+@Entity
+public class Tool {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "recipe_id")
-    private Integer recipeId;
-
-    private Integer version;
+    @Column(name = "tool_id")
+    private Integer toolId;
 
     private String name;
+
+    private Integer capacity;
+
+    private Integer quantity;
 
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "brewer_id")
     private Brewer brewer;
-
-    @OneToMany(mappedBy = "ingredient")
-    private List<RecipeIngredient> ingredients;
 
 }
