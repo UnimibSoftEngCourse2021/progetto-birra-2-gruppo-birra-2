@@ -25,12 +25,13 @@ public class Brewer {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "toolId")
+    @OneToMany(mappedBy = "brewer")
+    private List<BrewerIngredient> storage;
+
+    @OneToMany(mappedBy = "brewer")
     private List<Tool> tools;
 
-    @OneToMany(mappedBy = "recipeId")
+    @OneToMany(mappedBy = "brewer")
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "brewerIngredientId")
-    private List<BrewerIngredient> storage;
 }

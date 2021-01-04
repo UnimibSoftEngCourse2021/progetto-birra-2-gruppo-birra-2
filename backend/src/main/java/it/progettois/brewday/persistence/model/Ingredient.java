@@ -30,6 +30,7 @@ public class Ingredient {
     private List<RecipeIngredient> recipe;
 
     @ManyToOne
-    private Brewer owner;
+    @JoinColumn(name = "brewer_id")
+    private Brewer brewer;
 
 }

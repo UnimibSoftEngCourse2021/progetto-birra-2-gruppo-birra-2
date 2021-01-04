@@ -1,5 +1,6 @@
 package it.progettois.brewday.controller;
 
+import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class RecipeController {
     @GetMapping("/recipe")
     public ResponseEntity<?> getRecipes() {
 
-        List<Recipe> recipes = this.recipeService.getRecipes();
+        List<RecipeDto> recipes = this.recipeService.getRecipes();
 
         if (recipes.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No recipes found");
