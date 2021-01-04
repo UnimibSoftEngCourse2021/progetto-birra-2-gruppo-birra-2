@@ -1,4 +1,4 @@
-package it.progettois.brewday.model;
+package it.progettois.brewday.persistence.model;
 
 import lombok.Data;
 
@@ -25,12 +25,12 @@ public class Brewer {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "toolId")
+    @OneToMany(mappedBy = "brewer")
     private List<Tool> tools;
 
-    @OneToMany(mappedBy = "recipeId")
+    @OneToMany(mappedBy = "brewer", fetch = FetchType.EAGER)
     private List<Recipe> recipes;
 
-    @OneToMany(mappedBy = "brewerIngredientId")
-    private List<BrewerIngredient> storage;
+    @OneToMany(mappedBy = "brewer")
+    private List<BrewerIngredient> ingredients;
 }

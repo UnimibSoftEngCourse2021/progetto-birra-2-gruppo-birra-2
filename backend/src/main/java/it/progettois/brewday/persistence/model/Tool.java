@@ -1,4 +1,4 @@
-package it.progettois.brewday.model;
+package it.progettois.brewday.persistence.model;
 
 import lombok.Data;
 

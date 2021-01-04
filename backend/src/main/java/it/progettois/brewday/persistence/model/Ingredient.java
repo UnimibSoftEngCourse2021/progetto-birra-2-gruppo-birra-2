@@ -1,6 +1,6 @@
-package it.progettois.brewday.model;
+package it.progettois.brewday.persistence.model;
 
-import it.progettois.brewday.model.constant.IngredientType;
+import it.progettois.brewday.common.constant.IngredientType;
 import lombok.Data;
 
 import javax.persistence.*;
