@@ -3,6 +3,8 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5Dialect
+  profiles:
+    active: dev
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
