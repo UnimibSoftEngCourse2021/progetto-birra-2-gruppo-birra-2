@@ -1,6 +1,13 @@
 script:
   - cd backend
   - mvn clean install -Pdev
+  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=myorg_myrepo
+
+addons:
+  sonarcloud:
+    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
+    token: "*********" # encrypted value of your token
+
 language: java
 jdk:
-    - openjdk8
+    - openjdk11
