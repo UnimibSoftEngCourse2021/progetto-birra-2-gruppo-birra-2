@@ -3,13 +3,12 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5Dialect
-
   profiles:
-        active: "@profileActive@"
+    active: prod
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/progetto-is?createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
+    url: jdbc:mysql://database-dev.cvmoznlqcyge.eu-central-1.rds.amazonaws.com:3306/progetto-is?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
     username: root
     password: progetto-is
 

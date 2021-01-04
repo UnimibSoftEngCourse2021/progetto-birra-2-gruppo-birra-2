@@ -10,3 +10,7 @@ backend/.idea/
 backend/target/
 
 backend/backend.iml
+
+/backend/brewday.iml
+
+/.idea/
