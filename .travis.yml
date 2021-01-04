@@ -1,0 +1,13 @@
+script:
+  - cd backend
+  - mvn clean install -Pdev
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2
+
+addons:
+  sonarcloud:
+    organization: "unimibsoftengcourse2021"
+    token: ${SONAR_TOKEN}
+
+language: java
+jdk:
+    - openjdk11
