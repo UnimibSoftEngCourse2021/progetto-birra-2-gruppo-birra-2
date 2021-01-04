@@ -1,6 +1,7 @@
 package it.progettois.brewday.controller;
 
-import it.progettois.brewday.model.Brewer;
+import it.progettois.brewday.common.dto.BrewerFatDto;
+import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.service.BrewerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,10 @@ public class BrewerController {
     @GetMapping("/brewer")
     public ResponseEntity<?> GetBrewers() {
 
-        List<Brewer> brewers = this.brewerService.getBrewers();
+        List<BrewerFatDto> brewers = this.brewerService.getBrewers();
 
         if (brewers.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No recipes found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No brewers found");
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(brewers);
         }
