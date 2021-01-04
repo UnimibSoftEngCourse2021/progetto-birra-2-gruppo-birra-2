@@ -1,12 +1,12 @@
 script:
   - cd backend
   - mvn clean install -Pdev
-  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=myorg_myrepo
+  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=progetto-birra-2-gruppo-birra-2
 
 addons:
   sonarcloud:
-    organization: "sonarcloud_organization_key" # the key of the org you chose at step #3
-    token: "*********" # encrypted value of your token
+    organization: "unimibsoftengcourse2021"
+    token: ${SONAR_TOKEN}
 
 language: java
 jdk:
