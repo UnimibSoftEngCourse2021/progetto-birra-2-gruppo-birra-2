@@ -16,5 +16,6 @@ public class BrewerDto {
     private String email;
     private List<Integer> tools;
     private List<Integer> recipes;
+    private List<Integer> storage;
     private List<Integer> ingredients;
 }

@@ -1,6 +1,7 @@
 package it.progettois.brewday.common.dto;
 
 import it.progettois.brewday.common.constant.IngredientType;
+import it.progettois.brewday.common.constant.IngredientUnit;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class IngredientDto {
     private Integer ingredientId;
     private String name;
     private String description;
-    private String unit;
+    private IngredientUnit unit;
     private IngredientType type;
 
 }

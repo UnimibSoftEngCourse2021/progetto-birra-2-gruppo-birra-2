@@ -29,6 +29,9 @@ public class Brewer {
     private List<BrewerIngredient> storage;
 
     @OneToMany(mappedBy = "brewer")
+    private List<Ingredient> ingredients;
+
+    @OneToMany(mappedBy = "brewer")
     private List<Tool> tools;
 
     @OneToMany(mappedBy = "brewer")
