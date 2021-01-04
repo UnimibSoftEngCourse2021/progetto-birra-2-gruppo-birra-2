@@ -1,5 +1,6 @@
 package it.progettois.brewday.controller;
 
+import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.persistence.model.Ingredient;
 import it.progettois.brewday.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class IngredientController {
     @GetMapping("/ingredient")
     public ResponseEntity<?> getIngredients() {
 
-        List<Ingredient> ingredients = this.ingredientService.getIngredients();
+        List<IngredientDto> ingredients = this.ingredientService.getIngredients();
 
         if (ingredients.size() == 0) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No ingredients found");
@@ -43,12 +44,9 @@ public class IngredientController {
         }
     }
 
-    //nel Controller i metodi createIngredient ed editIngredient hanno due endpoint diversi ma utilizzano entrambi
-    //il metodo saveIngredient della classe Service
-
     @PostMapping("/ingredient")
     public ResponseEntity<?> createIngredient(@RequestBody Ingredient ingredient) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.saveIngredient(ingredient));
+        return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.createIngredient(ingredient));
     }
 
     //Il delete è da modificare rispetto ai permessi
@@ -62,13 +60,13 @@ public class IngredientController {
         }
     }
 
-    /*
-    Serve il builder per completare l'edit
-
     @PutMapping("/ingredient/{id}")
     public ResponseEntity<?> editIngredient(@PathVariable("id") Integer id, @RequestBody Ingredient modifiedIngredient){
+        if(this.ingredientService.editIngredient(id, modifiedIngredient)) {
+            return ResponseEntity.status(HttpStatus.OK).body("The ingredient has been updated");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
+        }
 
     }
-
-     */
 }
