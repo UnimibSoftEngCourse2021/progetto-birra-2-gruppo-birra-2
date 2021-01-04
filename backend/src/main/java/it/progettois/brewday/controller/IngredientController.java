@@ -1,8 +1,7 @@
 package it.progettois.brewday.controller;
 
-import it.progettois.brewday.model.Ingredient;
+import it.progettois.brewday.persistence.model.Ingredient;
 import it.progettois.brewday.service.IngredientService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

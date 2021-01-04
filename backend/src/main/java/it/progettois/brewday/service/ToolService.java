@@ -1,7 +1,7 @@
 package it.progettois.brewday.service;
 
-import it.progettois.brewday.model.Tool;
-import it.progettois.brewday.repository.ToolRepository;
+import it.progettois.brewday.persistence.model.Tool;
+import it.progettois.brewday.persistence.repository.ToolRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

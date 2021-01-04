@@ -1,6 +1,6 @@
 package it.progettois.brewday.controller;
 
-import it.progettois.brewday.model.Recipe;
+import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

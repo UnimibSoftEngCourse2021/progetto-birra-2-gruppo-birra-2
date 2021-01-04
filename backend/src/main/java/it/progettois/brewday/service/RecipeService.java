@@ -1,7 +1,7 @@
 package it.progettois.brewday.service;
 
-import it.progettois.brewday.model.Recipe;
-import it.progettois.brewday.repository.RecipeRepository;
+import it.progettois.brewday.persistence.model.Recipe;
+import it.progettois.brewday.persistence.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

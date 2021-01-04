@@ -1,6 +1,6 @@
 package it.progettois.brewday.controller;
 
-import it.progettois.brewday.model.Brewer;
+import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.service.BrewerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

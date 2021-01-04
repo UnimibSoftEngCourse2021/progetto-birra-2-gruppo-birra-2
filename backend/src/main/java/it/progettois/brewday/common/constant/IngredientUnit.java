@@ -1,4 +1,4 @@
-package it.progettois.brewday.model.constant;
+package it.progettois.brewday.common.constant;
 
 public enum IngredientUnit {
 
