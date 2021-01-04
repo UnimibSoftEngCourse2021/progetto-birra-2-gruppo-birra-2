@@ -26,11 +26,12 @@ public class Brewer {
     private String email;
 
     @OneToMany(mappedBy = "brewer")
-    private List<Tool> tools;
-
-    @OneToMany(mappedBy = "brewer", fetch = FetchType.EAGER)
-    private List<Recipe> recipes;
+    private List<BrewerIngredient> storage;
 
     @OneToMany(mappedBy = "brewer")
-    private List<BrewerIngredient> ingredients;
+    private List<Tool> tools;
+
+    @OneToMany(mappedBy = "brewer")
+    private List<Recipe> recipes;
+
 }

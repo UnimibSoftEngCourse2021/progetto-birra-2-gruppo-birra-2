@@ -1,5 +1,7 @@
 package it.progettois.brewday.service;
 
+
+import it.progettois.brewday.persistence.model.Tool;
 import it.progettois.brewday.common.converter.ToolToDtoConverter;
 import it.progettois.brewday.common.dto.ToolDto;
 import it.progettois.brewday.persistence.repository.ToolRepository;

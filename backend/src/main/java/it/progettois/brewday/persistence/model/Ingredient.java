@@ -1,6 +1,7 @@
 package it.progettois.brewday.persistence.model;
 
 import it.progettois.brewday.common.constant.IngredientType;
+import it.progettois.brewday.common.constant.IngredientUnit;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,12 +20,17 @@ public class Ingredient {
 
     private String description;
 
-    private String unit;
+    @Enumerated(EnumType.STRING)
+    private IngredientUnit unit;
 
     @Enumerated(EnumType.STRING)
     private IngredientType type;
 
     @OneToMany(mappedBy = "recipe")
     private List<RecipeIngredient> recipe;
+
+    @ManyToOne
+    @JoinColumn(name = "brewer_id")
+    private Brewer brewer;
 
 }
