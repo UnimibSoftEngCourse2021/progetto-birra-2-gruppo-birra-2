@@ -1,6 +1,6 @@
 script:
   - cd backend
-  - mvn clean install
+  - mvn clean install -Pdev
 language: java
 jdk:
     - openjdk8
