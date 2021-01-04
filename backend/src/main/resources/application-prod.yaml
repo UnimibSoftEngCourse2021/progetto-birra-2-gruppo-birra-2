@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://database-dev.cvmoznlqcyge.eu-central-1.rds.amazonaws.com:3306/progetto-is?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
+    username: root
+    password: progetto-is
+
+
+
+
