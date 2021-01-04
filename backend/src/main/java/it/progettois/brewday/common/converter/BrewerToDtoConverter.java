@@ -1,10 +1,7 @@
 package it.progettois.brewday.common.converter;
 
 import it.progettois.brewday.common.dto.BrewerDto;
-import it.progettois.brewday.persistence.model.Brewer;
-import it.progettois.brewday.persistence.model.BrewerIngredient;
-import it.progettois.brewday.persistence.model.Recipe;
-import it.progettois.brewday.persistence.model.Tool;
+import it.progettois.brewday.persistence.model.*;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +19,8 @@ public class BrewerToDtoConverter implements Converter<Brewer, BrewerDto> {
                 .name(brewer.getName())
                 .username(brewer.getUsername())
                 .recipes(brewer.getRecipes().stream().map(Recipe::getRecipeId).collect(Collectors.toList()))
-                .ingredients(brewer.getIngredients().stream().map(BrewerIngredient::getBrewerIngredientId).collect(Collectors.toList()))
+                .storage(brewer.getStorage().stream().map(BrewerIngredient::getBrewerIngredientId).collect(Collectors.toList()))
+                .ingredients(brewer.getIngredients().stream().map(Ingredient::getIngredientId).collect(Collectors.toList()))
                 .tools(brewer.getTools().stream().map(Tool::getToolId).collect(Collectors.toList()))
                 .build();
     }

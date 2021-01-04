@@ -14,7 +14,8 @@ public class BrewerFatDto {
     private String email;
     private List<ToolDto> tools;
     private List<RecipeDto> recipes;
-    private List<BrewerIngredientDto> ingredients;
+    private List<BrewerIngredientDto> storage;
+    private List<IngredientDto> ingredients;
 }
 
 
