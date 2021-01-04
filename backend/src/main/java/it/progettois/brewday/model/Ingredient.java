@@ -1,6 +1,7 @@
 package it.progettois.brewday.model;
 
 import it.progettois.brewday.model.constant.IngredientType;
+import it.progettois.brewday.model.constant.IngredientUnit;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,12 +20,16 @@ public class Ingredient {
 
     private String description;
 
-    private String unit;
+    @Enumerated(EnumType.STRING)
+    private IngredientUnit unit;
 
     @Enumerated(EnumType.STRING)
     private IngredientType type;
 
     @OneToMany(mappedBy = "recipe")
     private List<RecipeIngredient> recipe;
+
+    @ManyToOne
+    private Brewer owner;
 
 }

@@ -2,6 +2,7 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.model.Ingredient;
 import it.progettois.brewday.service.IngredientService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,8 +44,32 @@ public class IngredientController {
         }
     }
 
+    //nel Controller i metodi createIngredient ed editIngredient hanno due endpoint diversi ma utilizzano entrambi
+    //il metodo saveIngredient della classe Service
+
     @PostMapping("/ingredient")
-    public ResponseEntity<?> saveIngredient(@RequestBody Ingredient ingredient) {
+    public ResponseEntity<?> createIngredient(@RequestBody Ingredient ingredient) {
         return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.saveIngredient(ingredient));
     }
+
+    //Il delete è da modificare rispetto ai permessi
+    @DeleteMapping("/ingredient/{id}")
+    public ResponseEntity<?> deleteIngredient(@PathVariable("id") Integer id) {
+
+        if(this.ingredientService.deleteIngredient(id)){
+            return ResponseEntity.status(HttpStatus.OK).body("The ingredient was deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
+        }
+    }
+
+    /*
+    Serve il builder per completare l'edit
+
+    @PutMapping("/ingredient/{id}")
+    public ResponseEntity<?> editIngredient(@PathVariable("id") Integer id, @RequestBody Ingredient modifiedIngredient){
+
+    }
+
+     */
 }

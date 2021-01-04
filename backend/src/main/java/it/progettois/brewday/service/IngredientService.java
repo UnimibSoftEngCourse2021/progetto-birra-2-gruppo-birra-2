@@ -16,13 +16,18 @@ public class IngredientService {
     @Autowired
     public IngredientService(IngredientRepository ingredientRepository) { this.ingredientRepository = ingredientRepository; }
 
-    public List<Ingredient> getIngredients(){ return this.ingredientRepository.findAll(); }
+    public List<Ingredient> getIngredients() { return this.ingredientRepository.findAll(); }
 
-    public Optional<Ingredient> getIngredient(Integer id){ return this.ingredientRepository.findById(id); }
+    public Optional<Ingredient> getIngredient(Integer id) { return this.ingredientRepository.findById(id); }
 
-    public Ingredient saveIngredient(Ingredient ingredient){ return this.ingredientRepository.save(ingredient); }
+    public Ingredient saveIngredient(Ingredient ingredient) { return this.ingredientRepository.save(ingredient); }
 
-    // bisogna discutere su come gestire gli ingredienti
-    // (cioè se renderli visibili solo ai creatori o a tutti gli utenti così da limitare spazio db attraverso il riutilizzo)
-    // da cui dipende l'implementazione di 'deleteIngredient' e 'editIngredient'
+    public Boolean deleteIngredient(Integer id) {
+
+       if(this.ingredientRepository.existsById(id)) {
+           this.ingredientRepository.deleteById(id);
+           return true;
+       }
+       return false;
+    }
 }
