@@ -19,10 +19,10 @@ branches:
 script:
   - cd backend
   - mvn clean install -Pdev
-  - if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2 -DskipTests=true
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday:latest .
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday:latest
+  - if [ "${TRAVIS_PULL_REQUEST}" = "true" ]; then mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2 -DskipTests=true fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday:latest . fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday:latest fi
 
 deploy:
   - provider: script
