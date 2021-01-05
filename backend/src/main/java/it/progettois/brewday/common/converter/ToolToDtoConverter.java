@@ -11,11 +11,11 @@ public class ToolToDtoConverter implements Converter<Tool, ToolDto> {
     @Override
     public ToolDto convert(Tool tool) {
         return ToolDto.builder()
-                .capacity(tool.getCapacity())
-                .description(tool.getDescription())
-                .name(tool.getName())
-                .quantity(tool.getQuantity())
                 .toolId(tool.getToolId())
+                .name(tool.getName())
+                .capacity(tool.getCapacity())
+                .quantity(tool.getQuantity())
+                .description(tool.getDescription())
                 .build();
     }
 }
