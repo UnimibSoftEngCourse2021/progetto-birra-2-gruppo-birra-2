@@ -5,12 +5,13 @@ script:
   - docker build -t gruppobirra2/brewday:latest .
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push gruppobirra2/brewday:latest
-  - ssh -o "StrictHostKeyChecking no" ${DEV_EC2_USERNAME}@${DEV_EC2_URL} -p ${DEV_EC2_PASSWORD} touch test.txt
+  - ssh ${DEV_EC2_USERNAME}@${DEV_EC2_URL} -p ${DEV_EC2_PASSWORD} touch test.txt
 
 addons:
   sonarcloud:
     organization: "unimibsoftengcourse2021"
     token: ${SONAR_TOKEN}
+  ssh_known_hosts: ${DEV_EC2_URL}
 
 services:
   - docker
