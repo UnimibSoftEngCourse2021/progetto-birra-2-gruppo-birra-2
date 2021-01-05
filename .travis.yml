@@ -5,6 +5,9 @@ script:
   - docker build -t gruppobirra2/brewday:latest .
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push gruppobirra2/brewday:latest
+  - ${DEV-EC2-KEY} > dev.pem
+  - chmod 600 dev.pem
+  - ssh -oStrictHostKeyChecking=accept-new -i dev.pem ${DEV-EC2-USERNAME}@${DEV-EC2-URL} touch test.txt
 
 addons:
   sonarcloud:
