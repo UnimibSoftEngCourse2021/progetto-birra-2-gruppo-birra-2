@@ -13,7 +13,7 @@ public class DtoToIngredientConverter implements Converter<IngredientDto, Ingred
         Ingredient ingredient = new Ingredient();
 
         if(ingredientDto.getIngredientId() != null)
-        ingredient.setIngredientId(ingredientDto.getIngredientId());
+            ingredient.setIngredientId(ingredientDto.getIngredientId());
 
         ingredient.setName(ingredientDto.getName());
         ingredient.setDescription(ingredientDto.getDescription());
