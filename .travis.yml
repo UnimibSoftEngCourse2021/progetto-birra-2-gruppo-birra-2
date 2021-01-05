@@ -5,7 +5,17 @@ script:
   - docker build -t gruppobirra2/brewday:latest .
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push gruppobirra2/brewday:latest
-  - ssh ${DEV_EC2_USERNAME}@${DEV_EC2_URL} --passsword ${DEV_EC2_PASSWORD} touch test.txt
+  - ${DEV_EC2 _KEY} > dev.pem
+  - chmod 600 dev.pem
+  - ssh -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch test.txt
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script:
+      - ssh ${DEV_EC2_USERNAME}@${DEV_EC2_URL} --passsword ${DEV_EC2_PASSWORD} touch test.txt
+    on:
+      branch: develop
 
 addons:
   sonarcloud:
