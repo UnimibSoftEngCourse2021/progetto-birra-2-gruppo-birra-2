@@ -15,7 +15,7 @@ deploy:
     script:
       - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch deploy.txt
     on:
-      branch: develop
+      branch: Develop
 
 addons:
   sonarcloud:
