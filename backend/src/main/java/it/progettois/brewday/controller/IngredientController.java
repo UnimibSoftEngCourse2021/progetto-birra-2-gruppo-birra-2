@@ -45,8 +45,8 @@ public class IngredientController {
     }
 
     @PostMapping("/ingredient")
-    public ResponseEntity<?> createIngredient(@RequestBody Ingredient ingredient) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.createIngredient(ingredient));
+    public ResponseEntity<?> createIngredient(@RequestBody IngredientDto ingredientDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.createIngredient(ingredientDto));
     }
 
     //Il delete è da modificare rispetto ai permessi
@@ -61,8 +61,8 @@ public class IngredientController {
     }
 
     @PutMapping("/ingredient/{id}")
-    public ResponseEntity<?> editIngredient(@PathVariable("id") Integer id, @RequestBody Ingredient modifiedIngredient){
-        if(this.ingredientService.editIngredient(id, modifiedIngredient)) {
+    public ResponseEntity<?> editIngredient(@PathVariable("id") Integer id, @RequestBody IngredientDto ingredientDto){
+        if(this.ingredientService.editIngredient(id, ingredientDto)) {
             return ResponseEntity.status(HttpStatus.OK).body("The ingredient has been updated");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");

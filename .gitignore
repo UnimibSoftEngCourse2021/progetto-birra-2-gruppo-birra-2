@@ -14,3 +14,7 @@ backend/backend.iml
 /backend/brewday.iml
 
 /.idea/
+/backend/src/debug.log
+/backend/src/src.und/id.txt
+/backend/src/src.und/codecheck/ignores.json
+/backend/src/src.und/settings.xml
