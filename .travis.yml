@@ -29,10 +29,6 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    script:
-      - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker stop brewday
-      - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker rm brewday
-      - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker image rm gruppobirra2/brewday
-      - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker run -p 8080:8080 -d --name brewday gruppobirra2/brewday
+    script: ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker stop brewday && docker rm brewday && docker image rm gruppobirra2/brewday && docker run -p 8080:8080 -d --name brewday gruppobirra2/brewday
     on:
       branch: Develop
