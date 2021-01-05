@@ -1,5 +1,5 @@
 script:
-  - ${DEV_EC2_KEY} > dev.pem
+  - ${DEV_EC2_KEY}
   - chmod 600 dev.pem
   - cat dev.pem
   - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch test.txt
