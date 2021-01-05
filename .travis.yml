@@ -1,19 +1,19 @@
 script:
   - cd backend
   - mvn clean install -Pdev
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2
+  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2 -DskipTests=true
   - docker build -t gruppobirra2/brewday:latest .
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker push gruppobirra2/brewday:latest
-  - ${DEV_EC2 _KEY} > dev.pem
+  - echo ${DEV_EC2 _KEY} > dev.pem
   - chmod 600 dev.pem
-  - ssh -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch test.txt
+  - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch test.txt
 
 deploy:
   - provider: script
     skip_cleanup: true
     script:
-      - ssh ${DEV_EC2_USERNAME}@${DEV_EC2_URL} --passsword ${DEV_EC2_PASSWORD} touch test.txt
+      - ssh ${DEV_EC2_USERNAME}@${DEV_EC2_URL} --passsword ${DEV_EC2_PASSWORD} touch deploy.txt
     on:
       branch: develop
 
