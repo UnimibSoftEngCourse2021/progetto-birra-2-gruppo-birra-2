@@ -23,13 +23,13 @@ script:
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday:latest .; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday:latest; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "${DEV_EC2_KEY}" > dev.pem; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod 600 dev.pem; fi
 
 deploy:
   - provider: script
     cleanup: false
     script:
-      - echo "${DEV_EC2_KEY}" > dev.pem
-      - chmod 600 dev.pem
       - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker stop brewday
       - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker rm brewday
       - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} docker image rm gruppobirra2/brewday
