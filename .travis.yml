@@ -1,5 +1,5 @@
 env:
-  - DEV_EC2_KEY: "-----BEGIN RSA PRIVATE KEY-----
+  - DEV_EC2_KEY: ""-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEAk5AZ5BOojnzQyip0WOqRHKmfGnMUyTp7h981MuXf0BTTGyz4
 2KP8h0f7njWcX9Vu/v/Qa8xG3vlmi7N8GLbn9Ku3WcPHosMGFFhFEyqQigb2SnoT
 NmDIiNvAl3qBtTNzYt8LFNY69PozaXfWphD4LLmNvCxG02jqEsTSnNNLybPXaRDC
@@ -25,9 +25,13 @@ auZQA9jvXP10xek+GRsVJ836GF6fb6APnhgXhqwCjh8vRQyNvCenZOEvQx3nKsy/
 pDHxOQKBgDheCHt3yOOyL6Wcl3BF13U7yJtkLO/tdqHDuAm8Zif64TSu+nxeojuo
 OAgrEwWmdkaQ7KfNMJBEsC/KM0TYFhz23UDiHGzV/sJJ1lLPVo2F7rkIEMfqL3k2
 B/sR7DwNK5F6q/U1mOnd2yG9PFsFg2iTjndnLQ4AInw8dxyn+ptW
------END RSA PRIVATE KEY-----"
+-----END RSA PRIVATE KEY-----""
 
 script:
+  - echo ${DEV_EC2_KEY} > dev.pem
+  - chmod 600 dev.pem
+  - cat dev.pem
+  - ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} touch test.txt
   - cd backend
   - mvn clean install -Pdev
   - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2 -DskipTests=true
