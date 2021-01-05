@@ -10,9 +10,11 @@ public class DtoToIngredientConverter implements Converter<IngredientDto, Ingred
 
     @Override
     public Ingredient convert(IngredientDto ingredientDto) {
-        Ingredient ingredient = null;
+        Ingredient ingredient = new Ingredient();
 
+        if(ingredientDto.getIngredientId() != null)
         ingredient.setIngredientId(ingredientDto.getIngredientId());
+
         ingredient.setName(ingredientDto.getName());
         ingredient.setDescription(ingredientDto.getDescription());
         ingredient.setUnit(ingredientDto.getUnit());
