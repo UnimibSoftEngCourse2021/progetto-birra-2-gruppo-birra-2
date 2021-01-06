@@ -14,5 +14,6 @@ public class IngredientDto {
     private String description;
     private IngredientUnit unit;
     private IngredientType type;
+    private Double quantity;
 
 }

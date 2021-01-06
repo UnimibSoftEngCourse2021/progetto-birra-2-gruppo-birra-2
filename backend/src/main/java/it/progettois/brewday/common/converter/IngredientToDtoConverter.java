@@ -16,6 +16,7 @@ public class IngredientToDtoConverter implements Converter<Ingredient, Ingredien
                 .description(ingredient.getName())
                 .unit(ingredient.getUnit())
                 .type(ingredient.getType())
+                .quantity(ingredient.getQuantity())
                 .build();
     }
 }

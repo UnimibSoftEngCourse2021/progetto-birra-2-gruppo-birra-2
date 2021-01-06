@@ -26,9 +26,6 @@ public class Brewer {
     private String email;
 
     @OneToMany(mappedBy = "brewer")
-    private List<BrewerIngredient> storage;
-
-    @OneToMany(mappedBy = "brewer")
     private List<Ingredient> ingredients;
 
     @OneToMany(mappedBy = "brewer")

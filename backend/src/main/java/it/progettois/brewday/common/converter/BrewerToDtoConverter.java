@@ -19,7 +19,6 @@ public class BrewerToDtoConverter implements Converter<Brewer, BrewerDto> {
                 .name(brewer.getName())
                 .username(brewer.getUsername())
                 .recipes(brewer.getRecipes().stream().map(Recipe::getRecipeId).collect(Collectors.toList()))
-                .storage(brewer.getStorage().stream().map(BrewerIngredient::getBrewerIngredientId).collect(Collectors.toList()))
                 .ingredients(brewer.getIngredients().stream().map(Ingredient::getIngredientId).collect(Collectors.toList()))
                 .tools(brewer.getTools().stream().map(Tool::getToolId).collect(Collectors.toList()))
                 .build();
