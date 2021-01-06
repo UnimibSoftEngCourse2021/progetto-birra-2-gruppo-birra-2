@@ -12,18 +12,15 @@ import java.util.stream.Collectors;
 public class BrewerToFatDtoConverter implements Converter<Brewer, BrewerFatDto> {
 
     private final RecipeToDtoConverter recipeToDtoConverter;
-    private final BrewerIngredientToDtoConverter brewerIngredientToDtoConverter;
     private final ToolToDtoConverter toolToDtoConverter;
     private final IngredientToDtoConverter ingredientToDtoConverter;
 
 
     @Autowired
     public BrewerToFatDtoConverter(RecipeToDtoConverter recipeToDtoConverter,
-                                   BrewerIngredientToDtoConverter brewerIngredientToDtoConverter,
                                    ToolToDtoConverter toolToDtoConverter,
                                    IngredientToDtoConverter ingredientToDtoConverter) {
         this.recipeToDtoConverter = recipeToDtoConverter;
-        this.brewerIngredientToDtoConverter = brewerIngredientToDtoConverter;
         this.toolToDtoConverter = toolToDtoConverter;
         this.ingredientToDtoConverter = ingredientToDtoConverter;
     }
@@ -37,7 +34,6 @@ public class BrewerToFatDtoConverter implements Converter<Brewer, BrewerFatDto> 
                 .name(brewer.getName())
                 .username(brewer.getUsername())
                 .recipes(brewer.getRecipes().stream().map(recipeToDtoConverter::convert).collect(Collectors.toList()))
-                .storage(brewer.getStorage().stream().map(brewerIngredientToDtoConverter::convert).collect(Collectors.toList()))
                 .ingredients(brewer.getIngredients().stream().map(ingredientToDtoConverter::convert).collect(Collectors.toList()))
                 .tools(brewer.getTools().stream().map(toolToDtoConverter::convert).collect(Collectors.toList()))
                 .build();
