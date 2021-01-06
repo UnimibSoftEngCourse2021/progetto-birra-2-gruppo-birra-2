@@ -2,9 +2,8 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.util.JwtTokenUtil;
-import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.common.exception.RecipeNotFoundException;
+import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -48,7 +47,10 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<?> getRecipeById(@PathVariable Integer id) {
+    public ResponseEntity<?> getRecipeById(HttpServletRequest request, @PathVariable Integer id) {
+
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+
         try {
             return ResponseEntity.status(HttpStatus.OK).body(this.recipeService.getRecipesById(id));
         } catch (RecipeNotFoundException e) {
