@@ -7,6 +7,6 @@ import lombok.Data;
 @Builder
 public class RecipeIngredientDto {
 
-    private IngredientDto ingredient;
+    private Integer ingredientId;
     private Integer quantity;
 }

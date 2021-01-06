@@ -21,6 +21,8 @@ public class Recipe {
 
     private String description;
 
+    private Boolean shared;
+
     @ManyToOne
     @JoinColumn(name = "brewer_id")
     private Brewer brewer;
