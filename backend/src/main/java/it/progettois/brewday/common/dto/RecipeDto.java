@@ -15,6 +15,7 @@ public class RecipeDto {
     private String name;
     private String description;
     private Integer brewerId;
+    private Boolean shared;
     private List<RecipeIngredientDto> ingredients;
 
 }

@@ -1,9 +1,13 @@
 package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.IngredientDto;
+import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.exception.EmptyStorageException;
 import it.progettois.brewday.persistence.model.Ingredient;
 import it.progettois.brewday.service.IngredientService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -67,6 +71,17 @@ public class IngredientController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
         }
+    }
 
+    @GetMapping("/storage/{id}")
+    public ResponseEntity<?> getStorage(@PathVariable("id") Integer brewerId){
+        try {
+            List<IngredientDto> ingredientDtos = this.ingredientService.getStorage(brewerId);
+            return ResponseEntity.status(HttpStatus.OK).body(ingredientDtos);
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer does not exist");
+        } catch (EmptyStorageException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The storage is empty");
+        }
     }
 }

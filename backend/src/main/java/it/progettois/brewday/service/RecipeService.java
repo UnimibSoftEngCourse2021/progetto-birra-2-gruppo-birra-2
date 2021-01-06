@@ -1,9 +1,15 @@
 package it.progettois.brewday.service;
 
 
+
 import it.progettois.brewday.common.converter.RecipeToDtoConverter;
 import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.converter.DtoToRecipeConverter;
+import it.progettois.brewday.common.converter.RecipeToDtoConverter;
+import it.progettois.brewday.common.dto.RecipeDto;
+import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.exception.RecipeNotFoundException;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
 import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
@@ -21,15 +27,20 @@ public class RecipeService {
     private final BrewerRepository brewerRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final RecipeToDtoConverter recipeToDtoConverter;
+    private final DtoToRecipeConverter dtoToRecipeConverter;
+    private final BrewerRepository brewerRepository;
 
     @Autowired
     public RecipeService(RecipeRepository recipeRepository,
                          RecipeIngredientRepository recipeIngredientRepository,
                          RecipeToDtoConverter recipeToDtoConverter,
+                         DtoToRecipeConverter dtoToRecipeConverter,
+
                          BrewerRepository brewerRepository) {
         this.recipeRepository = recipeRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
         this.recipeToDtoConverter = recipeToDtoConverter;
+        this.dtoToRecipeConverter = dtoToRecipeConverter;
         this.brewerRepository = brewerRepository;
     }
 
@@ -43,7 +54,19 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
-    public Recipe saveRecipe(Recipe recipe) {
-        return this.recipeRepository.save(recipe);
+    public RecipeDto saveRecipe(RecipeDto recipeDto) {
+        Recipe recipe = this.dtoToRecipeConverter.convert(recipeDto);
+        if (recipe == null) {
+            return null;
+        }
+
+        final Recipe recipeToReturn = this.recipeRepository.save(recipe);
+
+        recipe.getIngredients().forEach(recipeIngredient -> {
+            recipeIngredient.setRecipe(recipeToReturn);
+            this.recipeIngredientRepository.save(recipeIngredient);
+        });
+
+        return this.recipeToDtoConverter.convert(recipeToReturn);
     }
 }

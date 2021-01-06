@@ -18,6 +18,7 @@ public class DtoToToolConverter implements Converter<ToolDto, Tool> {
 
         tool.setName(toolDto.getName());
         tool.setCapacity(toolDto.getCapacity());
+        tool.setUnit(toolDto.getUnit());
         tool.setQuantity(toolDto.getQuantity());
         tool.setDescription(toolDto.getDescription());
 
