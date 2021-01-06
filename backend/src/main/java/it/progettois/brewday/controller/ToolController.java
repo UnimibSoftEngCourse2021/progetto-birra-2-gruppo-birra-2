@@ -19,7 +19,7 @@ public class ToolController {
     }
 
     @GetMapping("/tool")
-    public ResponseEntity<?> getTools() {
+    public ResponseEntity<Object> getTools() {
         List<ToolDto> tools = this.toolService.getTools();
 
         if (tools.size() == 0) {
@@ -31,13 +31,13 @@ public class ToolController {
 
 
     @PostMapping("/tool")
-    public ResponseEntity<?> createTool(@RequestBody ToolDto toolDto) {
+    public ResponseEntity<Object> createTool(@RequestBody ToolDto toolDto) {
         return ResponseEntity.status(HttpStatus.OK).body(this.toolService.createTool(toolDto));
     }
 
 
     @DeleteMapping("/tool/{id}")
-    public ResponseEntity<?> deleteTool(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteTool(@PathVariable("id") Integer id) {
 
         if(this.toolService.deleteTool(id)){
             return ResponseEntity.status(HttpStatus.OK).body("The tool has been deleted from your inventory");
@@ -47,7 +47,7 @@ public class ToolController {
     }
 
     @PutMapping("/tool/{id}")
-    public ResponseEntity<?> editTool(@PathVariable("id") Integer id, @RequestBody ToolDto toolDto){
+    public ResponseEntity<String> editTool(@PathVariable("id") Integer id, @RequestBody ToolDto toolDto){
         if(this.toolService.editTool(id, toolDto)) {
             return ResponseEntity.status(HttpStatus.OK).body("The tool in your inventory has been updated");
         } else {
