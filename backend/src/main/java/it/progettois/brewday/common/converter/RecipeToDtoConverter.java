@@ -27,6 +27,7 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
                 .name(recipe.getName())
                 .recipeId(recipe.getRecipeId())
                 .version(recipe.getVersion())
+                .shared(recipe.getShared())
                 .ingredients(recipe.getIngredients()
                         .stream()
                         .map(recipeIngredientToDtoConverter::convert)
