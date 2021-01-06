@@ -1,6 +1,5 @@
 package it.progettois.brewday.service;
 
-
 import it.progettois.brewday.common.converter.DtoToRecipeConverter;
 import it.progettois.brewday.common.converter.RecipeToDtoConverter;
 import it.progettois.brewday.common.dto.RecipeDto;
@@ -20,10 +19,10 @@ import java.util.stream.Collectors;
 public class RecipeService {
 
     private final RecipeRepository recipeRepository;
+    private final BrewerRepository brewerRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final RecipeToDtoConverter recipeToDtoConverter;
     private final DtoToRecipeConverter dtoToRecipeConverter;
-    private final BrewerRepository brewerRepository;
 
     @Autowired
     public RecipeService(RecipeRepository recipeRepository,
@@ -38,9 +37,10 @@ public class RecipeService {
         this.brewerRepository = brewerRepository;
     }
 
-    public List<RecipeDto> getRecipes() {
+    public List<RecipeDto> getRecipes(String username) throws BrewerNotFoundException {
 
-        return this.recipeRepository.findByShared(true)
+        return this.recipeRepository
+                .findAllByBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new))
                 .stream()
                 .peek(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)))
                 .map(this.recipeToDtoConverter::convert)
@@ -50,13 +50,16 @@ public class RecipeService {
     public RecipeDto getRecipesById(Integer id) throws RecipeNotFoundException {
 
         Recipe recipe = this.recipeRepository.findById(id).orElseThrow(RecipeNotFoundException::new);
+
         recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe));
+
         return this.recipeToDtoConverter.convert(recipe);
+
     }
 
     public List<RecipeDto> getRecipesByUser(Integer id) throws BrewerNotFoundException {
-
-        return this.recipeRepository.findByBrewer(this.brewerRepository.findById(id).orElseThrow(BrewerNotFoundException::new))
+        return this.recipeRepository
+                .findAllByBrewer(this.brewerRepository.findById(id).orElseThrow(BrewerNotFoundException::new))
                 .stream()
                 .peek(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)))
                 .map(this.recipeToDtoConverter::convert)

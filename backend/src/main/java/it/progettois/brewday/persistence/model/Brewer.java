@@ -13,7 +13,7 @@ public class Brewer {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer brewerId;
 
-    @Column(updatable = false, nullable = false)
+    @Column(updatable = false, nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
