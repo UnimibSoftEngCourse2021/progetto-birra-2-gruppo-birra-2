@@ -32,11 +32,14 @@ public class IngredientService {
         this.dtoToIngredientConverter = dtoToIngredientConverter;
     }
 
-    public List<IngredientDto> getIngredients() {
-        return this.ingredientRepository.findAll()
+    public List<IngredientDto> getIngredients(String username) throws BrewerNotFoundException {
+
+        return this.ingredientRepository
+                .findAllByBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new))
                 .stream()
                 .map(ingredientToDtoConverter::convert)
-                .collect(Collectors.toList()); }
+                .collect(Collectors.toList());
+    }
 
     public Optional<Ingredient> getIngredient(Integer id) {
         return this.ingredientRepository.findById(id); }
@@ -68,7 +71,7 @@ public class IngredientService {
     public List<IngredientDto> getStorage(Integer brewerId) throws BrewerNotFoundException, EmptyStorageException {
         Brewer brewer = this.brewerRepository.findById(brewerId).orElseThrow(BrewerNotFoundException::new);
 
-        List<Ingredient> ingredients = null;
+        List<Ingredient> ingredients;
 
         ingredients = this.ingredientRepository
                 .findIngredientsByBrewerAndQuantityGreaterThan(brewer, 0.0);

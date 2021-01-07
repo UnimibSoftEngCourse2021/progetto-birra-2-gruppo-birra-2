@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer> {
 
+    List<Ingredient> findAllByBrewer(Brewer brewer);
     List<Ingredient> findIngredientsByBrewerAndQuantityGreaterThan(Brewer brewer, Double greaterThan);
 
 }

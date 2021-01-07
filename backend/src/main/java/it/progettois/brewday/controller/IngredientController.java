@@ -3,32 +3,45 @@ package it.progettois.brewday.controller;
 import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.EmptyStorageException;
+import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.persistence.model.Ingredient;
 import it.progettois.brewday.service.IngredientService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
+
+import static it.progettois.brewday.common.constant.SecurityConstants.HEADER_STRING;
 
 @RestController
 public class IngredientController {
 
     private final IngredientService ingredientService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public IngredientController(IngredientService ingredientService) { this.ingredientService = ingredientService; }
+    public IngredientController(IngredientService ingredientService, JwtTokenUtil jwtTokenUtil) {
+        this.ingredientService = ingredientService;
+        this.jwtTokenUtil = jwtTokenUtil;
+    }
 
     @GetMapping("/ingredient")
-    public ResponseEntity<?> getIngredients() {
+    public ResponseEntity<?> getIngredients(HttpServletRequest request) {
 
-        List<IngredientDto> ingredients = this.ingredientService.getIngredients();
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        if (ingredients.size() == 0) {
+        List<IngredientDto> ingredients;
+        try{
+            ingredients = this.ingredientService.getIngredients(username);
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+        }
+
+        if (ingredients.isEmpty() || ingredients == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No ingredients found");
         } else {
             return ResponseEntity.status(HttpStatus.OK).body(ingredients);
