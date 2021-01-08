@@ -90,12 +90,11 @@ public class IngredientService {
 
     }
 
-    public List<IngredientDto> getStorage(Integer brewerId) throws BrewerNotFoundException, EmptyStorageException {
-        Brewer brewer = this.brewerRepository.findById(brewerId).orElseThrow(BrewerNotFoundException::new);
+    public List<IngredientDto> getStorage(String username) throws BrewerNotFoundException, EmptyStorageException {
 
-        List<Ingredient> ingredients;
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
 
-        ingredients = this.ingredientRepository
+        List<Ingredient> ingredients = this.ingredientRepository
                 .findIngredientsByBrewerAndQuantityGreaterThan(brewer, 0.0);
 
         if(ingredients.size() > 0){
@@ -104,11 +103,23 @@ public class IngredientService {
                     .map(ingredientToDtoConverter::convert)
                     .collect(Collectors.toList());
         } else {
-            throw new EmptyStorageException();
+            throw new EmptyStorageException("The storage is empty");
         }
 
+    }
 
+    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException, EmptyStorageException{
 
+        IngredientDto ingredientDto = getIngredient(username, ingredientId);
+
+        //It is necessary to check that the brewer owns the ingredient so that
+        //other brewers storage can't be accessed
+        if(ingredientDto.getBrewerUsername().equals(username)) {
+            if (ingredientDto.getQuantity() > 0) {
+                return ingredientDto;
+            } else
+                throw new EmptyStorageException("You don't have ingredient: \"" + ingredientDto.getName() + "\" in the storage");
+        } else throw new AccessDeniedException("Access Denied");
 
     }
 }

@@ -118,15 +118,38 @@ public class IngredientController {
         }
     }
 
-    @GetMapping("/storage/{id}")
-    public ResponseEntity<?> getStorage(@PathVariable("id") Integer brewerId){
+    @GetMapping("/storage")
+    public ResponseEntity<?> getStorage(HttpServletRequest request){
+
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+
         try {
-            List<IngredientDto> ingredientDtos = this.ingredientService.getStorage(brewerId);
-            return ResponseEntity.status(HttpStatus.OK).body(ingredientDtos);
+            List<IngredientDto> ingredientDtoList = this.ingredientService.getStorage(username);
+            return ResponseEntity.status(HttpStatus.OK).body(ingredientDtoList);
         } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer does not exist");
         } catch (EmptyStorageException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The storage is empty");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/storage/{id}")
+    public ResponseEntity<?> getStorageIngredient(HttpServletRequest request, @PathVariable("id") Integer ingredientId) {
+
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+
+        IngredientDto ingredientDto;
+        try {
+            ingredientDto = this.ingredientService.getStorageIngredient(username, ingredientId);
+            return ResponseEntity.ok(ingredientDto);
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer does not exist");
+        } catch (EmptyStorageException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IngredientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
 }
