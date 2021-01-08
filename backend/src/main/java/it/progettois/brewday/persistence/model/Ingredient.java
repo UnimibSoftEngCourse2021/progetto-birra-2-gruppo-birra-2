@@ -36,4 +36,6 @@ public class Ingredient {
     @JoinColumn(name = "brewer_id")
     private Brewer brewer;
 
+    private Boolean shared;
+
 }

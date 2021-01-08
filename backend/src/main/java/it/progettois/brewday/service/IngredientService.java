@@ -5,6 +5,7 @@ import it.progettois.brewday.common.converter.IngredientToDtoConverter;
 import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.EmptyStorageException;
+import it.progettois.brewday.common.exception.IngredientNotFoundException;
 import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.model.Ingredient;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
@@ -12,8 +13,8 @@ import it.progettois.brewday.persistence.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +33,16 @@ public class IngredientService {
         this.dtoToIngredientConverter = dtoToIngredientConverter;
     }
 
+    private Boolean brewerOwnsIngredient(String username, Integer id) throws BrewerNotFoundException, IngredientNotFoundException {
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
+        return this.ingredientRepository.findById(id).orElseThrow(IngredientNotFoundException::new).getBrewer().equals(brewer);
+    }
+
+    private Boolean brewerOwnsIngredient(String username, Ingredient ingredient) throws BrewerNotFoundException {
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
+        return ingredient.getBrewer().equals(brewer);
+    }
+
     public List<IngredientDto> getIngredients(String username) throws BrewerNotFoundException {
 
         return this.ingredientRepository
@@ -41,31 +52,42 @@ public class IngredientService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Ingredient> getIngredient(Integer id) {
-        return this.ingredientRepository.findById(id); }
+    public IngredientDto getIngredient(String username, Integer id) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException {
 
-    public Ingredient createIngredient(IngredientDto ingredientDto) {
+        Ingredient ingredient = this.ingredientRepository.findById(id).orElseThrow(IngredientNotFoundException::new);
+
+        if(brewerOwnsIngredient(username, ingredient) || ingredient.getShared()){
+            return this.ingredientToDtoConverter.convert(ingredient);
+        } else throw new AccessDeniedException("You don't have access to this ingredient");
+
+    }
+
+    public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException {
+
         Ingredient ingredient = dtoToIngredientConverter.convert(ingredientDto);
-        return this.ingredientRepository.save(ingredient);
-    }
-
-    public Boolean deleteIngredient(Integer id) {
-
-       if(this.ingredientRepository.existsById(id)) {
-           this.ingredientRepository.deleteById(id);
-           return true;
-       }
-       return false;
-    }
-
-    public Boolean editIngredient(Integer id, IngredientDto ingredientDto){
-        if(!this.ingredientRepository.existsById(id)) return false;                 //controllo esistenza ingrediente
-
-        ingredientDto.setIngredientId(id);
-        Ingredient ingredient = dtoToIngredientConverter.convert(ingredientDto);    //conversione da dto
+        ingredient.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
         this.ingredientRepository.save(ingredient);
+        return this.ingredientToDtoConverter.convert(ingredient);
 
-        return true;
+    }
+
+    public void deleteIngredient(String username, Integer id) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
+
+        if(brewerOwnsIngredient(username, id)) {
+            this.ingredientRepository.deleteById(id);
+        } else throw new AccessDeniedException("You don't have permission to delete this ingredient");
+
+    }
+
+    public void editIngredient(String username, Integer id, IngredientDto ingredientDto)  throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
+
+        if(brewerOwnsIngredient(username, id)) {
+            Ingredient ingredient = dtoToIngredientConverter.convert(ingredientDto);
+            ingredient.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
+            ingredient.setIngredientId(id);
+            this.ingredientRepository.save(ingredient);
+        } else throw new AccessDeniedException("You don't have access to this ingredient");
+
     }
 
     public List<IngredientDto> getStorage(Integer brewerId) throws BrewerNotFoundException, EmptyStorageException {
