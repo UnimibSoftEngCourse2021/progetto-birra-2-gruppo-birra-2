@@ -13,10 +13,12 @@ public class IngredientToDtoConverter implements Converter<Ingredient, Ingredien
         return IngredientDto.builder()
                 .ingredientId(ingredient.getIngredientId())
                 .name(ingredient.getName())
-                .description(ingredient.getName())
+                .description(ingredient.getDescription())
                 .unit(ingredient.getUnit())
                 .type(ingredient.getType())
                 .quantity(ingredient.getQuantity())
+                .shared(ingredient.getShared())
+                .brewerUsername(ingredient.getBrewer().getUsername())
                 .build();
     }
 }
