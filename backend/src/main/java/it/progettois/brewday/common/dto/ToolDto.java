@@ -14,4 +14,5 @@ public class ToolDto {
     private IngredientUnit unit;
     private Integer quantity;
     private String description;
+    private String brewerUsername;
 }
