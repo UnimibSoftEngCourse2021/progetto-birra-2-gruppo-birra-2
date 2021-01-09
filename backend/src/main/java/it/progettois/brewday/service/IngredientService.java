@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,18 @@ public class IngredientService {
             } else
                 throw new EmptyStorageException("You don't have ingredient: \"" + ingredientDto.getName() + "\" in the storage");
         } else throw new AccessDeniedException("Access Denied");
+
+    }
+
+    public void addToStorage(String username, Integer ingredientId, Double newQuantity) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException, InvalidPropertiesFormatException {
+
+        if(newQuantity == null || newQuantity < 0.0) throw new InvalidPropertiesFormatException("The set quantity is invalid");
+
+        if(brewerOwnsIngredient(username, ingredientId)) {
+            Ingredient ingredient = this.ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
+            ingredient.setQuantity(newQuantity);
+            this.ingredientRepository.save(ingredient);
+        } else throw new AccessDeniedException("You don't have access to this ingredient");
 
     }
 }
