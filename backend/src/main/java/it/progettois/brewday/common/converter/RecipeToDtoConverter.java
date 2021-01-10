@@ -22,7 +22,7 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
     public RecipeDto convert(Recipe recipe) {
 
         return RecipeDto.builder()
-                .brewerId(recipe.getBrewer().getBrewerId())
+                .username(recipe.getBrewer().getUsername())
                 .description(recipe.getDescription())
                 .name(recipe.getName())
                 .recipeId(recipe.getRecipeId())

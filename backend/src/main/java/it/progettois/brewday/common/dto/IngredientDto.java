@@ -15,7 +15,7 @@ public class IngredientDto {
     private IngredientUnit unit;
     private IngredientType type;
     private Double quantity;
-    private String brewerUsername;
+    private String username;
     private Boolean shared;
 
 }

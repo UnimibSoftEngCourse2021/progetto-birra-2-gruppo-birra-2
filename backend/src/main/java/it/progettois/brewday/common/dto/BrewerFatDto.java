@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 @Builder
 public class BrewerFatDto {
-    private Integer brewerId;
     private String username;
     private String name;
     private String email;

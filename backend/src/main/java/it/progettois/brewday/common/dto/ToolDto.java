@@ -15,5 +15,5 @@ public class ToolDto {
     private ToolUnit unit;
     private Integer quantity;
     private String description;
-    private String brewerUsername;
+    private String username;
 }

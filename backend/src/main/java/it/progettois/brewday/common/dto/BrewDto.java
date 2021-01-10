@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Builder
 public class BrewDto {
 
-    private Integer brewId;
+    private String username;
     private Integer quantity;
     private Timestamp startDate;
     private String duration;
