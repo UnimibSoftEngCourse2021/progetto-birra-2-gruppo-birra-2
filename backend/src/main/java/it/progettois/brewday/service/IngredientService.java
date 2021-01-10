@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,12 +91,11 @@ public class IngredientService {
 
     }
 
-    public List<IngredientDto> getStorage(Integer brewerId) throws BrewerNotFoundException, EmptyStorageException {
-        Brewer brewer = this.brewerRepository.findById(brewerId).orElseThrow(BrewerNotFoundException::new);
+    public List<IngredientDto> getStorage(String username) throws BrewerNotFoundException, EmptyStorageException {
 
-        List<Ingredient> ingredients;
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
 
-        ingredients = this.ingredientRepository
+        List<Ingredient> ingredients = this.ingredientRepository
                 .findIngredientsByBrewerAndQuantityGreaterThan(brewer, 0.0);
 
         if(ingredients.size() > 0){
@@ -104,11 +104,35 @@ public class IngredientService {
                     .map(ingredientToDtoConverter::convert)
                     .collect(Collectors.toList());
         } else {
-            throw new EmptyStorageException();
+            throw new EmptyStorageException("The storage is empty");
         }
 
+    }
 
+    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException, EmptyStorageException{
 
+        IngredientDto ingredientDto = getIngredient(username, ingredientId);
+
+        //It is necessary to check that the brewer owns the ingredient so that
+        //other brewers storage can't be accessed
+        if(ingredientDto.getUsername().equals(username)) {
+            if (ingredientDto.getQuantity() > 0) {
+                return ingredientDto;
+            } else
+                throw new EmptyStorageException("You don't have ingredient: \"" + ingredientDto.getName() + "\" in the storage");
+        } else throw new AccessDeniedException("Access Denied");
+
+    }
+
+    public void addToStorage(String username, Integer ingredientId, Double newQuantity) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException, InvalidPropertiesFormatException {
+
+        if(newQuantity == null || newQuantity < 0.0) throw new InvalidPropertiesFormatException("The set quantity is invalid");
+
+        if(brewerOwnsIngredient(username, ingredientId)) {
+            Ingredient ingredient = this.ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
+            ingredient.setQuantity(newQuantity);
+            this.ingredientRepository.save(ingredient);
+        } else throw new AccessDeniedException("You don't have access to this ingredient");
 
     }
 }

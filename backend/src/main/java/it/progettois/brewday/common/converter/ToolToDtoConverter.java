@@ -1,6 +1,5 @@
 package it.progettois.brewday.common.converter;
 
-
 import it.progettois.brewday.common.dto.ToolDto;
 import it.progettois.brewday.persistence.model.Tool;
 import org.springframework.core.convert.converter.Converter;
@@ -18,6 +17,7 @@ public class ToolToDtoConverter implements Converter<Tool, ToolDto> {
                 .unit(tool.getUnit())
                 .quantity(tool.getQuantity())
                 .description(tool.getDescription())
+                .username(tool.getBrewer().getUsername())
                 .build();
     }
 }
