@@ -23,7 +23,11 @@ public class Brew {
 
     private String note;
 
+    //Json representation of the recipe
+    @Column(length = 1000)
+    private String recipe;
+
     @ManyToOne
-    @JoinColumn(name = "recipe_id")
-    private Recipe recipe;
+    @JoinColumn(name = "brewer_id")
+    private Brewer brewer;
 }

@@ -15,4 +15,5 @@ public class BrewDto {
     private String duration;
     private String note;
     private RecipeDto recipe;
+    private String brewerUsername;
 }
