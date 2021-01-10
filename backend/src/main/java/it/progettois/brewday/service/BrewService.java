@@ -115,10 +115,6 @@ public class BrewService {
 
     public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username, Integer quantity) throws RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
 
-        if (quantity < 0) {
-
-        }
-
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
         if (!recipe.getBrewer().getUsername().equals(username)) {
