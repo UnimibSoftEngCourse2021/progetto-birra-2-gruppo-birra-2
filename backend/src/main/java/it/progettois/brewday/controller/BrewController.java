@@ -1,8 +1,8 @@
 package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.BrewDto;
-import it.progettois.brewday.common.exception.BrewNotFoundException;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.dto.RecipeIngredientDto;
+import it.progettois.brewday.common.exception.*;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.service.BrewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +116,24 @@ public class BrewController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (BrewNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brew does not exist");
+        }
+    }
+
+    @GetMapping("/brew/{recipeId}/ingredient")
+    public ResponseEntity<?> getIngredientForBrew(HttpServletRequest request, @PathVariable("recipeId") Integer recipeId) {
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+
+        try {
+            List<RecipeIngredientDto> ingredients = this.brewService.getIngredientForBrew(recipeId, username);
+            return ResponseEntity.ok(ingredients);
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The recipe does not exist");
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (ToolNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The tools does not exist");
+        } catch (IngredientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredients does not exist");
         }
     }
 }
