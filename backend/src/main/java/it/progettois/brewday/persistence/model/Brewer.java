@@ -10,9 +10,6 @@ import java.util.List;
 public class Brewer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer brewerId;
-
     @Column(updatable = false, nullable = false, unique = true)
     private String username;
 

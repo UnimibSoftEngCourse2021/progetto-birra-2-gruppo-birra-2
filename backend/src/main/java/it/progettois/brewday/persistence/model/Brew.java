@@ -10,9 +10,8 @@ import java.sql.Timestamp;
 public class Brew {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "brew_id")
-    private Integer brewId;
+    @Column(name = "brewer_username", updatable = false, nullable = false, unique = true)
+    private String username;
 
     private Integer quantity;
 

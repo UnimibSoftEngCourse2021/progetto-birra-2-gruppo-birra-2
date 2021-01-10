@@ -17,7 +17,7 @@ public class ToolToDtoConverter implements Converter<Tool, ToolDto> {
                 .unit(tool.getUnit())
                 .quantity(tool.getQuantity())
                 .description(tool.getDescription())
-                .brewerUsername(tool.getBrewer().getUsername())
+                .username(tool.getBrewer().getUsername())
                 .build();
     }
 }
