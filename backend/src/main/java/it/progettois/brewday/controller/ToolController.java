@@ -78,7 +78,7 @@ public class ToolController {
     }
 
     @PutMapping("/tool/{id}")
-    public ResponseEntity<?> editTool(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody ToolDto toolDto){
+    public ResponseEntity<String> editTool(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody ToolDto toolDto){
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 

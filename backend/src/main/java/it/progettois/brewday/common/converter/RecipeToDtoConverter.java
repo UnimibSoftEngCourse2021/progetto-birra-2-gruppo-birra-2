@@ -22,12 +22,12 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
     public RecipeDto convert(Recipe recipe) {
 
         return RecipeDto.builder()
-                .username(recipe.getBrewer().getUsername())
-                .description(recipe.getDescription())
-                .name(recipe.getName())
                 .recipeId(recipe.getRecipeId())
                 .version(recipe.getVersion())
+                .name(recipe.getName())
+                .description(recipe.getDescription())
                 .shared(recipe.getShared())
+                .username(recipe.getBrewer().getUsername())
                 .ingredients(recipe.getIngredients()
                         .stream()
                         .map(recipeIngredientToDtoConverter::convert)

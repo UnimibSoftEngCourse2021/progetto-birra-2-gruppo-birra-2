@@ -12,10 +12,10 @@ public class BrewerToDtoConverter implements Converter<Brewer, BrewerDto> {
     public BrewerDto convert(Brewer brewer) {
 
         BrewerDto brewerDto = new BrewerDto();
-        brewerDto.setEmail(brewer.getEmail());
-        brewerDto.setName(brewer.getName());
         brewerDto.setUsername(brewer.getUsername());
-
+        brewerDto.setName(brewer.getName());
+        brewerDto.setEmail(brewer.getEmail());
+        brewerDto.setMax_brew(brewer.getMax_brew());
         return brewerDto;
     }
 }
