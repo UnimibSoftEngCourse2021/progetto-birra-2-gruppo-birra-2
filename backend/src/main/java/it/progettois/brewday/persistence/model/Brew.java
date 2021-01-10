@@ -10,8 +10,8 @@ import java.sql.Timestamp;
 public class Brew {
 
     @Id
-    @Column(name = "brewer_username", updatable = false, nullable = false, unique = true)
-    private String username;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer brewId;
 
     private Integer quantity;
 
@@ -27,6 +27,6 @@ public class Brew {
     private String recipe;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_id")
+    @JoinColumn(name = "username")
     private Brewer brewer;
 }

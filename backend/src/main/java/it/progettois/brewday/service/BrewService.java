@@ -5,12 +5,17 @@ import it.progettois.brewday.common.converter.DtoToBrewConverter;
 import it.progettois.brewday.common.converter.RecipeIngredientToDtoConverter;
 import it.progettois.brewday.common.dto.BrewDto;
 import it.progettois.brewday.common.dto.RecipeIngredientDto;
-import it.progettois.brewday.common.exception.*;
+import it.progettois.brewday.common.exception.BrewNotFoundException;
+import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.exception.IngredientNotFoundException;
+import it.progettois.brewday.common.exception.RecipeNotFoundException;
 import it.progettois.brewday.persistence.model.Brew;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.RecipeIngredient;
-import it.progettois.brewday.persistence.model.Tool;
-import it.progettois.brewday.persistence.repository.*;
+import it.progettois.brewday.persistence.repository.BrewRepository;
+import it.progettois.brewday.persistence.repository.BrewerRepository;
+import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
+import it.progettois.brewday.persistence.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +31,6 @@ public class BrewService {
     private final BrewRepository brewRepository;
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
-    private final ToolRepository toolRepository;
     private final BrewToDtoConverter brewToDtoConverter;
     private final DtoToBrewConverter dtoToBrewConverter;
     private final RecipeIngredientToDtoConverter recipeIngredientToDtoConverter;
@@ -37,7 +41,6 @@ public class BrewService {
                        BrewToDtoConverter brewToDtoConverter,
                        DtoToBrewConverter dtoToBrewConverter,
                        RecipeRepository recipeRepository,
-                       ToolRepository toolRepository,
                        RecipeIngredientToDtoConverter recipeIngredientToDtoConverter,
                        RecipeIngredientRepository recipeIngredientRepository) {
         this.brewerRepository = brewerRepository;
@@ -45,7 +48,6 @@ public class BrewService {
         this.brewToDtoConverter = brewToDtoConverter;
         this.dtoToBrewConverter = dtoToBrewConverter;
         this.recipeRepository = recipeRepository;
-        this.toolRepository = toolRepository;
         this.recipeIngredientToDtoConverter = recipeIngredientToDtoConverter;
         this.recipeIngredientRepository = recipeIngredientRepository;
     }
@@ -111,7 +113,11 @@ public class BrewService {
         } else throw new AccessDeniedException("You don't have permission to delete this ingredient");
     }
 
-    public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username) throws RecipeNotFoundException, AccessDeniedException, ToolNotFoundException, IngredientNotFoundException {
+    public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username, Integer quantity) throws RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
+
+        if (quantity < 0) {
+
+        }
 
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
@@ -127,12 +133,6 @@ public class BrewService {
             recipe.setIngredients(ingredients);
         }
 
-        List<Tool> tools = this.toolRepository.findByBrewer_Username(username);
-
-        if (tools.isEmpty()) {
-            throw new ToolNotFoundException();
-        }
-
 
         return recipe.getIngredients()
                 .stream()
@@ -141,13 +141,7 @@ public class BrewService {
                     ri.setRecipeIngredientId(recipeIngredient.getRecipeIngredientId());
                     ri.setIngredient(recipeIngredient.getIngredient());
                     ri.setRecipe(recipeIngredient.getRecipe());
-                    ri.setQuantity(recipeIngredient.getQuantity()
-                                    * (tools
-                                    .stream()
-                                    .mapToInt(Tool::getCapacity)
-                                    .sum()
-                            )
-                    );
+                    ri.setQuantity(recipeIngredient.getQuantity() * quantity);
                     return ri;
                 })
                 .map(recipeIngredientToDtoConverter::convert)
