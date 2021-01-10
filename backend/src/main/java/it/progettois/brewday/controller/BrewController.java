@@ -70,11 +70,9 @@ public class BrewController {
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(this.brewService.persistBrew(brewDto, username));
+            return ResponseEntity.status(HttpStatus.OK).body(this.brewService.saveBrew(brewDto, username));
         } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
-        } catch (BrewNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brew with id: " + brewDto.getBrewId() + " does not exist");
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
@@ -86,7 +84,7 @@ public class BrewController {
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         try {
-            if (this.brewService.persistBrew(brewDto, id, username)) {
+            if (this.brewService.editBrew(brewDto, id, username)) {
                 return ResponseEntity.status(HttpStatus.OK).body("The brew has been updated");
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating brew, try again later");

@@ -66,16 +66,11 @@ public class BrewService {
         } else throw new AccessDeniedException("You don't have access to this brew");
     }
 
-    public BrewDto persistBrew(BrewDto brewDto, String username) throws BrewerNotFoundException, AccessDeniedException, BrewNotFoundException {
-
-        if (brewDto.getBrewId() != null) {
-            if (!this.brewRepository.findById(brewDto.getBrewId()).orElseThrow(BrewNotFoundException::new).getBrewer().getUsername().equals(username)) {
-                throw new AccessDeniedException("You don't have access to this brew");
-            }
-        }
+    public BrewDto saveBrew(BrewDto brewDto, String username) throws BrewerNotFoundException, AccessDeniedException {
 
         brewDto.setBrewerUsername(username);
         Brew brew = this.dtoToBrewConverter.convert(brewDto);
+
 
         if (brew == null || brew.getBrewer() == null) {
             throw new BrewerNotFoundException();
@@ -87,9 +82,23 @@ public class BrewService {
         } else throw new AccessDeniedException("You don't have access to this brew");
     }
 
-    public Boolean persistBrew(BrewDto brewDto, Integer id, String username) throws BrewerNotFoundException, AccessDeniedException, BrewNotFoundException {
-        brewDto.setBrewId(id);
-        return this.persistBrew(brewDto, username) != null;
+    public Boolean editBrew(BrewDto brewDto, Integer id, String username) throws BrewerNotFoundException, AccessDeniedException, BrewNotFoundException {
+
+        if (!this.brewRepository.findById(id).orElseThrow(BrewNotFoundException::new).getBrewer().getUsername().equals(username)) {
+            throw new AccessDeniedException("You don't have access to this brew");
+        }
+
+        brewDto.setBrewerUsername(username);
+
+        Brew brew = this.dtoToBrewConverter.convert(brewDto);
+
+        if (brew == null || brew.getBrewer() == null) {
+            throw new BrewerNotFoundException();
+        }
+
+        brew.setBrewId(id);
+
+        return this.brewToDtoConverter.convert(this.brewRepository.save(brew)) != null;
     }
 
     public boolean deleteBrew(Integer id, String username) throws AccessDeniedException, BrewNotFoundException {

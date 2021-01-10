@@ -27,7 +27,6 @@ public class DtoToBrewConverter implements Converter<BrewDto, Brew> {
 
         Brew brew = new Brew();
 
-        brew.setBrewId(brewDto.getBrewId());
         brew.setQuantity(brewDto.getQuantity());
         brew.setStartDate(brewDto.getStartDate());
         brew.setDuration(brewDto.getDuration());
