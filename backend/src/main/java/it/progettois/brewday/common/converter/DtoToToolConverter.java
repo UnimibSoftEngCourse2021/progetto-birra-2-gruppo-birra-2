@@ -13,16 +13,11 @@ public class DtoToToolConverter implements Converter<ToolDto, Tool> {
     public Tool convert(ToolDto toolDto) {
         Tool tool = new Tool();
 
-        if (toolDto.getToolId() != null)
-        { tool.setToolId(toolDto.getToolId()); }
-
         tool.setName(toolDto.getName());
         tool.setCapacity(toolDto.getCapacity());
         tool.setUnit(toolDto.getUnit());
         tool.setQuantity(toolDto.getQuantity());
         tool.setDescription(toolDto.getDescription());
-
-
         return tool;
 
     }
