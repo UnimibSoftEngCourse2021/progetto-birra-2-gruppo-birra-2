@@ -72,6 +72,7 @@ public class RecipeService {
     }
 
     public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException{
+        recipeDto.setUsername(username);
         Recipe recipe = this.dtoToRecipeConverter.convert(recipeDto);
         Objects.requireNonNull(recipe).setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
 
