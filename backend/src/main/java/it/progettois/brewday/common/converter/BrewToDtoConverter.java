@@ -18,7 +18,6 @@ public class BrewToDtoConverter implements Converter<Brew, BrewDto> {
         this.jsonToRecipeDtoConverter = jsonToRecipeDtoConverter;
     }
 
-
     @Override
     public BrewDto convert(Brew brew) {
 
@@ -34,7 +33,7 @@ public class BrewToDtoConverter implements Converter<Brew, BrewDto> {
                 .startDate(brew.getStartDate())
                 .duration(brew.getDuration())
                 .note(brew.getNote())
-                .recipe(recipeDto)
+                .recipeId(recipeDto.getRecipeId())
                 .brewerUsername(brew.getBrewer().getUsername())
                 .build();
     }

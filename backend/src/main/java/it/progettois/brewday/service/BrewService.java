@@ -110,7 +110,7 @@ public class BrewService {
         if (brew.getBrewer().getUsername().equals(username)) {
             this.brewRepository.deleteById(id);
             return true;
-        } else throw new AccessDeniedException("You don't have permission to delete this ingredient");
+        } else throw new AccessDeniedException("You don't have permission to delete this brew");
     }
 
     public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username, Integer quantity) throws RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
@@ -118,7 +118,7 @@ public class BrewService {
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
         if (!recipe.getBrewer().getUsername().equals(username)) {
-            throw new AccessDeniedException("You don't have permission to delete this ingredient");
+            throw new AccessDeniedException("You don't have permission to brew this recipe");
         }
 
         List<RecipeIngredient> ingredients = this.recipeIngredientRepository.findAllByRecipe(recipe);
