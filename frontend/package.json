@@ -19,6 +19,11 @@
     "@angular/platform-browser": "~11.0.6",
     "@angular/platform-browser-dynamic": "~11.0.6",
     "@angular/router": "~11.0.6",
+    "@auth0/angular-jwt": "^5.0.2",
+    "angular-jwt": "^0.1.11",
+    "bootstrap": "^4.5.3",
+    "material-icons": "^0.5.2",
+    "ngx-pagination": "^5.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
