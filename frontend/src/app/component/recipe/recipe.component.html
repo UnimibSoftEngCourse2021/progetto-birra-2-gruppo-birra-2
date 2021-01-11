@@ -1,0 +1,12 @@
+<app-nav-bar [user]="currentUser"></app-nav-bar>
+
+<app-table
+  [data]="recipes"
+  [headers]="header"
+  [indexField]="'recipeId'"
+  [actions]="actions"
+  [currentUser]="currentUser"
+  [genericService]="recipeService"
+  [formUrl]="'/createRecipe'"
+>
+</app-table>

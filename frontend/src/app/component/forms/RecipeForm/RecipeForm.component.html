@@ -1,0 +1,51 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="container">
+  <div>
+    <h1>Create new Recipe</h1>
+    <form (ngSubmit)="onSubmit()" #RecipeForm="ngForm">
+      <div class="form-group">
+        <label for="name">Recipe name</label>
+        <input type="text" class="form-control" id="name" name="name"
+               required
+               [(ngModel)]="recipe.name"
+               #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          The recipe name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Recipe description</label>
+        <input type="text" class="form-control" id="description"
+               required
+               [(ngModel)]="recipe.description" name="description"
+               #description="ngModel">
+        <div [hidden]="description.valid || description.pristine"
+             class="alert alert-danger">
+          Recipe description is required
+        </div>
+      </div>
+
+      <label for="ingredient">Ingredients:</label>
+
+      <div class="form-group" *ngFor="let recipeIngredient of recipeIngredients">
+
+        <select class="form-control" id="ingredient" name="ingredient">
+          <option *ngFor="let ingredient of ingredients" [ngValue]="ingredient">{{ingredient.name}}</option>
+        </select>
+        Quantity:
+        <input type="number" [(ngModel)]="recipeIngredient.quantity">
+        <button (click)="addIngredient(recipeIngredient)" *ngIf="recipeIngredient.ingredientId" class="btn btn-default">
+          <i class="material-icons">add</i></button>
+      </div>
+
+
+      <button type="submit" class="btn btn-success" [disabled]="!RecipeForm.form.valid"
+              style="margin-left: 4px">Save
+      </button>
+    </form>
+    <button class="btn btn-primary" (click)="goBack()">Go back</button>
+  </div>
+</div>
