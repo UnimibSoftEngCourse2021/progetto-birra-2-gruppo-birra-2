@@ -10,4 +10,5 @@ public class BrewerDto {
     private String password;
     private String name;
     private String email;
+    private Integer max_brew;
 }
