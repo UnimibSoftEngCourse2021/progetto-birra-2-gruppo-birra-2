@@ -30,11 +30,12 @@ public class BrewerToFatDtoConverter implements Converter<Brewer, BrewerFatDto> 
 
         return BrewerFatDto.builder()
                 .username(brewer.getUsername())
-                .email(brewer.getEmail())
                 .name(brewer.getName())
+                .email(brewer.getEmail())
+                .max_brew(brewer.getMax_brew())
+                .tools(brewer.getTools().stream().map(toolToDtoConverter::convert).collect(Collectors.toList()))
                 .recipes(brewer.getRecipes().stream().map(recipeToDtoConverter::convert).collect(Collectors.toList()))
                 .ingredients(brewer.getIngredients().stream().map(ingredientToDtoConverter::convert).collect(Collectors.toList()))
-                .tools(brewer.getTools().stream().map(toolToDtoConverter::convert).collect(Collectors.toList()))
                 .build();
     }
 }

@@ -35,5 +35,6 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
                 .collect(Collectors.toList()));
 
         return recipeDto;
+
     }
 }
