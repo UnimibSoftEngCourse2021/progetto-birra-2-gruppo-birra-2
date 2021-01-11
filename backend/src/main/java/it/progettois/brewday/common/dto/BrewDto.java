@@ -9,10 +9,11 @@ import java.sql.Timestamp;
 @Builder
 public class BrewDto {
 
-    private String username;
+    private Integer brewId;
     private Integer quantity;
     private Timestamp startDate;
     private String duration;
     private String note;
     private RecipeDto recipe;
+    private String brewerUsername;
 }

@@ -34,4 +34,7 @@ public class Brewer {
     @OneToMany(mappedBy = "brewer")
     private List<Recipe> recipes;
 
+    @OneToMany(mappedBy = "brewer")
+    private List<Brew> brews;
+
 }

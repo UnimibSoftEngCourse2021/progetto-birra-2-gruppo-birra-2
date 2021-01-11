@@ -8,21 +8,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class RecipeIngredientToDtoConverter implements Converter<RecipeIngredient, RecipeIngredientDto> {
 
-    /*
-    private final IngredientToDtoConverter ingredientToDtoConverter;
-
-    @Autowired
-    public RecipeIngredientToDtoConverter(IngredientToDtoConverter ingredientToDtoConverter) {
-        this.ingredientToDtoConverter = ingredientToDtoConverter;
-    }
-
-     */
-
     @Override
     public RecipeIngredientDto convert(RecipeIngredient recipeIngredient) {
-        return RecipeIngredientDto.builder()
-                .ingredientId(recipeIngredient.getIngredient().getIngredientId())
-                .quantity(recipeIngredient.getQuantity())
-                .build();
+
+        RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
+
+        recipeIngredientDto.setIngredientId(recipeIngredient.getIngredient().getIngredientId());
+        recipeIngredientDto.setQuantity(recipeIngredient.getQuantity());
+
+        return recipeIngredientDto;
     }
 }

@@ -21,17 +21,20 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
     @Override
     public RecipeDto convert(Recipe recipe) {
 
-        return RecipeDto.builder()
-                .recipeId(recipe.getRecipeId())
-                .version(recipe.getVersion())
-                .name(recipe.getName())
-                .description(recipe.getDescription())
-                .shared(recipe.getShared())
-                .username(recipe.getBrewer().getUsername())
-                .ingredients(recipe.getIngredients()
-                        .stream()
-                        .map(recipeIngredientToDtoConverter::convert)
-                        .collect(Collectors.toList()))
-                .build();
+        RecipeDto recipeDto = new RecipeDto();
+
+        recipeDto.setUsername(recipe.getBrewer().getUsername());
+        recipeDto.setDescription(recipe.getDescription());
+        recipeDto.setName(recipe.getName());
+        recipeDto.setRecipeId(recipe.getRecipeId());
+        recipeDto.setVersion(recipe.getVersion());
+        recipeDto.setShared(recipe.getShared());
+        recipeDto.setIngredients(recipe.getIngredients()
+                .stream()
+                .map(recipeIngredientToDtoConverter::convert)
+                .collect(Collectors.toList()));
+
+        return recipeDto;
+
     }
 }
