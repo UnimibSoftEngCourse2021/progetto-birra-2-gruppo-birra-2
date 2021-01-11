@@ -47,7 +47,7 @@ export function tokenGetter(): string {
   ],
   providers: [RecipeService,
     AuthService,
-    IngredientService,{
+    IngredientService, {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true

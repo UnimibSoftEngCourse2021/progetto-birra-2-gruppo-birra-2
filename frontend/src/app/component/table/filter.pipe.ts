@@ -4,14 +4,14 @@ import {Pipe, PipeTransform} from '@angular/core';
   name: 'filter'
 })
 export class FilterPipe implements PipeTransform {
-  transform(value: any, searchText: any, field: any) {
+  transform(value: any, searchText: any, field: any): any {
     if (!searchText) {
       return value;
     }
     return value.filter((data) => this.matchValue(data, searchText, field));
   }
 
-  matchValue(data, value, field) {
+  matchValue(data, value, field): any {
     return Object.keys(data).map((key) => {
       if (!field || field === 'All') {
         return new RegExp(value, 'gi').test(data[key]);

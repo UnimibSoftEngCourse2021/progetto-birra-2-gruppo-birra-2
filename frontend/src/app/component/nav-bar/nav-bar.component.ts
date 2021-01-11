@@ -11,6 +11,6 @@ export class NavBarComponent implements OnInit {
   @Input()
   user: Brewer;
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 }

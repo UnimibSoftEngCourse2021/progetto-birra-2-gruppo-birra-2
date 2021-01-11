@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {RecipeService} from '../../service/RecipeService';
 import {ACTIONS, COLUMNS, Recipe} from '../../model/Recipe';
 import {Brewer} from '../../model/Brewer';
-import {Actions} from '../../common/URLS';
 
 @Component({
   selector: 'app-recipe',
@@ -24,9 +23,6 @@ export class RecipeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.recipeService.getAll().subscribe(data => this.recipes = data);
-    // this.recipeService.getById(window.localStorage.getItem('uuid')).subscribe(user => this.currentUser = user);
-
   }
 }

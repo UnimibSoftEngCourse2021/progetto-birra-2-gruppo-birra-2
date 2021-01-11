@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Token} from '../model/Token';
+import {Actions, URLS} from '../common/URLS';
 
 
 @Injectable()
@@ -11,6 +12,6 @@ export class AuthService {
   }
 
   login(payload): Observable<Token> {
-    return this.http.post<Token>('http://localhost:8080/login', payload);
+    return this.http.post<Token>(URLS[Actions.LOGIN].url, payload);
   }
 }

@@ -37,14 +37,14 @@
         </select>
         Quantity:
         <input type="number" [(ngModel)]="recipeIngredient.quantity">
-        <button *ngIf="recipeIngredient.ingredientId" class="btn btn-default" (click)="addIngredient(recipeIngredient)"><i class="material-icons">add</i></button>
+        <button (click)="addIngredient(recipeIngredient)" *ngIf="recipeIngredient.ingredientId" class="btn btn-default">
+          <i class="material-icons">add</i></button>
       </div>
 
 
-
-
       <button type="submit" class="btn btn-success" [disabled]="!RecipeForm.form.valid"
-              style="margin-left: 4px">Save</button>
+              style="margin-left: 4px">Save
+      </button>
     </form>
     <button class="btn btn-primary" (click)="goBack()">Go back</button>
   </div>
