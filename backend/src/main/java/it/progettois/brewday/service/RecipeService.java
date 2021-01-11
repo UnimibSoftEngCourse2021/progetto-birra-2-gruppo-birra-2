@@ -7,6 +7,7 @@ import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.RecipeNotFoundException;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.Brewer;
+import it.progettois.brewday.persistence.model.RecipeIngredient;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
 import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
 import it.progettois.brewday.persistence.repository.RecipeRepository;
@@ -76,13 +77,13 @@ public class RecipeService {
         Recipe recipe = this.dtoToRecipeConverter.convert(recipeDto);
         Objects.requireNonNull(recipe).setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
 
-        this.recipeRepository.save(recipe);
+        recipe = this.recipeRepository.save(recipe);
 
-        recipe.getIngredients().forEach(recipeIngredient -> {
-            recipeIngredient.setRecipe(this.recipeRepository.save(recipe));
+        for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
+            recipeIngredient.setRecipe(recipe);
             this.recipeIngredientRepository.save(recipeIngredient);
-        });
-        return this.recipeToDtoConverter.convert(this.recipeRepository.save(recipe));
+        }
+        return this.recipeToDtoConverter.convert(recipe);
     }
 
     public void deleteRecipe(String username, Integer id) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException {
