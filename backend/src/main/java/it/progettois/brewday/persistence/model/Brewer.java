@@ -23,7 +23,8 @@ public class Brewer {
     private String email;
 
     @Column(nullable = false)
-    private Integer max_brew;
+    private Integer maxBrew;
+
 
     @OneToMany(mappedBy = "brewer")
     private List<Ingredient> ingredients;

@@ -3,12 +3,15 @@ package it.progettois.brewday.controller;
 import it.progettois.brewday.common.dto.BrewerFatDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.service.BrewerService;
+import it.progettois.brewday.service.maximizeBrew.MaximizeBrewInput;
+import it.progettois.brewday.service.maximizeBrew.MaximizeBrewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -16,9 +19,11 @@ import java.util.List;
 public class BrewerController {
 
     private final BrewerService brewerService;
+    private final MaximizeBrewService maximizeBrewService;
 
-    public BrewerController(BrewerService brewerService) {
+    public BrewerController(BrewerService brewerService, MaximizeBrewService maximizeBrewService) {
         this.brewerService = brewerService;
+        this.maximizeBrewService = maximizeBrewService;
     }
 
     @GetMapping("/brewer")
@@ -40,5 +45,19 @@ public class BrewerController {
         } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Brewer with username: " + username + " does not exists");
         }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> test() {
+
+        MaximizeBrewInput maximizeBrewInput = MaximizeBrewInput
+                .builder()
+                .capacity(10)
+                .ingredientNames(Arrays.asList("1", "2", "3", "4"))
+                .proportions(Arrays.asList(0.25, 0.25, 0.25, 0.25))
+                .storage(Arrays.asList(2.0, 5.0, 3.0, 4.0))
+                .build();
+
+        return ResponseEntity.ok(this.maximizeBrewService.getMaxBrew(maximizeBrewInput));
     }
 }

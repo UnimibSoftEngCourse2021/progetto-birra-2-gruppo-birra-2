@@ -135,4 +135,18 @@ public class IngredientService {
         } else throw new AccessDeniedException("You don't have access to this ingredient");
 
     }
+
+    public Boolean isInStorage(String username, Integer ingredientId) throws EmptyStorageException, BrewerNotFoundException {
+        List<IngredientDto> storage = getStorage(username);
+        Boolean result = false;
+
+        for(IngredientDto i : storage){
+            if (i.getIngredientId().equals(ingredientId)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+
+    }
 }
