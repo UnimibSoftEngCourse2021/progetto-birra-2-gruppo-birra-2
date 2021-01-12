@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 public class MaximizeBrewOutput {
 
-    private List<RecipeIngredientDto> ingredients;
+    private List<MaxedRecipeIngredient> ingredients;
     private double FO;
 }

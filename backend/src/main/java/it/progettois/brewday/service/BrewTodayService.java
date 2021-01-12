@@ -8,12 +8,14 @@ import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.RecipeIngredient;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
+import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
 import it.progettois.brewday.persistence.repository.RecipeRepository;
 import it.progettois.brewday.service.maximizeBrew.MaximizeBrewInput;
 import it.progettois.brewday.service.maximizeBrew.MaximizeBrewOutput;
 import it.progettois.brewday.service.maximizeBrew.MaximizeBrewService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +27,15 @@ public class BrewTodayService {
     private final RecipeRepository recipeRepository;
     private final BrewerRepository brewerRepository;
     private final MaximizeBrewService maximizeBrewService;
+    private final RecipeIngredientRepository recipeIngredientRepository;
 
 
-    public BrewTodayService(IngredientService ingredientService, RecipeRepository recipeRepository, BrewerRepository brewerRepository, ToolService toolService, MaximizeBrewService maximizeBrewService) {
+    public BrewTodayService(RecipeIngredientRepository recipeIngredientRepository, IngredientService ingredientService, RecipeRepository recipeRepository, BrewerRepository brewerRepository, MaximizeBrewService maximizeBrewService) {
         this.ingredientService = ingredientService;
         this.recipeRepository = recipeRepository;
         this.brewerRepository = brewerRepository;
         this.maximizeBrewService = maximizeBrewService;
+        this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
     public BrewTodayDto find(String username) throws BrewerNotFoundException, EmptyStorageException, NoBestRecipeException {
@@ -41,45 +45,48 @@ public class BrewTodayService {
         Integer maxCapacity = brewer.getMaxBrew();
 
         //Maximize Brew Input
-        List<String> ingredientNames = null;
-        List<Double> storageValues = null;
-        List<Double> proportionValues = null;
+        List<String> ingredientNames = new ArrayList<>();
+        List<Double> storageValues =  new ArrayList<>();
+        List<Double> proportionValues =  new ArrayList<>();
 
         //Proportion Input Variables
-        List<Integer> recipeIngredientQuantityValues = null;
-        Integer recipeQuantity;
+        List<Double> recipeIngredientQuantityValues =  new ArrayList<>();
+        Double recipeTotQuantity;
 
         //This map associates each recipe to how many stored ingredients it can use
         HashMap<Recipe, MaximizeBrewOutput> brewTodayMap = new HashMap<>();
 
         for(Recipe r : recipes){
 
-            Boolean compatible = true;
-            recipeQuantity = 0;
-            recipeIngredientQuantityValues = null;
-            ingredientNames = null;
-            storageValues = null;
-            proportionValues = null;
+            boolean compatible = true;
+            recipeTotQuantity = 0.0;
+            recipeIngredientQuantityValues.clear();
+            ingredientNames.clear();
+            storageValues.clear();
+            proportionValues.clear();
+            List<RecipeIngredient> recipeIngredients = this.recipeIngredientRepository.findAllByRecipe(r);
 
-            for(RecipeIngredient i : r.getIngredients()){
+            for(RecipeIngredient i : recipeIngredients){
 
                 //Checks if the recipe ingredient is available in storage
-                if(!this.ingredientService.isInStorage(username, i.getIngredient().getIngredientId()))
+                if(!this.ingredientService.isInStorage(username, i.getIngredient().getIngredientId())) {
                     compatible = false;
+                    break;
+                }
 
                 ingredientNames.add(i.getIngredient().getName());
                 storageValues.add(i.getIngredient().getQuantity());
-                recipeIngredientQuantityValues.add(i.getQuantity());
-                recipeQuantity += i.getQuantity();
-            }
-
-            //Proportions elaboration
-            for(Integer ingredientQuantity : recipeIngredientQuantityValues){
-                Double ingredientProportion = Double.valueOf(recipeQuantity/ingredientQuantity);
-                proportionValues.add(ingredientProportion);
+                recipeIngredientQuantityValues.add(Double.valueOf(i.getQuantity()));
+                recipeTotQuantity += i.getQuantity();
             }
 
             if(compatible){
+
+                //Proportions elaboration
+                for(Double ingredientQuantity : recipeIngredientQuantityValues){
+                    Double ingredientProportion = ingredientQuantity/recipeTotQuantity;
+                    proportionValues.add(ingredientProportion);
+                }
 
                 MaximizeBrewInput input = MaximizeBrewInput.builder()
                         .capacity(maxCapacity)
@@ -93,12 +100,15 @@ public class BrewTodayService {
                 brewTodayMap.put(r, result);
 
             } else {
-                brewTodayMap.put(r, null);
+                //Sets the FO value to 0
+                MaximizeBrewOutput foZero = new MaximizeBrewOutput();
+                foZero.setFO(0.0);
+                brewTodayMap.put(r, foZero);
             }
         }
 
         Recipe key = null;
-        Double max = 0.0;
+        double max = 0.0;
         for (Map.Entry<Recipe, MaximizeBrewOutput> set : brewTodayMap.entrySet()) {
 
             if(set.getValue().getFO() > max){
@@ -111,12 +121,12 @@ public class BrewTodayService {
         if(max == 0.0)
             throw new NoBestRecipeException();
 
-        BrewTodayDto bestRecipe = BrewTodayDto.builder()
+        return BrewTodayDto.builder()
+                .recipeId(key.getRecipeId())
                 .recipeName(key.getName())
+                .recipeDescription(key.getDescription())
                 .ingredientQuantities(brewTodayMap.get(key).getIngredients())
                 .build();
-
-        return bestRecipe;
 
 
     }

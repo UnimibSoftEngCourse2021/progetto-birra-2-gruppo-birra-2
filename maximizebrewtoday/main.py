@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 
 class OptimalRecipe(pydantic.BaseModel):
-    ingredientId: int
-    quantity: int
+    ingredientName: str
+    quantity: float
 
 
 class OptimalResponse(pydantic.BaseModel):
@@ -22,7 +22,7 @@ def maximize_brew():
 
     print(payload)
 
-    n = len(payload["ingredients"])
+    n = len(payload["ingredientNames"])
 
     model = pulp.LpProblem('brew_today', pulp.LpMaximize)
 
@@ -30,7 +30,7 @@ def maximize_brew():
 
     # VARIABLES
 
-    x = (pulp.LpVariable(str(payload["ingredients"][i]), 0, payload["storage"][i]) for i in range(n))
+    x = (pulp.LpVariable(str(payload["ingredientNames"][i]), 0, payload["storage"][i]) for i in range(n))
 
     model.addVariables(x)
 
@@ -67,7 +67,7 @@ def maximize_brew():
 
     for var in model.variables():
         print(var.name, "=", var.varValue)
-        optimalRecipe = OptimalRecipe(ingredientId=var.name, quantity=int(var.varValue))
+        optimalRecipe = OptimalRecipe(ingredientName=var.name, quantity=round(var.varValue, 1))
         optimalRecipes.append(optimalRecipe)
     print()
     FO = pulp.value(model.objective)
