@@ -60,7 +60,6 @@ public class DtoToRecipeConverter implements Converter<RecipeDto, Recipe> {
             }
         }
 
-        recipe.setVersion(recipeDto.getVersion());
         recipe.setName(recipeDto.getName());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setShared(recipeDto.getShared());

@@ -27,7 +27,6 @@ public class RecipeToDtoConverter implements Converter<Recipe, RecipeDto> {
         recipeDto.setDescription(recipe.getDescription());
         recipeDto.setName(recipe.getName());
         recipeDto.setRecipeId(recipe.getRecipeId());
-        recipeDto.setVersion(recipe.getVersion());
         recipeDto.setShared(recipe.getShared());
         recipeDto.setIngredients(recipe.getIngredients()
                 .stream()
