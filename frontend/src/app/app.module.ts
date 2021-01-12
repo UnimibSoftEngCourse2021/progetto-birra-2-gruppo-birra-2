@@ -15,8 +15,10 @@ import {LoginComponent} from './component/login/login.component';
 import {AuthService} from './service/AuthService';
 import {TokenInterceptor} from './common/TokenInterceptor';
 import {NavBarComponent} from './component/nav-bar/nav-bar.component';
-import {RecipeFormComponent} from "./component/forms/RecipeForm/RecipeForm.component";
-import {IngredientService} from "./service/IngredientService";
+import {RecipeFormComponent} from './component/forms/RecipeForm/RecipeForm.component';
+import {IngredientService} from './service/IngredientService';
+import {IngredientComponent} from './component/ingredient/ingredient.component';
+import {IngredientFormComponent} from './component/forms/IngredientForm/IngredientForm.component';
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -31,6 +33,8 @@ export function tokenGetter(): string {
     NavBarComponent,
     RecipeFormComponent,
     FilterPipe,
+    IngredientComponent,
+    IngredientFormComponent
   ],
   imports: [
     BrowserModule,

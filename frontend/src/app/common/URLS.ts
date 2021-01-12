@@ -10,7 +10,11 @@ export enum Actions {
   GET_RECIPE_BY_ID,
   SAVE_RECIPE,
   DELETE_RECIPE,
-  GET_INGREDIENT
+  GET_INGREDIENT,
+  GET_INGREDIENT_BY_ID,
+  SAVE_INGREDIENT,
+  DELETE_INGREDIENT,
+  EDIT_INGREDIENT
 }
 
 export const BASE_URL_DEV = 'http://ec2-52-29-235-197.eu-central-1.compute.amazonaws.com:8080/';
@@ -22,7 +26,7 @@ export const URLS: Url[] = [
 
   {
     action: Actions.LOGIN,
-    url: BASE_URL + 'login/'
+    url: BASE_URL + 'login'
   },
   {
     action: Actions.GET_RECIPE,
@@ -42,6 +46,22 @@ export const URLS: Url[] = [
   },
   {
     action: Actions.GET_INGREDIENT,
+    url: BASE_URL + 'ingredient/'
+  },
+  {
+    action: Actions.GET_INGREDIENT_BY_ID,
+    url: BASE_URL + 'ingredient'
+  },
+  {
+    action: Actions.SAVE_INGREDIENT,
+    url: BASE_URL + 'ingredient'
+  },
+  {
+    action: Actions.DELETE_INGREDIENT,
+    url: BASE_URL + 'ingredient'
+  },
+  {
+    action: Actions.EDIT_INGREDIENT,
     url: BASE_URL + 'ingredient/'
   }
 ];
