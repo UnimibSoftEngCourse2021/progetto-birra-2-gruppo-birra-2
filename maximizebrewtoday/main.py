@@ -1,12 +1,23 @@
 import pulp
-from flask import Flask, request
+from flask import Flask, request, jsonify, make_response, Response
+import json
+import pydantic
 
 app = Flask(__name__)
 
 
-@app.route('/', methods=['POST'])
-def hello_world():
+class OptimalRecipe(pydantic.BaseModel):
+    ingredientId: int
+    quantity: int
 
+
+class OptimalResponse(pydantic.BaseModel):
+    ingredients: list
+    fo: int
+
+
+@app.route('/', methods=['POST'])
+def maximize_brew():
     payload = request.json
 
     print(payload)
@@ -19,7 +30,7 @@ def hello_world():
 
     # VARIABLES
 
-    x = (pulp.LpVariable(payload["ingredients"][i], 0, payload["storage"][i]) for i in range(n))
+    x = (pulp.LpVariable(str(payload["ingredients"][i]), 0, payload["storage"][i]) for i in range(n))
 
     model.addVariables(x)
 
@@ -52,10 +63,16 @@ def hello_world():
 
     # OPTIMAL VALUE
 
+    optimalRecipes = []
+
     for var in model.variables():
         print(var.name, "=", var.varValue)
+        optimalRecipe = OptimalRecipe(ingredientId=var.name, quantity=int(var.varValue))
+        optimalRecipes.append(optimalRecipe)
     print()
     FO = pulp.value(model.objective)
     print("FO =", FO)
 
-    return str(FO)
+    optimalResponse = OptimalResponse(ingredients=optimalRecipes, fo=FO)
+
+    return Response(optimalResponse.json(), mimetype='application/json')

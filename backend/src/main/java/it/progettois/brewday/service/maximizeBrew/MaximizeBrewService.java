@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public interface MaximizeBrewService {
 
     @RequestMapping(method = RequestMethod.POST)
-    Integer getMaxBrew(MaximizeBrewInput maximizeBrewInput);
+    MaximizeBrewOutput getMaxBrew(MaximizeBrewInput maximizeBrewInput);
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Builder
 public class MaximizeBrewInput {
-    private List<String> ingredients;
+    private List<Integer> ingredients;
     private List<Integer> storage;
     private List<Double> proportions;
     private int capacity;

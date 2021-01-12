@@ -53,9 +53,9 @@ public class BrewerController {
         MaximizeBrewInput maximizeBrewInput = MaximizeBrewInput
                 .builder()
                 .capacity(10)
-                .ingredients(Arrays.asList("Acqua", "malto", "luppolo", "altro"))
+                .ingredients(Arrays.asList(1, 2, 3, 4))
                 .proportions(Arrays.asList(0.25, 0.25, 0.25, 0.25))
-                .storage(Arrays.asList(3, 5, 2, 10))
+                .storage(Arrays.asList(2, 5, 3, 4))
                 .build();
 
         return ResponseEntity.ok(this.maximizeBrewService.getMaxBrew(maximizeBrewInput));
