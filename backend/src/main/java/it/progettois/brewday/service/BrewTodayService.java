@@ -82,22 +82,25 @@ public class BrewTodayService {
 
             if(compatible){
 
-                //Proportions elaboration
-                for(Double ingredientQuantity : recipeIngredientQuantityValues){
-                    Double ingredientProportion = ingredientQuantity/recipeTotQuantity;
-                    proportionValues.add(ingredientProportion);
+                if(recipeTotQuantity != 0.0) {
+
+                    //Proportions elaboration
+                    for (Double ingredientQuantity : recipeIngredientQuantityValues) {
+                        Double ingredientProportion = ingredientQuantity / recipeTotQuantity;
+                        proportionValues.add(ingredientProportion);
+                    }
+
+                    MaximizeBrewInput input = MaximizeBrewInput.builder()
+                            .capacity(maxCapacity)
+                            .ingredientNames(ingredientNames)
+                            .proportions(proportionValues)
+                            .storage(storageValues)
+                            .build();
+
+                    MaximizeBrewOutput result = this.maximizeBrewService.getMaxBrew(input);
+
+                    brewTodayMap.put(r, result);
                 }
-
-                MaximizeBrewInput input = MaximizeBrewInput.builder()
-                        .capacity(maxCapacity)
-                        .ingredientNames(ingredientNames)
-                        .proportions(proportionValues)
-                        .storage(storageValues)
-                        .build();
-
-                MaximizeBrewOutput result = this.maximizeBrewService.getMaxBrew(input);
-
-                brewTodayMap.put(r, result);
 
             } else {
                 //Sets the FO value to 0
