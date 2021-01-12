@@ -10,7 +10,11 @@ export enum Actions {
   GET_RECIPE_BY_ID,
   SAVE_RECIPE,
   DELETE_RECIPE,
-  GET_INGREDIENT
+  GET_INGREDIENT,
+  GET_TOOLS,
+  SAVE_TOOL,
+  DELETE_TOOL,
+  EDIT_TOOL
 }
 
 export const BASE_URL_DEV = 'http://ec2-52-29-235-197.eu-central-1.compute.amazonaws.com:8080/';
@@ -43,5 +47,22 @@ export const URLS: Url[] = [
   {
     action: Actions.GET_INGREDIENT,
     url: BASE_URL + 'ingredient/'
+  },
+  {
+    action: Actions.GET_TOOLS,
+    url: BASE_URL + 'tool/'
+  },
+  {
+    action: Actions.SAVE_TOOL,
+    url: BASE_URL + 'tool/'
+  },
+  {
+    action: Actions.DELETE_TOOL,
+    url: BASE_URL + 'tool/'
+  },
+  {
+    action: Actions.EDIT_TOOL,
+    url: BASE_URL + 'tool/'
   }
+
 ];
