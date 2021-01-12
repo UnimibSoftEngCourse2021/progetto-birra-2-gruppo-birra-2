@@ -10,9 +10,6 @@ import java.util.List;
 public class Brewer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer brewerId;
-
     @Column(updatable = false, nullable = false, unique = true)
     private String username;
 
@@ -28,6 +25,7 @@ public class Brewer {
     @Column(nullable = false)
     private Integer maxBrew;
 
+
     @OneToMany(mappedBy = "brewer")
     private List<Ingredient> ingredients;
 
@@ -36,5 +34,8 @@ public class Brewer {
 
     @OneToMany(mappedBy = "brewer")
     private List<Recipe> recipes;
+
+    @OneToMany(mappedBy = "brewer")
+    private List<Brew> brews;
 
 }

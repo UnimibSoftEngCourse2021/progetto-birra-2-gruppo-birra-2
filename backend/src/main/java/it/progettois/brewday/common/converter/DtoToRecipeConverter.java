@@ -35,7 +35,7 @@ public class DtoToRecipeConverter implements Converter<RecipeDto, Recipe> {
     public Recipe convert(RecipeDto recipeDto) {
 
         Recipe recipe = new Recipe();
-        Brewer brewer = this.brewerRepository.findById(recipeDto.getBrewerId()).orElse(null);
+        Brewer brewer = this.brewerRepository.findByUsername(recipeDto.getUsername()).orElse(null);
 
         if (brewer == null) {
             return null;

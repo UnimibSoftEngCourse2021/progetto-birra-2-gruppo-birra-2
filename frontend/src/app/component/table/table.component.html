@@ -1,0 +1,64 @@
+<div align="center">
+  <div class="form-group float-label-control">
+    <input #search [(ngModel)]="searchText" style="width: 15%"
+           placeholder="{{'table.search.placeHolder'}}">
+    <select [(ngModel)]="field" style="width: 15%">
+      <option value='All' selected="selected">{{'table.search.all'}}</option>
+      <option *ngFor="let h of headers" value="{{h.fieldName}}">{{h.label}}</option>
+    </select>
+    <div *ngIf="search.value">
+      {{'table.search.stringToMatch'}} {{searchText}}
+      <br>
+      <button class="btn button-default" (click)="searchText = ''">{{'table.search.clear'}}</button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <table class="table table-striped" align="center" style="width: 75%">
+    <thead class="thead-dark">
+    <tr>
+      <th *ngFor="let col of headers" (click)="onSelect(col.fieldName)">
+        {{col.label}}
+        <i *ngIf="col.fieldName === selectedHeader" class="material-icons ">
+          {{sortIcon}}
+        </i>
+        <i *ngIf="col.fieldName !== selectedHeader" class="material-icons ">
+          unfold_more
+        </i>
+      </th>
+      <th>{{'table.actions'}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let row of data | filter: searchText : field">
+      <td *ngFor="let col of headers">
+          <span>
+            {{getRowParameter(col, row)}}
+          </span>
+      </td>
+      <td>
+        <button class="btn btn-default" *ngFor="let act of actions"
+                (click)="actionFunc(act, row)"><i class="material-icons">{{act.label}}</i></button>
+      </td>
+    </tr>
+
+    <tr>
+      <td bgcolor="white" colspan="2">
+        {{'table.pagination.elementToDisplay'}}
+        <select [(ngModel)]="numOfElement" style="height: 25px">
+          <option *ngFor="let num of elementToDisplay">{{num}}</option>
+        </select>
+      </td>
+      <td bgcolor="white"></td>
+      <td bgcolor="white" colspan="2">
+
+      </td>
+      <td bgcolor="white"></td>
+      <td bgcolor="white">
+        <a class="btn btn-primary" routerLink="{{formUrl}}" style="width: 80%"><i class="material-icons">add</i></a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

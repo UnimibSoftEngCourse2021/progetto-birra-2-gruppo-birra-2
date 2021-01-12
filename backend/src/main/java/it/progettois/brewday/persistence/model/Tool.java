@@ -1,6 +1,6 @@
 package it.progettois.brewday.persistence.model;
 
-import it.progettois.brewday.common.constant.IngredientUnit;
+import it.progettois.brewday.common.constant.ToolUnit;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,14 +19,14 @@ public class Tool {
     private Integer capacity;
 
     @Enumerated(EnumType.STRING)
-    private IngredientUnit unit;
+    private ToolUnit unit;
 
     private Integer quantity;
 
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_id")
+    @JoinColumn(name = "brewer_username")
     private Brewer brewer;
 
 }

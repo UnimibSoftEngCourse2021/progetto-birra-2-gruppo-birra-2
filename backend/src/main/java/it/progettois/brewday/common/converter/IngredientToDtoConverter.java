@@ -18,7 +18,7 @@ public class IngredientToDtoConverter implements Converter<Ingredient, Ingredien
                 .type(ingredient.getType())
                 .quantity(ingredient.getQuantity())
                 .shared(ingredient.getShared())
-                .brewerUsername(ingredient.getBrewer().getUsername())
+                .username(ingredient.getBrewer().getUsername())
                 .build();
     }
 }

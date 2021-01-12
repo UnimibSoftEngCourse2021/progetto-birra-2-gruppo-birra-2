@@ -115,7 +115,7 @@ public class IngredientService {
 
         //It is necessary to check that the brewer owns the ingredient so that
         //other brewers storage can't be accessed
-        if(ingredientDto.getBrewerUsername().equals(username)) {
+        if(ingredientDto.getUsername().equals(username)) {
             if (ingredientDto.getQuantity() > 0) {
                 return ingredientDto;
             } else
