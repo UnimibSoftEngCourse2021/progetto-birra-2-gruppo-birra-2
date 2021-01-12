@@ -25,6 +25,9 @@ public class Brewer {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private Integer maxBrew;
+
     @OneToMany(mappedBy = "brewer")
     private List<Ingredient> ingredients;
 
