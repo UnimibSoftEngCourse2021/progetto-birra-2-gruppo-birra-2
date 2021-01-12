@@ -1,57 +1,61 @@
 import pulp
+from flask import Flask, request
 
-ingredient = ["acqua", "luppolo", "malto"]
-storage = [5, 3, 3]
-proportion = [0.5, 0.25, 0.25]
-capacity = 5
-
-n = len(ingredient)
-
-model = pulp.LpProblem('brew_today', pulp.LpMaximize)
-
-f = pulp.LpAffineExpression(pulp.LpElement('x'))
-
-#VARIABLES
+app = Flask(__name__)
 
 
-x = (pulp.LpVariable(ingredient[i], 0, storage[i]) for i in range(n))
+@app.route('/', methods=['POST'])
+def hello_world():
 
-model.addVariables(x)
+    payload = request.json
 
-print(model.variables())
+    print(payload)
 
+    n = len(payload["ingredients"])
 
+    model = pulp.LpProblem('brew_today', pulp.LpMaximize)
 
-#OBJECTIVE
+    f = pulp.LpAffineExpression(pulp.LpElement('x'))
 
-fo = ""
-for i in range(n):
-    fo += model.variables()[i]
+    # VARIABLES
 
-model += fo, "FO"
+    x = (pulp.LpVariable(payload["ingredients"][i], 0, payload["storage"][i]) for i in range(n))
 
-#CONSTRAINTS
+    model.addVariables(x)
 
-quantityUsed = ""
-for i in range(n):
-    quantityUsed += model.variables()[i]
-model += quantityUsed <= capacity
+    print(model.variables())
 
+    # OBJECTIVE
 
-for i in range(n):
-    model += model.variables()[i] == proportion[i]*fo   # recipe proportion constraints
+    fo = ""
+    for i in range(n):
+        fo += model.variables()[i]
 
-#SOLUTION
+    model += fo, "FO"
 
-print(model)
-model.solve()
-status = pulp.LpStatus[model.status]
-print(status)
+    # CONSTRAINTS
 
-#OPTIMAL VALUE
+    quantityUsed = ""
+    for i in range(n):
+        quantityUsed += model.variables()[i]
+    model += quantityUsed <= payload["capacity"]
 
-for var in model.variables() :
-    print(var.name, "=", var.varValue)
-print()
-FO = pulp.value(model.objective)
-print("FO =", FO)
+    for i in range(n):
+        model += model.variables()[i] == payload["proportions"][i] * fo  # recipe proportion constraints
+
+    # SOLUTION
+
+    print(model)
+    model.solve()
+    status = pulp.LpStatus[model.status]
+    print(status)
+
+    # OPTIMAL VALUE
+
+    for var in model.variables():
+        print(var.name, "=", var.varValue)
+    print()
+    FO = pulp.value(model.objective)
+    print("FO =", FO)
+
+    return str(FO)
