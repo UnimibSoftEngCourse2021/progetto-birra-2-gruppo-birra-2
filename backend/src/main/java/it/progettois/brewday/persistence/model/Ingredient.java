@@ -33,7 +33,7 @@ public class Ingredient {
     private List<RecipeIngredient> recipe;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_username")
+    @JoinColumn(name = "username")
     private Brewer brewer;
 
     private Boolean shared;
