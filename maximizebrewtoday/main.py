@@ -1,6 +1,5 @@
 import pulp
-from flask import Flask, request, jsonify, make_response, Response
-import json
+from flask import Flask, request, Response
 import pydantic
 
 app = Flask(__name__)
@@ -76,3 +75,7 @@ def maximize_brew():
     optimalResponse = OptimalResponse(ingredients=optimalRecipes, fo=FO)
 
     return Response(optimalResponse.json(), mimetype='application/json')
+
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
