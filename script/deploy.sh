@@ -9,3 +9,8 @@ docker stop maximizebrewtoday
 docker rm maximizebrewtoday
 docker image rm gruppobirra2/maximizebrewtoday
 docker run -p 5000:5000 -d --name maximizebrewtoday gruppobirra2/maximizebrewtoday:latest
+
+docker stop brewday-frontend
+docker rm brewday-frontend
+docker image rm gruppobirra2/brewday-frontend
+docker run -p 80:4200 -d --name brewday-frontend gruppobirra2/brewday-frontend:latest

@@ -28,6 +28,10 @@ script:
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/maximizebrewtoday:latest .; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/maximizebrewtoday:latest; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd frontend; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewtoday-frontend:latest .; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewtoday-frontend:latest; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd script; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod +x deploy.sh; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "${DEV_EC2_KEY}" > dev.pem; fi
