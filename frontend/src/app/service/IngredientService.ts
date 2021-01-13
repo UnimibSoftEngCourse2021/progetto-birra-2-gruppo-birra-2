@@ -21,17 +21,20 @@ export class IngredientService implements GenericService {
   }
 
   delete(id: number): Observable<any> {
-    return undefined;
+    const url = `${URLS[Actions.DELETE_INGREDIENT].url}/${id}`;
+    return this.http.delete<boolean>(url);
   }
 
   edit(entity: any): Observable<any> {
     return undefined;
   }
 
-  save(recipe: Recipe): Observable<Recipe> {
+  save(ingredient: Ingredient): Observable<Ingredient> {
 
-    return undefined;
+    return this.http.post<Ingredient>(URLS[Actions.SAVE_INGREDIENT].url, ingredient);
   }
+
+
 
   /*
 
@@ -40,11 +43,6 @@ export class IngredientService implements GenericService {
     }
     edit(employeeDTO: Recipe): Observable<Recipe> {
       return this.http.put<Recipe>(URLS[Actions.EDIT].url, employeeDTO);
-    }
-
-    delete(id: number): Observable<boolean> {
-      const url = `${URLS[Actions.DELETE].url}/${id}`;
-      return this.http.delete<boolean>(url);
     }
 
     find(query: string): Observable<Recipe[]> {
