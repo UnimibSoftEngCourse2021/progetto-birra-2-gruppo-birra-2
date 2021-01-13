@@ -23,8 +23,8 @@ script:
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday:latest .; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday:latest; fi
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; cd ..; fi
-  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; cd maximizebrewtoday; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd maximizebrewtoday; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/maximizebrewtoday:latest .; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/maximizebrewtoday:latest; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "${DEV_EC2_KEY}" > dev.pem; fi
@@ -36,6 +36,7 @@ script:
 
 deploy:
   - provider: script
+    skip_cleanup: true
     script: ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} ./deploy.sh
     on:
       branch: Develop
