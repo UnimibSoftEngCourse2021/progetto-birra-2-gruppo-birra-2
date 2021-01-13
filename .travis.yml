@@ -30,6 +30,7 @@ script:
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "${DEV_EC2_KEY}" > dev.pem; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod 600 dev.pem; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd script; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod +x deploy.sh; fi
 
 
