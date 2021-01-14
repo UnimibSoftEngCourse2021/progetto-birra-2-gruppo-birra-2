@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(loginPayload).subscribe(data => {
       window.localStorage.setItem('token', data.token);
-      window.localStorage.setItem('id', this.jwtHelper.decodeToken(data.token).user_id);
+      window.localStorage.setItem('username', this.jwtHelper.decodeToken(data.token).username);
       this.router.navigate(['index']);
 
     }, err => {
@@ -42,7 +42,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    window.localStorage.removeItem('access');
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('username');
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.compose([Validators.required])],
       password: ['', Validators.required]

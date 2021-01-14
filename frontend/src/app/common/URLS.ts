@@ -25,7 +25,7 @@ export enum Actions {
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
 export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
 
-export const BASE_URL = BASE_URL_LOCALHOST;
+export const BASE_URL = BASE_URL_DEV;
 
 export const URLS: Url[] = [
 
