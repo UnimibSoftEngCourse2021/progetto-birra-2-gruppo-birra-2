@@ -1,0 +1,24 @@
+<app-nav-bar [user]="currentUser"></app-nav-bar>
+
+<div class="container">
+  <div>
+    <h1>Today's Brew</h1>
+    <form (ngSubmit)="onSubmit()" #BrewTodayForm="ngForm">
+      <div class="form-group">
+
+        <label class="form-control-lg" id="name">{{brewToday.recipeName}}</label>
+        <br>
+        <label class="form-control-lg" id="description">{{brewToday.recipeDescription}}</label>
+        <br>
+        <ul class="form-control-lg" name="ingredient" id="ingredient">
+          <li *ngFor='let in of counter(brewToday.ingredientQuantities.length) ;let i = index'>
+            {{brewToday.ingredientQuantities[i].ingredientName}} = {{brewToday.ingredientQuantities[i].quantity}} </li>
+        </ul>
+        <br *ngFor='let in of counter(brewToday.ingredientQuantities.length)'>
+      <button type="submit" class="btn btn-success" [disabled]="!BrewTodayForm.form.valid"
+              style="margin-left: 4px">Brew!
+      </button>
+      </div>
+    </form>
+  </div>
+</div>

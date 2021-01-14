@@ -9,7 +9,6 @@ import java.util.List;
 public class RecipeDto {
 
     private Integer recipeId;
-    private Integer version;
     private String name;
     private String description;
     private String username;

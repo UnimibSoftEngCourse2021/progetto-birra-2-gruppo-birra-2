@@ -23,12 +23,25 @@ script:
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday:latest .; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday:latest; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd maximizebrewtoday; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/maximizebrewtoday:latest .; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/maximizebrewtoday:latest; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd frontend; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker build -t gruppobirra2/brewday-frontend:latest .; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then docker push gruppobirra2/brewday-frontend:latest; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd ..; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then cd script; fi
+  - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod +x deploy.sh; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then echo "${DEV_EC2_KEY}" > dev.pem; fi
   - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then chmod 600 dev.pem; fi
+
+
 
 deploy:
   - provider: script
     skip_cleanup: true
-    script: ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} "docker stop brewday; docker rm brewday; docker image rm gruppobirra2/brewday; docker run -p 8080:8080 -d --name brewday gruppobirra2/brewday:latest;"
+    script: ssh -o "StrictHostKeyChecking no" -i dev.pem ${DEV_EC2_USERNAME}@${DEV_EC2_URL} "bash -s" < ./deploy.sh
     on:
       branch: Develop

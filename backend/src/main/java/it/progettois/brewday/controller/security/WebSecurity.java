@@ -15,7 +15,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 import static it.progettois.brewday.common.constant.SecurityConstants.SIGN_UP_URL;
 
@@ -51,7 +50,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // setAllowCredentials(true) is important, otherwise:
