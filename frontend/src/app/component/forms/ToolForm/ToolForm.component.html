@@ -12,7 +12,7 @@
                #name="ngModel">
         <div [hidden]="name.valid || name.pristine"
              class="alert alert-danger">
-          You need to put the name of the tool.
+          The tool name is required
         </div>
       </div>
 
@@ -20,13 +20,14 @@
 
       <div class="form-group">
         <label for="capacity">Capacity: </label>
-        <input type="text" class="form-control" id="capacity"
-               required
-               [(ngModel)]="tool.capacity" name="capacity"
-               #capacity="ngModel">
+        <input type="text" class="form-control" id="capacity" required
+               [(ngModel)]="tool.capacity">
         <label for="unit">Unit: </label>
-        <select class="form-control" id="unit" name="unit">
-          //connessione con toolunit
+        <select class="form-control" id="unit" name="unit"
+                [(ngModel)]="tool.unit">
+          <option value="piece">PIECE</option>
+          <OPTION value="ML">MILLILITERS</OPTION>
+          <option value="G">GRAMS</option>
         </select>
         </div>
 
