@@ -1,10 +1,13 @@
 import {Observable} from 'rxjs';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {GenericService} from './GenericService';
 import {Tool} from '../model/Tool';
 import {Actions, URLS} from '../common/URLS';
 
 
-export class ToolService  {
+@Injectable()
+export class ToolService implements GenericService {
 
   constructor(private http: HttpClient) {
   }
