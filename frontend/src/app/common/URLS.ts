@@ -14,13 +14,14 @@ export enum Actions {
   GET_INGREDIENT_BY_ID,
   SAVE_INGREDIENT,
   DELETE_INGREDIENT,
-  EDIT_INGREDIENT
+  EDIT_INGREDIENT,
+  BREW_TODAY
 }
 
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
 export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
 
-export const BASE_URL = BASE_URL_DEV;
+export const BASE_URL = BASE_URL_LOCALHOST;
 
 export const URLS: Url[] = [
 
@@ -63,5 +64,9 @@ export const URLS: Url[] = [
   {
     action: Actions.EDIT_INGREDIENT,
     url: BASE_URL + 'ingredient/'
+  },
+  {
+    action: Actions.BREW_TODAY,
+    url: BASE_URL + 'today'
   }
 ];
