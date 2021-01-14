@@ -25,11 +25,14 @@ export class ToolService implements GenericService {
 
     edit(toolDTO: Tool): Observable<Tool> {
       return this.http.put<Tool>(URLS[Actions.EDIT_TOOL].url, toolDTO);
-    return undefined;
   }
 
   save(tool: Tool): Observable<Tool> {
     return this.http.post<Tool>(URLS[Actions.SAVE_TOOL].url, tool);
+  }
+
+  getById(id: any): Observable<any> {
+    return undefined;
   }
 
 

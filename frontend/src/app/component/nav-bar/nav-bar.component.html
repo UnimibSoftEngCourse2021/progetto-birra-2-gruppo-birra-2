@@ -7,6 +7,8 @@
   <a class="navbar-nav" href="/ingredient" *ngIf="user">{{'Ingredients'}}</a>
   <a class="navbar" *ngIf="user">|</a>
   <a class="navbar-nav" href="/today" *ngIf="user">{{ 'What Should I Brew Today?'}}</a>
+  <a class="navbar" *ngIf="user">|</a>
+  <a class="navbar-nav" href="/tool" *ngIf="user">{{ 'Tool'}}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
           aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>

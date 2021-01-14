@@ -72,5 +72,9 @@ export const URLS: Url[] = [
   {
     action: Actions.BREW_TODAY,
     url: BASE_URL + 'today'
+  },
+  {
+    action: Actions.GET_TOOLS,
+    url: BASE_URL + 'tool'
   }
 ];

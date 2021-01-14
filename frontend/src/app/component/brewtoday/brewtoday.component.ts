@@ -11,7 +11,6 @@ import {ACTIONS, BrewToday, BrewTodayIngredient} from '../../model/BrewToday';
 export class BrewTodayComponent implements OnInit {
 
   brewToday: BrewToday;
-  recipeIngredients: BrewTodayIngredient[] = [];
   actions = ACTIONS;
 
   currentUser = new Brewer();
@@ -24,10 +23,6 @@ export class BrewTodayComponent implements OnInit {
 
   ngOnInit(): void {
       this.brewTodayService.get().subscribe(data => this.brewToday = data);
-  }
-
-  counter(i: number) {
-    return new Array(i);
   }
 
   onSubmit(): void {

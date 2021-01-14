@@ -11,10 +11,10 @@
         <label class="form-control-lg" id="description">{{brewToday.recipeDescription}}</label>
         <br>
         <ul class="form-control-lg" name="ingredient" id="ingredient">
-          <li *ngFor='let in of counter(brewToday.ingredientQuantities.length) ;let i = index'>
+          <li *ngFor='let in of brewToday.ingredientQuantities ;let i = index'>
             {{brewToday.ingredientQuantities[i].ingredientName}} = {{brewToday.ingredientQuantities[i].quantity}} </li>
         </ul>
-        <br *ngFor='let in of counter(brewToday.ingredientQuantities.length)'>
+        <br *ngFor='let in of brewToday.ingredientQuantities'>
       <button type="submit" class="btn btn-success" [disabled]="!BrewTodayForm.form.valid"
               style="margin-left: 4px">Brew!
       </button>
