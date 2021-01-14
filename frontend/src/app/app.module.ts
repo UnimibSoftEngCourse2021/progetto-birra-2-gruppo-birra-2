@@ -21,6 +21,9 @@ import {IngredientComponent} from './component/ingredient/ingredient.component';
 import {IngredientFormComponent} from './component/forms/IngredientForm/IngredientForm.component';
 import {BrewTodayComponent} from './component/brewtoday/brewtoday.component';
 import {BrewTodayService} from './service/BrewTodayService';
+import {ToolService} from './service/ToolService';
+import {ToolComponent} from './component/tool/tool.component';
+import {ToolFormComponent} from "./component/forms/ToolForm/ToolForm.component";
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -37,7 +40,10 @@ export function tokenGetter(): string {
     FilterPipe,
     IngredientComponent,
     IngredientFormComponent,
-    BrewTodayComponent
+    BrewTodayComponent,
+    ToolComponent,
+    ToolFormComponent
+
   ],
   imports: [
     BrowserModule,
@@ -55,7 +61,9 @@ export function tokenGetter(): string {
   providers: [RecipeService,
     AuthService,
     IngredientService,
-    BrewTodayService, {
+    BrewTodayService,
+    ToolService,
+    {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true

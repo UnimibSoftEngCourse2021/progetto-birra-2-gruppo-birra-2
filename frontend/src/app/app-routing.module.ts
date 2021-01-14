@@ -6,7 +6,8 @@ import {RecipeFormComponent} from './component/forms/RecipeForm/RecipeForm.compo
 import {IngredientComponent} from './component/ingredient/ingredient.component';
 import {IngredientFormComponent} from './component/forms/IngredientForm/IngredientForm.component';
 import {BrewTodayComponent} from './component/brewtoday/brewtoday.component';
-
+import {ToolComponent} from './component/tool/tool.component';
+import {ToolFormComponent} from './component/forms/ToolForm/ToolForm.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -15,7 +16,9 @@ const routes: Routes = [
   {path: 'createRecipe', component: RecipeFormComponent},
   {path: 'ingredient', component: IngredientComponent},
   {path: 'createIngredient', component: IngredientFormComponent},
-  {path: 'today', component: BrewTodayComponent}
+  {path: 'today', component: BrewTodayComponent},
+  {path: 'createTool', component: ToolFormComponent},
+  {path: 'tool', component: ToolComponent}
 ];
 
 @NgModule({
