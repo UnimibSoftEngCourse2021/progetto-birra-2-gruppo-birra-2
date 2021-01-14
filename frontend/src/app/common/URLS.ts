@@ -15,7 +15,11 @@ export enum Actions {
   SAVE_INGREDIENT,
   DELETE_INGREDIENT,
   EDIT_INGREDIENT,
-  BREW_TODAY
+  BREW_TODAY,
+  GET_TOOLS,
+  DELETE_TOOL,
+  EDIT_TOOL,
+  SAVE_TOOL
 }
 
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';

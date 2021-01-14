@@ -1,0 +1,13 @@
+<app-nav-bar [user]="currentUser"></app-nav-bar>
+
+<app-table
+  [data]="tools"
+  [headers]="header"
+  [indexField]="'toolId'"
+  [actions]="actions"
+  [currentUser]="currentUser"
+  [genericService]="toolService"
+  [formUrl]="'/createTool'"
+  [formUrl]="'/editTool'"
+>
+</app-table>
