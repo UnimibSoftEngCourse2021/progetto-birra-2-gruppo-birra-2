@@ -31,3 +31,5 @@ backend/backend.iml
 /maximizebrewtoday/.idea/inspectionProfiles/profiles_settings.xml
 /maximizebrewtoday/.idea/vcs.xml
 /brewtodaymaximize/.idea/workspace.xml
+
+maximizebrewtoday/venv/
