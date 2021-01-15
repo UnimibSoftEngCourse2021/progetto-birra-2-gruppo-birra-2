@@ -4,7 +4,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "MaximizeBrewService", url = "http://localhost:5000")
+@FeignClient(name = "MaximizeBrewService", url = "http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:5000")
 public interface MaximizeBrewService {
 
     @RequestMapping(method = RequestMethod.POST)
