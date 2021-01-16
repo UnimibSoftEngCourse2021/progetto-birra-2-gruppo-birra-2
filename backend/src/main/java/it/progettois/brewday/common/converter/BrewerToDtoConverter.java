@@ -15,7 +15,7 @@ public class BrewerToDtoConverter implements Converter<Brewer, BrewerDto> {
         brewerDto.setUsername(brewer.getUsername());
         brewerDto.setName(brewer.getName());
         brewerDto.setEmail(brewer.getEmail());
-        brewerDto.setMax_brew(brewer.getMaxBrew());
+        brewerDto.setMaxBrew(brewer.getMaxBrew());
         return brewerDto;
     }
 }

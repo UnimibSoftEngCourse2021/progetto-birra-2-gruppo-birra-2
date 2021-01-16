@@ -19,7 +19,7 @@ public class DtoToBrewerConverter implements Converter<BrewerDto, Brewer> {
         brewer.setPassword(brewerDto.getPassword());
         brewer.setName(brewerDto.getName());
         brewer.setEmail(brewerDto.getEmail());
-        brewer.setMaxBrew(brewerDto.getMax_brew());
+        brewer.setMaxBrew(brewerDto.getMaxBrew());
         brewer.setIngredients(new ArrayList<>());
         brewer.setTools(new ArrayList<>());
         brewer.setRecipes(new ArrayList<>());
