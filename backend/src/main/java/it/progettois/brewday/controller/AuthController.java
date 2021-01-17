@@ -2,6 +2,7 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.exception.ConversionException;
+import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.BrewerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,12 +22,11 @@ public class AuthController {
     }
 
     @PostMapping("/brewer")
-    public ResponseEntity<?> registration(@RequestBody BrewerDto brewerDto) {
+    public ResponseEntity<Response> registration(@RequestBody BrewerDto brewerDto) {
         try {
-            return ResponseEntity.ok(this.brewerService.saveBrewer(brewerDto));
+            return ResponseEntity.ok(new Response(this.brewerService.saveBrewer(brewerDto)));
         } catch (ConversionException e) {
-            //TODO Gestione migliore errore
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error in creating user");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error in creating user"));
         }
     }
 }

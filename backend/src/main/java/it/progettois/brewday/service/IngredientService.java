@@ -57,13 +57,17 @@ public class IngredientService {
 
         Ingredient ingredient = this.ingredientRepository.findById(id).orElseThrow(IngredientNotFoundException::new);
 
-        if(brewerOwnsIngredient(username, ingredient) || ingredient.getShared()){
+        if (brewerOwnsIngredient(username, ingredient) || ingredient.getShared()) {
             return this.ingredientToDtoConverter.convert(ingredient);
         } else throw new AccessDeniedException("You don't have access to this ingredient");
 
     }
 
     public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException {
+
+        if (ingredientDto.getShared() == null) {
+            ingredientDto.setShared(false);
+        }
 
         Ingredient ingredient = dtoToIngredientConverter.convert(ingredientDto);
         ingredient.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
@@ -74,15 +78,15 @@ public class IngredientService {
 
     public void deleteIngredient(String username, Integer id) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
 
-        if(brewerOwnsIngredient(username, id)) {
+        if (brewerOwnsIngredient(username, id)) {
             this.ingredientRepository.deleteById(id);
         } else throw new AccessDeniedException("You don't have permission to delete this ingredient");
 
     }
 
-    public void editIngredient(String username, Integer id, IngredientDto ingredientDto)  throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
+    public void editIngredient(String username, Integer id, IngredientDto ingredientDto) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
 
-        if(brewerOwnsIngredient(username, id)) {
+        if (brewerOwnsIngredient(username, id)) {
             Ingredient ingredient = dtoToIngredientConverter.convert(ingredientDto);
             ingredient.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
             ingredient.setIngredientId(id);
@@ -98,7 +102,7 @@ public class IngredientService {
         List<Ingredient> ingredients = this.ingredientRepository
                 .findIngredientsByBrewerAndQuantityGreaterThan(brewer, 0.0);
 
-        if(ingredients.size() > 0){
+        if (ingredients.size() > 0) {
             return ingredients
                     .stream()
                     .map(ingredientToDtoConverter::convert)
@@ -109,13 +113,13 @@ public class IngredientService {
 
     }
 
-    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException, EmptyStorageException{
+    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException, EmptyStorageException {
 
         IngredientDto ingredientDto = getIngredient(username, ingredientId);
 
         //It is necessary to check that the brewer owns the ingredient so that
         //other brewers storage can't be accessed
-        if(ingredientDto.getUsername().equals(username)) {
+        if (ingredientDto.getUsername().equals(username)) {
             if (ingredientDto.getQuantity() > 0) {
                 return ingredientDto;
             } else
@@ -126,9 +130,10 @@ public class IngredientService {
 
     public void addToStorage(String username, Integer ingredientId, Double newQuantity) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException, InvalidPropertiesFormatException {
 
-        if(newQuantity == null || newQuantity < 0.0) throw new InvalidPropertiesFormatException("The set quantity is invalid");
+        if (newQuantity == null || newQuantity < 0.0)
+            throw new InvalidPropertiesFormatException("The set quantity is invalid");
 
-        if(brewerOwnsIngredient(username, ingredientId)) {
+        if (brewerOwnsIngredient(username, ingredientId)) {
             Ingredient ingredient = this.ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
             ingredient.setQuantity(newQuantity);
             this.ingredientRepository.save(ingredient);
@@ -140,7 +145,7 @@ public class IngredientService {
         List<IngredientDto> storage = getStorage(username);
         Boolean result = false;
 
-        for(IngredientDto i : storage){
+        for (IngredientDto i : storage) {
             if (i.getIngredientId().equals(ingredientId)) {
                 result = true;
                 break;

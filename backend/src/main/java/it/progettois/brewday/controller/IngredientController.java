@@ -5,6 +5,7 @@ import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.EmptyStorageException;
 import it.progettois.brewday.common.exception.IngredientNotFoundException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
+import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,127 +33,122 @@ public class IngredientController {
 
     //get all brewer ingredients
     @GetMapping("/ingredient")
-    public ResponseEntity<?> getIngredients(HttpServletRequest request) {
+    public ResponseEntity<Response> getIngredients(HttpServletRequest request) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         List<IngredientDto> ingredients;
-        try{
+        try {
             ingredients = this.ingredientService.getIngredients(username);
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
 
         if (ingredients.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No ingredients found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No ingredients found"));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(ingredients);
+            return ResponseEntity.ok(new Response(ingredients));
         }
 
     }
 
     //get brewer ingredient by IngredientId
     @GetMapping("/ingredient/{id}")
-    public ResponseEntity<?> getIngredient(HttpServletRequest request, @PathVariable("id") Integer id) {
+    public ResponseEntity<Response> getIngredient(HttpServletRequest request, @PathVariable("id") Integer id) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         IngredientDto ingredientDto;
-        try{
+        try {
             ingredientDto = this.ingredientService.getIngredient(username, id);
-            return ResponseEntity.ok(ingredientDto);
+            return ResponseEntity.ok(new Response(ingredientDto));
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (IngredientNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
         }
-
-
-
     }
 
     @PostMapping("/ingredient")
-    public ResponseEntity<?> createIngredient(HttpServletRequest request, @RequestBody IngredientDto ingredientDto) {
+    public ResponseEntity<Response> createIngredient(HttpServletRequest request, @RequestBody IngredientDto ingredientDto) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.ingredientService.createIngredient(ingredientDto, username));
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+        try {
+            return ResponseEntity.ok(new Response(this.ingredientService.createIngredient(ingredientDto, username)));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
-
     }
 
     @DeleteMapping("/ingredient/{id}")
-    public ResponseEntity<?> deleteIngredient(HttpServletRequest request, @PathVariable("id") Integer id) {
+    public ResponseEntity<Response> deleteIngredient(HttpServletRequest request, @PathVariable("id") Integer id) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
+        try {
             this.ingredientService.deleteIngredient(username, id);
-            return ResponseEntity.status(HttpStatus.OK).body("The ingredient was deleted successfully");
+            return ResponseEntity.ok(new Response("The ingredient was deleted successfully"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (IngredientNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
-
     }
 
     @PutMapping("/ingredient/{id}")
-    public ResponseEntity<?> editIngredient(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody IngredientDto ingredientDto){
+    public ResponseEntity<Response> editIngredient(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody IngredientDto ingredientDto) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
+        try {
             this.ingredientService.editIngredient(username, id, ingredientDto);
-            return ResponseEntity.status(HttpStatus.OK).body("The ingredient has been updated");
+            return ResponseEntity.ok(new Response("The ingredient has been updated"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (IngredientNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
     }
 
     @GetMapping("/storage")
-    public ResponseEntity<?> getStorage(HttpServletRequest request){
+    public ResponseEntity<Response> getStorage(HttpServletRequest request) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         try {
             List<IngredientDto> ingredientDtoList = this.ingredientService.getStorage(username);
-            return ResponseEntity.status(HttpStatus.OK).body(ingredientDtoList);
+            return ResponseEntity.ok(new Response(ingredientDtoList));
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer does not exist"));
         } catch (EmptyStorageException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 
     @GetMapping("/storage/{id}")
-    public ResponseEntity<?> getStorageIngredient(HttpServletRequest request, @PathVariable("id") Integer ingredientId) {
+    public ResponseEntity<Response> getStorageIngredient(HttpServletRequest request, @PathVariable("id") Integer ingredientId) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         IngredientDto ingredientDto;
         try {
             ingredientDto = this.ingredientService.getStorageIngredient(username, ingredientId);
-            return ResponseEntity.ok(ingredientDto);
+            return ResponseEntity.ok(new Response(ingredientDto));
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer does not exist"));
         } catch (EmptyStorageException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         } catch (IngredientNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         }
     }
 
@@ -160,22 +156,21 @@ public class IngredientController {
     // quantity > 0 -> create / update
     // quantity = 0 -> delete
     @PutMapping("/storage/{id}")
-    public ResponseEntity<?> modifyStorage(HttpServletRequest request, @PathVariable("id") Integer ingredientId, @RequestBody Double quantity){
+    public ResponseEntity<Response> modifyStorage(HttpServletRequest request, @PathVariable("id") Integer ingredientId, @RequestBody Double quantity) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
+        try {
             this.ingredientService.addToStorage(username, ingredientId, quantity);
-            return ResponseEntity.status(HttpStatus.OK).body("The ingredient has been updated");
+            return ResponseEntity.ok(new Response("The ingredient has been updated"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (IngredientNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The ingredient does not exist");
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
-        } catch (InvalidPropertiesFormatException e){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (InvalidPropertiesFormatException e) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(new Response(e.getMessage()));
         }
     }
-
 }
