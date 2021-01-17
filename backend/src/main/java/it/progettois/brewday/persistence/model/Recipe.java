@@ -15,8 +15,6 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Integer recipeId;
 
-    private Integer version;
-
     private String name;
 
     private String description;
