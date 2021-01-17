@@ -66,7 +66,9 @@ public class RecipeService {
 
         Recipe recipe = this.recipeRepository.findById(id).orElseThrow(RecipeNotFoundException::new);
 
-        if(brewerOwnsRecipe(username, recipe) || recipe.getShared()){
+        recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe));
+
+        if (brewerOwnsRecipe(username, recipe) || recipe.getShared()) {
             return this.recipeToDtoConverter.convert(recipe);
         } else throw new AccessDeniedException("You don't have access to view this recipe");
 
