@@ -2,16 +2,14 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.BrewerFatDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.BrewerService;
-import it.progettois.brewday.service.maximizeBrew.MaximizeBrewInput;
-import it.progettois.brewday.service.maximizeBrew.MaximizeBrewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -19,45 +17,29 @@ import java.util.List;
 public class BrewerController {
 
     private final BrewerService brewerService;
-    private final MaximizeBrewService maximizeBrewService;
 
-    public BrewerController(BrewerService brewerService, MaximizeBrewService maximizeBrewService) {
+    public BrewerController(BrewerService brewerService) {
         this.brewerService = brewerService;
-        this.maximizeBrewService = maximizeBrewService;
     }
 
     @GetMapping("/brewer")
-    public ResponseEntity<?> getBrewers() {
+    public ResponseEntity<Response> getBrewers() {
 
         List<BrewerFatDto> brewers = this.brewerService.getBrewers();
 
-        if (brewers.size() == 0) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No brewers found");
+        if (brewers.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No brewers found"));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(brewers);
+            return ResponseEntity.ok(new Response(brewers));
         }
     }
 
     @GetMapping("/brewer/{username}")
-    public ResponseEntity<?> getBrewerByUsername(@PathVariable String username) {
+    public ResponseEntity<Response> getBrewerByUsername(@PathVariable String username) {
         try {
-            return ResponseEntity.ok(this.brewerService.getBrewerByUsername(username));
+            return ResponseEntity.ok(new Response(this.brewerService.getBrewerByUsername(username)));
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Brewer with username: " + username + " does not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Brewer with username: " + username + " does not exists"));
         }
-    }
-
-    @GetMapping("/test")
-    public ResponseEntity<?> test() {
-
-        MaximizeBrewInput maximizeBrewInput = MaximizeBrewInput
-                .builder()
-                .capacity(10)
-                .ingredientNames(Arrays.asList("1", "2", "3", "4"))
-                .proportions(Arrays.asList(0.25, 0.25, 0.25, 0.25))
-                .storage(Arrays.asList(2.0, 5.0, 3.0, 4.0))
-                .build();
-
-        return ResponseEntity.ok(this.maximizeBrewService.getMaxBrew(maximizeBrewInput));
     }
 }

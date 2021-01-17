@@ -5,8 +5,8 @@ import it.progettois.brewday.common.converter.RecipeToDtoConverter;
 import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.RecipeNotFoundException;
-import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.Brewer;
+import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.RecipeIngredient;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
 import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
@@ -72,8 +72,13 @@ public class RecipeService {
 
     }
 
-    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException{
+    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException {
         recipeDto.setUsername(username);
+
+        if (recipeDto.getShared() == null) {
+            recipeDto.setShared(false);
+        }
+
         Recipe recipe = this.dtoToRecipeConverter.convert(recipeDto);
         Objects.requireNonNull(recipe).setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
 

@@ -4,6 +4,7 @@ import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.RecipeNotFoundException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
+import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe")
-    public ResponseEntity<Object> getRecipes(HttpServletRequest request) {
+    public ResponseEntity<Response> getRecipes(HttpServletRequest request) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
@@ -37,80 +38,79 @@ public class RecipeController {
         try {
             recipes = this.recipeService.getRecipes(username);
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exists"));
         }
 
         if (recipes == null || recipes.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No recipes found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("No recipes found"));
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(recipes);
+            return ResponseEntity.ok(new Response(recipes));
         }
     }
 
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<Object> getRecipe(HttpServletRequest request, @PathVariable Integer id) {
+    public ResponseEntity<Response> getRecipe(HttpServletRequest request, @PathVariable Integer id) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
         RecipeDto recipeDto;
-        try{
+        try {
             recipeDto = this.recipeService.getRecipe(username, id);
-            return ResponseEntity.ok(recipeDto);
+            return ResponseEntity.ok(new Response(recipeDto));
         } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (RecipeNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The recipe with id " + id + " does not exists");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The recipe with id " + id + " does not exists"));
         }
     }
 
     @PostMapping("/recipe")
-    public ResponseEntity<Object> saveRecipe(HttpServletRequest request, @RequestBody RecipeDto recipeDto) {
+    public ResponseEntity<Response> saveRecipe(HttpServletRequest request, @RequestBody RecipeDto recipeDto) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(this.recipeService.saveRecipe(recipeDto, username));
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+        try {
+            return ResponseEntity.ok(new Response(this.recipeService.saveRecipe(recipeDto, username)));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
 
     }
+
     @DeleteMapping("/recipe/{id}")
-    public ResponseEntity<String> deleteRecipe(HttpServletRequest request, @PathVariable("id") Integer id) {
+    public ResponseEntity<Response> deleteRecipe(HttpServletRequest request, @PathVariable("id") Integer id) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
+        try {
             this.recipeService.deleteRecipe(username, id);
-            return ResponseEntity.status(HttpStatus.OK).body("The recipe was deleted successfully");
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("The recipe was deleted successfully"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (RecipeNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The recipe does not exist");
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The recipe does not exist"));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
 
     }
 
     @PutMapping("/recipe/{id}")
-    public ResponseEntity<String> editRecipe(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody RecipeDto recipeDto){
+    public ResponseEntity<Response> editRecipe(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody RecipeDto recipeDto) {
 
         String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
 
-        try{
+        try {
             this.recipeService.editRecipe(username, id, recipeDto);
-            return ResponseEntity.status(HttpStatus.OK).body("The recipe has been updated successfully");
+            return ResponseEntity.ok(new Response("The recipe has been updated successfully"));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (RecipeNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The recipe does not exist");
-        } catch (BrewerNotFoundException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The brewer with username: " + username + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The recipe does not exist"));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
     }
-
-
 }
