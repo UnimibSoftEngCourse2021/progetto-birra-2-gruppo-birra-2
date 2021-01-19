@@ -1,9 +1,9 @@
 import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {GenericService} from './GenericService';
 import {Actions, URLS} from '../common/URLS';
-import {BrewToday} from '../model/BrewToday';
+import {Response} from '../model/Response';
+
 
 @Injectable()
 export class BrewTodayService {
@@ -11,8 +11,8 @@ export class BrewTodayService {
   constructor(private http: HttpClient) {
   }
 
-  get(): Observable<any> {
-    return this.http.get<BrewToday>(URLS[Actions.BREW_TODAY].url);
+  get(): Observable<Response> {
+    return this.http.get<Response>(URLS[Actions.BREW_TODAY].url);
   }
 
 

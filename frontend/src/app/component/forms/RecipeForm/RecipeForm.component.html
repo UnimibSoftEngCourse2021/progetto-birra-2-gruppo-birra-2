@@ -1,9 +1,6 @@
-<app-nav-bar></app-nav-bar>
-
 <div class="container">
   <div>
     <h1>Create new Recipe</h1>
-    <form (ngSubmit)="onSubmit()" #RecipeForm="ngForm">
       <div class="form-group">
         <label for="name">Recipe name</label>
         <input type="text" class="form-control" id="name" name="name"
@@ -18,34 +15,51 @@
 
       <div class="form-group">
         <label for="description">Recipe description</label>
-        <input type="text" class="form-control" id="description"
-               required
-               [(ngModel)]="recipe.description" name="description"
-               #description="ngModel">
+        <textarea #description="ngModel" [(ngModel)]="recipe.description"
+                  class="form-control"
+                  id="description" name="description"
+                  required></textarea>
         <div [hidden]="description.valid || description.pristine"
              class="alert alert-danger">
           Recipe description is required
         </div>
       </div>
 
+    <div class="form-group">
+      <label for="shared">Public</label>
+      <input [(ngModel)]="recipe.shared" class="form-control" name="shared" type="hidden"
+             value="false"/>
+      <input [(ngModel)]="recipe.shared" checked class="form-control" id="shared" name="shared" type="checkbox"
+             value="true">
+    </div>
+
+    <div class="form-group">
+
       <label for="ingredient">Ingredients:</label>
 
-      <div class="form-group" *ngFor="let recipeIngredient of recipeIngredients">
-
-        <select class="form-control" id="ingredient" name="ingredient">
-          <option *ngFor="let ingredient of ingredients" [ngValue]="ingredient">{{ingredient.name}}</option>
-        </select>
-        Quantity:
-        <input type="number" [(ngModel)]="recipeIngredient.quantity">
-        <button (click)="addIngredient(recipeIngredient)" *ngIf="recipeIngredient.ingredientId" class="btn btn-default">
-          <i class="material-icons">add</i></button>
+      <div *ngIf="recipeIngredients.length === 0">
+        This recipe has no ingredient.
+      </div>
+      <div *ngFor="let ri of recipeIngredients">
+        Ingredient: {{getIngredientName(ri.ingredientId)}} quantity: {{ri.quantity}}
+        <button (click)="removeIngredient(ri)" class="btn btn-default"><i class="material-icons">close</i></button>
       </div>
 
+      <br>
+      Add a new ingredient:
+      <select [(ngModel)]="recipeIngredient.ingredientId" class="form-control" id="ingredient" name="ingredient">
+        <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId">{{ingredient.name}}</option>
+      </select>
+      <label>
+        Quantity:
+        <input [(ngModel)]="recipeIngredient.quantity" type="number">
+      </label>
+      <button (click)="addIngredient()" class="btn btn-default"><i class="material-icons">add</i></button>
+    </div>
 
-      <button type="submit" class="btn btn-success" [disabled]="!RecipeForm.form.valid"
-              style="margin-left: 4px">Save
-      </button>
-    </form>
+    <button (click)="onSubmit()" class="btn btn-success"
+            style="margin-left: 4px">Save
+    </button>
     <button class="btn btn-primary" (click)="goBack()">Go back</button>
   </div>
 </div>

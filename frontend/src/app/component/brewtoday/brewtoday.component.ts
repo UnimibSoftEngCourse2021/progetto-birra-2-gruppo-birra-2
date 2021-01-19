@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Brewer} from '../../model/Brewer';
 import {BrewTodayService} from '../../service/BrewTodayService';
-import {ACTIONS, BrewToday, BrewTodayIngredient} from '../../model/BrewToday';
+import {ACTIONS, BrewToday} from '../../model/BrewToday';
 
 @Component({
   selector: 'app-ingredient',
@@ -13,16 +12,17 @@ export class BrewTodayComponent implements OnInit {
   brewToday: BrewToday;
   actions = ACTIONS;
 
-  currentUser = new Brewer();
+  loading: boolean;
 
-  brewTodayService: BrewTodayService;
-
-  constructor(brewTodayService: BrewTodayService) {
-    this.brewTodayService = brewTodayService;
+  constructor(private brewTodayService: BrewTodayService) {
   }
 
   ngOnInit(): void {
-      this.brewTodayService.get().subscribe(data => this.brewToday = data);
+    this.loading = true;
+    this.brewTodayService.get().subscribe(response => {
+      this.brewToday = response.data;
+      this.loading = false;
+    });
   }
 
   onSubmit(): void {

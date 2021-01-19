@@ -13,6 +13,8 @@ import {IngredientService} from '../../../service/IngredientService';
 
 export class IngredientFormComponent implements OnInit {
 
+  isEdit = false;
+
   ingredient: Ingredient = new Ingredient();
   ingredientType = [
     'MALT',
@@ -24,11 +26,19 @@ export class IngredientFormComponent implements OnInit {
     'OTHER'
   ];
 
-  onSubmit(): void{
-    console.log(this.ingredient);
-    this.ingredientService.save(this.ingredient).subscribe(response => {
-
-    });
+  onSubmit(): void {
+    if (this.isEdit) {
+      this.ingredientService.edit(this.ingredient).subscribe(response => {
+          this.router.navigate(['ingredient']);
+        },
+        error => {
+          alert(error);
+        });
+    } else {
+      this.ingredientService.save(this.ingredient).subscribe(response => {
+        this.router.navigate(['ingredient']);
+      });
+    }
   }
 
   constructor(
@@ -39,7 +49,17 @@ export class IngredientFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    return;
+    // tslint:disable-next-line:radix
+    const ingredientId = Number.parseInt(this.route.snapshot.paramMap.get('id'));
+    if (ingredientId) {
+      this.isEdit = true;
+      this.ingredientService.getById(ingredientId).subscribe(resp => {
+          this.ingredient = resp.data;
+        },
+        error => {
+          alert(error);
+        });
+    }
   }
 
   goBack(): void {

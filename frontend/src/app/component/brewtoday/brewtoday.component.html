@@ -1,6 +1,10 @@
-<app-nav-bar [user]="currentUser"></app-nav-bar>
-
-<div class="container">
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!brewToday && !loading">
+  There is no recipe you can brew.
+  Add a recipe now!
+  <a class="btn btn-primary" routerLink="/createRecipe"><i class="material-icons">add</i></a>
+</div>
+<div *ngIf="brewToday && !loading" class="container">
   <div>
     <h1>Today's Brew</h1>
     <form (ngSubmit)="onSubmit()" #BrewTodayForm="ngForm">

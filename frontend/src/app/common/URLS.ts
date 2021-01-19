@@ -6,10 +6,17 @@ interface Url {
 export enum Actions {
 
   LOGIN,
+  REGISTRATION,
+  USER_EXIST,
+  GET_BREWER_BY_USERNAME,
+  EDIT_BREWER,
+  DELETE_BREWER,
   GET_RECIPE,
   GET_RECIPE_BY_ID,
   SAVE_RECIPE,
+  EDIT_RECIPE,
   DELETE_RECIPE,
+  GET_INGREDIENTS_BY_RECIPE,
   GET_INGREDIENT,
   GET_INGREDIENT_BY_ID,
   SAVE_INGREDIENT,
@@ -17,6 +24,7 @@ export enum Actions {
   EDIT_INGREDIENT,
   BREW_TODAY,
   GET_TOOLS,
+  GET_TOOL_BY_ID,
   DELETE_TOOL,
   EDIT_TOOL,
   SAVE_TOOL
@@ -25,13 +33,33 @@ export enum Actions {
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
 export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
 
-export const BASE_URL = BASE_URL_DEV;
+export const BASE_URL = BASE_URL_LOCALHOST;
 
 export const URLS: Url[] = [
 
   {
     action: Actions.LOGIN,
     url: BASE_URL + 'login'
+  },
+  {
+    action: Actions.REGISTRATION,
+    url: BASE_URL + 'brewer'
+  },
+  {
+    action: Actions.USER_EXIST,
+    url: BASE_URL + 'brewer/username'
+  },
+  {
+    action: Actions.GET_BREWER_BY_USERNAME,
+    url: BASE_URL + 'brewer'
+  },
+  {
+    action: Actions.EDIT_BREWER,
+    url: BASE_URL + 'brewer'
+  },
+  {
+    action: Actions.DELETE_BREWER,
+    url: BASE_URL + 'brewer'
   },
   {
     action: Actions.GET_RECIPE,
@@ -46,7 +74,15 @@ export const URLS: Url[] = [
     url: BASE_URL + 'recipe/'
   },
   {
+    action: Actions.EDIT_RECIPE,
+    url: BASE_URL + 'recipe'
+  },
+  {
     action: Actions.DELETE_RECIPE,
+    url: BASE_URL + 'recipe'
+  },
+  {
+    action: Actions.GET_INGREDIENTS_BY_RECIPE,
     url: BASE_URL + 'recipe'
   },
   {
@@ -75,6 +111,10 @@ export const URLS: Url[] = [
   },
   {
     action: Actions.GET_TOOLS,
+    url: BASE_URL + 'tool'
+  },
+  {
+    action: Actions.GET_TOOL_BY_ID,
     url: BASE_URL + 'tool'
   }
 ];

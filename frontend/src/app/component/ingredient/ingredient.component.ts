@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IngredientService} from '../../service/IngredientService';
 import {ACTIONS, COLUMNS, Ingredient} from '../../model/Ingredient';
-import {Brewer} from '../../model/Brewer';
 
 @Component({
   selector: 'app-ingredient',
@@ -14,15 +13,20 @@ export class IngredientComponent implements OnInit {
   ingredients: Ingredient[];
   actions = ACTIONS;
 
-  currentUser = new Brewer();
-
   ingredientService: IngredientService;
+
+  loading: boolean;
+
 
   constructor(ingredientService: IngredientService) {
     this.ingredientService = ingredientService;
   }
 
   ngOnInit(): void {
-    this.ingredientService.getAll().subscribe(data => this.ingredients = data);
+    this.loading = true;
+    this.ingredientService.getAll().subscribe(resp => {
+      this.ingredients = resp.data;
+      this.loading = false;
+    });
   }
 }

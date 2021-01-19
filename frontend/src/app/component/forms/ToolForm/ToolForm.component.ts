@@ -12,14 +12,22 @@ import {ToolService} from '../../../service/ToolService';
 })
 export class ToolFormComponent implements OnInit {
 
+  isEdit = false;
   tool: Tool = new Tool();
-  tools: Tool[] = [];
 
   onSubmit(): void {
-    console.log(this.tool);
-    this.toolService.save(this.tool).subscribe(response => {
+    if (this.isEdit) {
+      this.toolService.edit(this.tool).subscribe(response => {
+          this.router.navigate(['tool']);
+        },
+        error => {
+          alert(error);
+        });
+    } else {
+      this.toolService.save(this.tool).subscribe(response => {
 
-    });
+      });
+    }
   }
 
   constructor(
@@ -30,8 +38,17 @@ export class ToolFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toolService.getAll().subscribe(resp => this.tools = resp);
-
+    // tslint:disable-next-line:radix
+    const toolId = Number.parseInt(this.route.snapshot.paramMap.get('id'));
+    if (toolId) {
+      this.isEdit = true;
+      this.toolService.getById(toolId).subscribe(resp => {
+          this.tool = resp.data;
+        },
+        error => {
+          alert(error.error.data);
+        });
+    }
   }
 
   goBack(): void {

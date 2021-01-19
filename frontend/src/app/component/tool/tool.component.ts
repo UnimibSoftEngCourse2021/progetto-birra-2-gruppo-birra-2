@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ToolService} from '../../service/ToolService';
 import {ACTIONS, COLUMNS, Tool} from '../../model/Tool';
-import {Brewer} from '../../model/Brewer';
 
 @Component({
   selector: 'app-tool',
@@ -14,7 +13,7 @@ export class ToolComponent implements OnInit {
   tools: Tool[];
   actions = ACTIONS;
 
-  currentUser = new Brewer();
+  loading: boolean;
 
   toolService: ToolService;
 
@@ -23,6 +22,10 @@ export class ToolComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.toolService.getAll().subscribe(data => this.tools = data);
+    this.loading = true;
+    this.toolService.getAll().subscribe(resp => {
+      this.tools = resp.data;
+      this.loading = false;
+    });
   }
 }
