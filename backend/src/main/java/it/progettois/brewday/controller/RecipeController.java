@@ -1,8 +1,8 @@
 package it.progettois.brewday.controller;
 
+import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.common.dto.RecipeDto;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.exception.RecipeNotFoundException;
+import it.progettois.brewday.common.exception.*;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.RecipeService;
@@ -75,6 +75,10 @@ public class RecipeController {
             return ResponseEntity.ok(new Response(this.recipeService.saveRecipe(recipeDto, username)));
         } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (ConversionException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (IngredientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
 
     }
@@ -111,6 +115,28 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The recipe does not exist"));
         } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (IngredientNotFoundException | RecipeIngredientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/recipe/{id}/ingredient")
+    public ResponseEntity<Response> getIngredientsByRecipe(HttpServletRequest request, @PathVariable("id") Integer id) {
+
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+
+        List<IngredientDto> ingredientDto;
+        try {
+            ingredientDto = this.recipeService.getIngredientsByRecipe(username, id);
+            return ResponseEntity.ok(new Response(ingredientDto));
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
+        } catch (IngredientNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The ingredient does not exist"));
+        } catch (RecipeNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 }

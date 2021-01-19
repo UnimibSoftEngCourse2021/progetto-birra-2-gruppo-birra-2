@@ -1,15 +1,15 @@
 import {Observable} from 'rxjs';
+import {Response} from '../model/Response';
 
 export interface GenericService {
 
-  save(entity: any): Observable<any>;
+  save(entity: any): Observable<Response>;
 
-  edit(entity: any): Observable<any>;
+  edit(entity: any): Observable<Response>;
 
-  delete(id: any): Observable<any>;
+  delete(id: any): Observable<Response>;
 
-  getById(id: any): Observable<any>;
+  getAll(): Observable<Response>;
 
-  getAll(): Observable<any[]>;
-
+  getById(id: number): Observable<Response>;
 }

@@ -27,7 +27,10 @@ public class IngredientService {
     private final DtoToIngredientConverter dtoToIngredientConverter;
 
     @Autowired
-    public IngredientService(IngredientRepository ingredientRepository, BrewerRepository brewerRepository, IngredientToDtoConverter ingredientToDtoConverter, DtoToIngredientConverter dtoToIngredientConverter) {
+    public IngredientService(IngredientRepository ingredientRepository,
+                             BrewerRepository brewerRepository,
+                             IngredientToDtoConverter ingredientToDtoConverter,
+                             DtoToIngredientConverter dtoToIngredientConverter) {
         this.ingredientRepository = ingredientRepository;
         this.brewerRepository = brewerRepository;
         this.ingredientToDtoConverter = ingredientToDtoConverter;
@@ -143,7 +146,7 @@ public class IngredientService {
 
     public Boolean isInStorage(String username, Integer ingredientId) throws EmptyStorageException, BrewerNotFoundException {
         List<IngredientDto> storage = getStorage(username);
-        Boolean result = false;
+        boolean result = false;
 
         for (IngredientDto i : storage) {
             if (i.getIngredientId().equals(ingredientId)) {
@@ -152,6 +155,5 @@ public class IngredientService {
             }
         }
         return result;
-
     }
 }

@@ -1,13 +1,13 @@
-<app-nav-bar [user]="currentUser"></app-nav-bar>
-
-<app-table
-  [data]="tools"
-  [headers]="header"
-  [indexField]="'toolId'"
-  [actions]="actions"
-  [currentUser]="currentUser"
-  [genericService]="toolService"
-  [formUrl]="'/createTool'"
-  [formUrl]="'/editTool'"
->
-</app-table>
+<h1>MY TOOLS</h1>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading">
+  <app-table
+    [data]="tools"
+    [headers]="header"
+    [indexField]="'toolId'"
+    [actions]="actions"
+    [genericService]="toolService"
+    [formUrl]="'/toolForm'"
+  >
+  </app-table>
+</div>

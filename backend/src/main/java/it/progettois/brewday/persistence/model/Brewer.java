@@ -2,7 +2,10 @@ package it.progettois.brewday.persistence.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.util.List;
 
 @Data
@@ -10,7 +13,7 @@ import java.util.List;
 public class Brewer {
 
     @Id
-    @Column(updatable = false, nullable = false, unique = true)
+    @Column(updatable = false, nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(nullable = false)
@@ -25,7 +28,6 @@ public class Brewer {
     @Column(nullable = false)
     private Integer maxBrew;
 
-
     @OneToMany(mappedBy = "brewer")
     private List<Ingredient> ingredients;
 
@@ -37,5 +39,4 @@ public class Brewer {
 
     @OneToMany(mappedBy = "brewer")
     private List<Brew> brews;
-
 }

@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {TableComponent} from './component/table/table.component';
@@ -23,7 +23,15 @@ import {BrewTodayComponent} from './component/brewtoday/brewtoday.component';
 import {BrewTodayService} from './service/BrewTodayService';
 import {ToolService} from './service/ToolService';
 import {ToolComponent} from './component/tool/tool.component';
-import {ToolFormComponent} from "./component/forms/ToolForm/ToolForm.component";
+import {ToolFormComponent} from './component/forms/ToolForm/ToolForm.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HomeComponent} from './component/home/home.component';
+import {RegistrationFormComponent} from './component/forms/RegistrationForm/RegistrationForm.component';
+import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
+import {BrewerService} from './service/BrewerService';
+
 
 export function tokenGetter(): string {
   return localStorage.getItem('token');
@@ -42,8 +50,11 @@ export function tokenGetter(): string {
     IngredientFormComponent,
     BrewTodayComponent,
     ToolComponent,
-    ToolFormComponent
-
+    ToolFormComponent,
+    HomeComponent,
+    RegistrationFormComponent,
+    RecipeDetailComponent,
+    BrewerFormComponent
   ],
   imports: [
     BrowserModule,
@@ -57,19 +68,23 @@ export function tokenGetter(): string {
         tokenGetter
       }
     }),
+    NgbModule,
+    MatProgressSpinnerModule
   ],
   providers: [RecipeService,
     AuthService,
     IngredientService,
     BrewTodayService,
     ToolService,
+    BrewerService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 
 export class AppModule {

@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +72,21 @@ public class BrewerService implements UserDetailsService {
         if (brewer == null) {
             throw new ConversionException();
         }
+
+        return this.brewerToFatDtoConverter.convert(this.brewerRepository.save(brewer));
+    }
+
+    public BrewerFatDto editBrewer(String username, String usernameFromToken, BrewerDto brewerDto) throws BrewerNotFoundException, AccessDeniedException {
+
+        if (!username.equals(usernameFromToken)) {
+            throw new AccessDeniedException("You don't have access to this brewer");
+        }
+
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
+
+        brewer.setEmail(brewerDto.getEmail());
+        brewer.setName(brewerDto.getName());
+        brewer.setMaxBrew(brewerDto.getMaxBrew());
 
         return this.brewerToFatDtoConverter.convert(this.brewerRepository.save(brewer));
     }

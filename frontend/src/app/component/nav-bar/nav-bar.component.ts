@@ -1,5 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Brewer} from '../../model/Brewer';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,8 +7,11 @@ import {Brewer} from '../../model/Brewer';
 })
 export class NavBarComponent implements OnInit {
 
-  @Input()
-  user: Brewer;
+  username: string = undefined;
+
+  constructor() {
+    this.username = window.localStorage.getItem('username');
+  }
 
   ngOnInit(): void {
   }

@@ -6,6 +6,7 @@ export class Tool {
   quantity: number;
   description: string;
 }
+
 export const COLUMNS = [
   {
     label: 'Id',
@@ -35,14 +36,9 @@ export const COLUMNS = [
 
 export const ACTIONS = [
   {
-    label: 'info',
-    actionType: 'GO_TO',
-    getUrl: row => '/createForm/' + row.id,
-  },
-  {
     label: 'edit',
     actionType: 'GO_TO',
-    getUrl: row => '/editForm/' + row.id,
+    getUrl: row => '/toolForm/' + row.toolId,
   },
   {
     label: 'delete',

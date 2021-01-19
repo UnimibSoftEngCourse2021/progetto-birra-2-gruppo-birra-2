@@ -1,30 +1,46 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-warning">
-  <a class="navbar-brand" href="/index">
+  <a class="navbar-brand" routerLink="/index">
     <img alt=""
-         src="https://www.searchpng.com/wp-content/uploads/2018/12/Transparent-Glass-Beer--1024x1024.png" width="50" height="auto">
-    {{'Brew-Day!'}}
+         height="auto" src="https://www.searchpng.com/wp-content/uploads/2018/12/Transparent-Glass-Beer--1024x1024.png"
+         width="50">
+    Brew-Day!
   </a>
-  <a class="navbar-nav" href="/ingredient" *ngIf="user">{{'Ingredients'}}</a>
-  <a class="navbar" *ngIf="user">|</a>
-  <a class="navbar-nav" href="/today" *ngIf="user">{{ 'What Should I Brew Today?'}}</a>
-  <a class="navbar" *ngIf="user">|</a>
-  <a class="navbar-nav" href="/tool" *ngIf="user">{{ 'Tool'}}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-4"
-          aria-controls="navbarSupportedContent-4" aria-expanded="false" aria-label="Toggle navigation">
+  <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+          class="navbar-toggler"
+          data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent-4" *ngIf="user">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-4" data-toggle="dropdown" aria-haspopup="true"
-           aria-expanded="false" style="color: white">
-          username
-        </a>
-        <div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
-          <a class="dropdown-item" href="changePassword/{{user.id}}">{{ 'navBar.dropdown.changePassword'}}</a>
-          <a class="dropdown-item" href="/login">{{ 'navBar.dropdown.logout'}}</a>
-        </div>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/index">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/recipe">My Recipes</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/ingredient">My Ingredients</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" routerLink="/today">What Should I Brew Today?</a>
       </li>
     </ul>
+
+    <div *ngIf="username" class="collapse navbar-collapse" id="navbarSupportedContent-4">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown"
+             id="navbarDropdownMenuLink-4" style="color: white">
+            {{username}}
+          </a>
+          <div aria-labelledby="navbarDropdownMenuLink-4" class="dropdown-menu dropdown-menu-right dropdown-info">
+            <a class="dropdown-item" routerLink="brewerForm">My Info</a>
+            <a class="dropdown-item" routerLink="tool">My Tools</a>
+            <a class="dropdown-item" routerLink="/login">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>

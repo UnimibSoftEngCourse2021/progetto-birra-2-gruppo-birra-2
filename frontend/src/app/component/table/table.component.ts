@@ -11,7 +11,7 @@ import {GenericService} from '../../service/GenericService';
 export class TableComponent implements OnInit {
 
   @Input()
-  headers: string;
+  headers: any;
 
   @Input()
   data: any[];
@@ -27,12 +27,6 @@ export class TableComponent implements OnInit {
 
   @Input()
   genericService: GenericService;
-
-  @Input()
-  currentUser;
-
-  @Input()
-  imageUrlAPI: string;
 
   @Input()
   formUrl: string;
@@ -74,11 +68,18 @@ export class TableComponent implements OnInit {
     this.numOfElement = this.elementToDisplay[this.elementToDisplay.length - 1];
   }
 
-  getRowParameter(col, row) {
+  getRowParameter(col, row): any {
     if (col.arrayField) {
-      let result = '';
-      _.get(row, col.arrayField).forEach((element) => result += _.get(element, col.fieldName) + ',');
-      return result;
+      if (_.get(row, col.arrayField).length > 2) {
+        let result = '';
+        result += _.get(_.get(row, col.arrayField)[0], col.fieldName) + ',';
+        result += _.get(_.get(row, col.arrayField)[1], col.fieldName) + ' and ' + (_.get(row, col.arrayField).length - 2) + ' more';
+        return result;
+      } else {
+        let result = '';
+        _.get(row, col.arrayField).forEach((element) => result += _.get(element, col.fieldName) + ',');
+        return result;
+      }
     }
     return _.get(row, col.fieldName);
   }
@@ -90,7 +91,9 @@ export class TableComponent implements OnInit {
 
       if (confirm(msg) === true) {
         this.genericService.delete(element[this.indexField])
-          .subscribe(() => location.reload(),
+          .subscribe(() => {
+              location.reload();
+            },
             error => console.log(error));
       }
     }

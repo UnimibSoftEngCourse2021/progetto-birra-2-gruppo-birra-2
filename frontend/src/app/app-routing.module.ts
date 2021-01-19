@@ -8,17 +8,29 @@ import {IngredientFormComponent} from './component/forms/IngredientForm/Ingredie
 import {BrewTodayComponent} from './component/brewtoday/brewtoday.component';
 import {ToolComponent} from './component/tool/tool.component';
 import {ToolFormComponent} from './component/forms/ToolForm/ToolForm.component';
+import {HomeComponent} from './component/home/home.component';
+import {RegistrationFormComponent} from './component/forms/RegistrationForm/RegistrationForm.component';
+import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.component';
+import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
-  {path: 'index', component: RecipeComponent},
+  {path: 'index', component: HomeComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'createRecipe', component: RecipeFormComponent},
+  {path: 'register', component: RegistrationFormComponent},
+  {path: 'recipe', component: RecipeComponent},
+  {path: 'recipeForm', component: RecipeFormComponent},
+  {path: 'recipeForm/:id', component: RecipeFormComponent},
+  {path: 'recipe/:id', component: RecipeDetailComponent},
   {path: 'ingredient', component: IngredientComponent},
-  {path: 'createIngredient', component: IngredientFormComponent},
+  {path: 'ingredientForm', component: IngredientFormComponent},
+  {path: 'ingredientForm/:id', component: IngredientFormComponent},
   {path: 'today', component: BrewTodayComponent},
-  {path: 'createTool', component: ToolFormComponent},
-  {path: 'tool', component: ToolComponent}
+  {path: 'toolForm', component: ToolFormComponent},
+  {path: 'toolForm/:id', component: ToolFormComponent},
+  {path: 'tool', component: ToolComponent},
+  {path: 'brewerForm', component: BrewerFormComponent},
+
 ];
 
 @NgModule({

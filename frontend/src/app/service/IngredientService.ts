@@ -2,9 +2,9 @@ import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {GenericService} from './GenericService';
-import {Recipe} from '../model/Recipe';
 import {Actions, URLS} from '../common/URLS';
 import {Ingredient} from '../model/Ingredient';
+import {Response} from '../model/Response';
 
 @Injectable()
 export class IngredientService implements GenericService {
@@ -12,26 +12,27 @@ export class IngredientService implements GenericService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<Ingredient[]> {
-    return this.http.get<Ingredient[]>(URLS[Actions.GET_INGREDIENT].url);
+  getAll(): Observable<Response> {
+    return this.http.get<Response>(URLS[Actions.GET_INGREDIENT].url);
   }
 
-  getById(id: number): Observable<Recipe> {
-    return undefined;
+  getById(id: number): Observable<Response> {
+    const url = `${URLS[Actions.GET_INGREDIENT_BY_ID].url}/${id}`;
+    return this.http.get<Response>(url);
   }
 
-  delete(id: number): Observable<any> {
+  delete(id: number): Observable<Response> {
     const url = `${URLS[Actions.DELETE_INGREDIENT].url}/${id}`;
-    return this.http.delete<boolean>(url);
+    return this.http.delete<Response>(url);
   }
 
-  edit(entity: any): Observable<any> {
+  edit(entity: any): Observable<Response> {
     return undefined;
   }
 
-  save(ingredient: Ingredient): Observable<Ingredient> {
+  save(ingredient: Ingredient): Observable<Response> {
 
-    return this.http.post<Ingredient>(URLS[Actions.SAVE_INGREDIENT].url, ingredient);
+    return this.http.post<Response>(URLS[Actions.SAVE_INGREDIENT].url, ingredient);
   }
 
 

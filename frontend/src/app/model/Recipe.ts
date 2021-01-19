@@ -11,10 +11,6 @@ export class Recipe {
 
 export const COLUMNS = [
   {
-    label: 'Id',
-    fieldName: 'recipeId',
-  },
-  {
     label: 'Name',
     fieldName: 'name',
   },
@@ -23,17 +19,13 @@ export const COLUMNS = [
     fieldName: 'description',
   },
   {
-    label: 'Username',
-    fieldName: 'username',
-  },
-  {
-    label: 'Shared',
-    fieldName: 'shared',
-  },
-  {
     label: 'Ingredients',
-    fieldName: 'ingredientId',
+    fieldName: 'ingredientName',
     arrayField: 'ingredients'
+  },
+  {
+    label: 'Public',
+    fieldName: 'shared',
   }
 ];
 
@@ -41,12 +33,12 @@ export const ACTIONS = [
   {
     label: 'info',
     actionType: 'GO_TO',
-    getUrl: row => '/editForm/' + row.id,
+    getUrl: row => '/recipe/' + row.recipeId,
   },
   {
     label: 'edit',
     actionType: 'GO_TO',
-    getUrl: row => '/editForm/' + row.id,
+    getUrl: row => '/recipeForm/' + row.recipeId,
   },
   {
     label: 'delete',
