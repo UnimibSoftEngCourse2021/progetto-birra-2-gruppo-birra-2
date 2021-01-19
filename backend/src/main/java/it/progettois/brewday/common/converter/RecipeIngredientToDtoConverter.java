@@ -13,8 +13,11 @@ public class RecipeIngredientToDtoConverter implements Converter<RecipeIngredien
 
         RecipeIngredientDto recipeIngredientDto = new RecipeIngredientDto();
 
+        recipeIngredientDto.setRecipeIngredientId(recipeIngredient.getRecipeIngredientId());
         recipeIngredientDto.setIngredientId(recipeIngredient.getIngredient().getIngredientId());
         recipeIngredientDto.setQuantity(recipeIngredient.getQuantity());
+
+        recipeIngredientDto.setIngredientName(recipeIngredient.getIngredient().getName());
 
         return recipeIngredientDto;
     }

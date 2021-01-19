@@ -47,6 +47,23 @@ public class ToolController {
         }
     }
 
+    @GetMapping("/tool/{id}")
+    public ResponseEntity<Response> getTool(HttpServletRequest request, @PathVariable("id") Integer id) {
+        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
+        ToolDto tool;
+        try {
+            tool = this.toolService.getTool(username, id);
+        } catch (BrewerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (ToolNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Tool not found"));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
+        }
+
+        return ResponseEntity.ok(new Response(tool));
+
+    }
 
     @PostMapping("/tool")
     public ResponseEntity<Response> createTool(HttpServletRequest request, @RequestBody ToolDto toolDto) {
@@ -71,7 +88,7 @@ public class ToolController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (ToolNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The tool does not exist in your inventory"));
-        } catch (BrewerNotFoundException e){
+        } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
     }
@@ -88,7 +105,7 @@ public class ToolController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (ToolNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The tool does not exist in your inventory"));
-        } catch (BrewerNotFoundException e){
+        } catch (BrewerNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
         }
     }

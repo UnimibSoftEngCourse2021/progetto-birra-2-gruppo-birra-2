@@ -11,4 +11,5 @@ import java.util.List;
 public interface ToolRepository extends JpaRepository<Tool, Integer> {
 
     List<Tool> findToolsByBrewer(Brewer brewer);
+
 }
