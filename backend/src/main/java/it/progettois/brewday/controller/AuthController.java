@@ -26,7 +26,7 @@ public class AuthController {
         try {
             return ResponseEntity.ok(new Response(this.brewerService.saveBrewer(brewerDto)));
         } catch (ConversionException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Error in creating user"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 }

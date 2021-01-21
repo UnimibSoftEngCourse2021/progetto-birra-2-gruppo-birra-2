@@ -12,4 +12,6 @@ public interface ToolRepository extends JpaRepository<Tool, Integer> {
 
     List<Tool> findToolsByBrewer(Brewer brewer);
 
+    void deleteByBrewer(Brewer brewer);
+
 }

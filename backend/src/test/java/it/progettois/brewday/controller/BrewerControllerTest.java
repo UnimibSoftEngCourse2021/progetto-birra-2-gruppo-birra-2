@@ -5,16 +5,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class BrewerControllerTest {
+class BrewerControllerTest {
 
     @Test
-    public void getBrewersTest() {
+    void getBrewersTest() {
 
 
     }
 
     @Test
-    public void getBrewerByUsernameTest() {
+    void getBrewerByUsernameTest() {
 
     }
 }

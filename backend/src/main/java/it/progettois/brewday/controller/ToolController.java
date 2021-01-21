@@ -1,9 +1,7 @@
 package it.progettois.brewday.controller;
 
-
 import it.progettois.brewday.common.dto.ToolDto;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.exception.ToolNotFoundException;
+import it.progettois.brewday.common.exception.GenericNotFoundException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.ToolService;
@@ -14,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
-import java.util.List;
 
-import static it.progettois.brewday.common.constant.SecurityConstants.HEADER_STRING;
 
 @RestController
 public class ToolController {
@@ -33,80 +29,55 @@ public class ToolController {
 
     @GetMapping("/tool")
     public ResponseEntity<Response> getTools(HttpServletRequest request) {
-        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
-        List<ToolDto> tools;
         try {
-            tools = this.toolService.getTools(username);
-        } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
-        }
-        if (tools.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("You have no tools in your inventory"));
-        } else {
-            return ResponseEntity.ok(new Response(tools));
+            return ResponseEntity.ok(new Response(this.toolService.getTools(this.jwtTokenUtil.getUsername(request))));
+        } catch (GenericNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 
     @GetMapping("/tool/{id}")
     public ResponseEntity<Response> getTool(HttpServletRequest request, @PathVariable("id") Integer id) {
-        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
-        ToolDto tool;
         try {
-            tool = this.toolService.getTool(username, id);
-        } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
-        } catch (ToolNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Tool not found"));
+            return ResponseEntity.ok(new Response(this.toolService.getTool(this.jwtTokenUtil.getUsername(request), id)));
+        } catch (GenericNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         }
-
-        return ResponseEntity.ok(new Response(tool));
-
     }
 
     @PostMapping("/tool")
     public ResponseEntity<Response> createTool(HttpServletRequest request, @RequestBody ToolDto toolDto) {
-        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
         try {
-            return ResponseEntity.ok(new Response(this.toolService.createTool(toolDto, username)));
-        } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+            return ResponseEntity.ok(new Response(this.toolService.createTool(toolDto, this.jwtTokenUtil.getUsername(request))));
+        } catch (GenericNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 
 
     @DeleteMapping("/tool/{id}")
     public ResponseEntity<Response> deleteTool(HttpServletRequest request, @PathVariable("id") Integer id) {
-
-        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
-
         try {
-            this.toolService.deleteTool(username, id);
+            this.toolService.deleteTool(this.jwtTokenUtil.getUsername(request), id);
             return ResponseEntity.ok(new Response("The tool was deleted successfully from the inventory"));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
-        } catch (ToolNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The tool does not exist in your inventory"));
-        } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (GenericNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 
     @PutMapping("/tool/{id}")
     public ResponseEntity<Response> editTool(HttpServletRequest request, @PathVariable("id") Integer id, @RequestBody ToolDto toolDto) {
-
-        String username = this.jwtTokenUtil.getUsernameFromToken(request.getHeader(HEADER_STRING));
-
         try {
-            this.toolService.editTool(username, id, toolDto);
+            this.toolService.editTool(this.jwtTokenUtil.getUsername(request), id, toolDto);
             return ResponseEntity.ok(new Response("The tool in your inventory has been updated"));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
-        } catch (ToolNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The tool does not exist in your inventory"));
-        } catch (BrewerNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("The brewer with username: " + username + " does not exist"));
+        } catch (GenericNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
         }
     }
 }

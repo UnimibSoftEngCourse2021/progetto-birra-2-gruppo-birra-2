@@ -20,9 +20,12 @@ export class BrewTodayComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.brewTodayService.get().subscribe(response => {
-      this.brewToday = response.data;
-      this.loading = false;
-    });
+        this.brewToday = response.data;
+        this.loading = false;
+      },
+      error => {
+        this.loading = false;
+      });
   }
 
   onSubmit(): void {

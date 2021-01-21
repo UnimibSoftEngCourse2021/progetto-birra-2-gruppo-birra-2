@@ -1,6 +1,5 @@
-package it.progettois.brewday.service.maximizeBrew;
+package it.progettois.brewday.service.maximizebrew;
 
-import it.progettois.brewday.common.dto.RecipeIngredientDto;
 import lombok.Data;
 
 import java.util.List;

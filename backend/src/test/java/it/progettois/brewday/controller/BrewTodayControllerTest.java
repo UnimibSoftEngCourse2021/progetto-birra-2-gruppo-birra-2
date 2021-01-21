@@ -5,10 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class BrewTodayControllerTest {
+class BrewTodayControllerTest {
 
     @Test
-    public void whatShouldIBrewTodayTest() {
+    void whatShouldIBrewTodayTest() {
 
     }
 

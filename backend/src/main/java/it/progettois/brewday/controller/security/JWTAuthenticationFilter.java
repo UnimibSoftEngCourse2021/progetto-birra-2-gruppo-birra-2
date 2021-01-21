@@ -3,6 +3,7 @@ package it.progettois.brewday.controller.security;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.progettois.brewday.common.dto.BrewerDto;
+import it.progettois.brewday.common.exception.AuthException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             new ArrayList<>())
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthException(e.getMessage());
         }
     }
 
@@ -64,8 +65,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             res.getWriter().write("{ \"token\": \"" + TOKEN_PREFIX + token + "\"}");
             res.getWriter().flush();
             res.getWriter().close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
     }
 }

@@ -5,39 +5,39 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class BrewControllerTest {
+class BrewControllerTest {
 
     @Test
-    public void getBrewsTest() {
+    void getBrewsTest() {
 
     }
 
     @Test
-    public void getBrewTest() {
-
-
-    }
-
-    @Test
-    public void createBrewTest() {
+    void getBrewTest() {
 
 
     }
 
     @Test
-    public void editBrewTest() {
+    void createBrewTest() {
 
 
     }
 
     @Test
-    public void deleteBrewTest() {
+    void editBrewTest() {
 
 
     }
 
     @Test
-    public void getIngredientForBrewTest() {
+    void deleteBrewTest() {
+
+
+    }
+
+    @Test
+    void getIngredientForBrewTest() {
 
 
     }

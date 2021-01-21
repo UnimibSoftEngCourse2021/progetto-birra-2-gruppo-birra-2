@@ -1,14 +1,12 @@
 package it.progettois.brewday.common.exception;
 
-public class EmptyStorageException extends Exception{
-    String message;
+public class EmptyStorageException extends GenericNotFoundException {
 
-    public EmptyStorageException(String message) {
-        this.message = message;
+    public EmptyStorageException() {
+        super("The storage is empty");
     }
 
-    @Override
-    public String getMessage(){
-        return this.message;
+    public EmptyStorageException(String ingredientName) {
+        super("You don't have ingredient: \"" + ingredientName + "\" in the storage");
     }
 }

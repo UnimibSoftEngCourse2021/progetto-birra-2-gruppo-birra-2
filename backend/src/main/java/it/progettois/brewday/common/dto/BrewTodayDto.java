@@ -1,7 +1,6 @@
 package it.progettois.brewday.common.dto;
 
-import it.progettois.brewday.persistence.model.Recipe;
-import it.progettois.brewday.service.maximizeBrew.MaxedRecipeIngredient;
+import it.progettois.brewday.service.maximizebrew.MaxedRecipeIngredient;
 import lombok.Builder;
 import lombok.Data;
 
