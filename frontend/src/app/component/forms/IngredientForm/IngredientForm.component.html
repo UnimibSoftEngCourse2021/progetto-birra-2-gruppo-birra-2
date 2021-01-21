@@ -1,5 +1,3 @@
-<app-nav-bar></app-nav-bar>
-
 <div class="container">
   <div>
     <h1>Create new Ingredient</h1>
@@ -53,9 +51,6 @@
                [(ngModel)]="ingredient.shared"/>
         <input type="checkbox" class="form-control" name="shared" id="shared" value="true" checked
                [(ngModel)]="ingredient.shared">
-
-
-
       </div>
 
       <button type="submit" class="btn btn-success" [disabled]="!IngredientForm.form.valid"

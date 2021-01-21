@@ -1,0 +1,25 @@
+<h1>RECIPE DETAIL</h1>
+
+<button (click)="edit()" class="btn btn-default"><i class="material-icons">edit</i></button>
+
+Name: {{recipe.name}} <br>
+Description: {{recipe.description}} <br>
+Is Public: {{recipe.shared}} <br>
+
+<h2>Ingredients: </h2><br>
+
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading">
+  <div *ngFor="let recipeIngredient of recipe.ingredients; let i = index">
+
+    Ingredient name: {{recipeIngredient.ingredientName}} <br>
+    Ingredient description: {{ingredients[i].description}} <br>
+    Ingredient type: {{ingredients[i].type}} <br>
+    Ingredient unit: {{ingredients[i].unit}} <br>
+
+    Quantity required for this recipe: {{recipeIngredient.quantity}} <br>
+    <br>
+  </div>
+  <button (click)="goBack()" class="btn btn-primary">Go back</button>
+</div>
+

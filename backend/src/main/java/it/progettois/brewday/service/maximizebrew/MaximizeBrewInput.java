@@ -1,4 +1,4 @@
-package it.progettois.brewday.service.maximizeBrew;
+package it.progettois.brewday.service.maximizebrew;
 
 import lombok.Builder;
 import lombok.Data;

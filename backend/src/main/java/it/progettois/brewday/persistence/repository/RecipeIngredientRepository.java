@@ -9,4 +9,8 @@ import java.util.List;
 public interface RecipeIngredientRepository extends JpaRepository<RecipeIngredient, Integer> {
 
     List<RecipeIngredient> findAllByRecipe(Recipe recipe);
+
+    List<RecipeIngredient> findAllByRecipe_RecipeId(Integer id);
+
+    void deleteAllByRecipeIn(List<Recipe> recipes);
 }

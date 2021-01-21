@@ -1,0 +1,13 @@
+<h1>MY TOOLS</h1>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading">
+  <app-table
+    [data]="tools"
+    [headers]="header"
+    [indexField]="'toolId'"
+    [actions]="actions"
+    [genericService]="toolService"
+    [formUrl]="'/toolForm'"
+  >
+  </app-table>
+</div>

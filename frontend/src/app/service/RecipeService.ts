@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {GenericService} from './GenericService';
 import {Recipe} from '../model/Recipe';
 import {Actions, URLS} from '../common/URLS';
-import {RecipeIngredient} from '../model/RecipeIngredient';
+import {Response} from '../model/Response';
 
 @Injectable()
 export class RecipeService implements GenericService {
@@ -12,34 +12,32 @@ export class RecipeService implements GenericService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(URLS[Actions.GET_RECIPE].url);
+  getAll(): Observable<Response> {
+    return this.http.get<Response>(URLS[Actions.GET_RECIPE].url);
   }
 
-  getById(id: number): Observable<Recipe> {
+  getById(id: number): Observable<Response> {
     const url = `${URLS[Actions.GET_RECIPE_BY_ID].url}/${id}`;
-    return this.http.get<Recipe>(url);
+    return this.http.get<Response>(url);
   }
 
-  delete(id: number): Observable<any> {
+  delete(id: number): Observable<Response> {
     const url = `${URLS[Actions.DELETE_RECIPE].url}/${id}`;
-    return this.http.delete<boolean>(url);
+    return this.http.delete<Response>(url);
   }
 
-  edit(entity: any): Observable<any> {
-    return undefined;
+  edit(recipe: Recipe): Observable<Response> {
+    const url = `${URLS[Actions.EDIT_RECIPE].url}/${recipe.recipeId}`;
+    return this.http.put<Response>(url, recipe);
   }
 
-  save(recipe: Recipe): Observable<Recipe> {
+  save(recipe: Recipe): Observable<Response> {
+    return this.http.post<Response>(URLS[Actions.SAVE_RECIPE].url, recipe);
+  }
 
-    const recipeIngredient: RecipeIngredient = new RecipeIngredient();
-
-    recipeIngredient.ingredientId = 4;
-    recipeIngredient.quantity = 2;
-
-    recipe.ingredients = [recipeIngredient];
-
-    return this.http.post<Recipe>(URLS[Actions.SAVE_RECIPE].url, recipe);
+  getIngredientsByRecipeId(id: number): Observable<Response> {
+    const url = `${URLS[Actions.GET_INGREDIENTS_BY_RECIPE].url}/${id}/ingredient`;
+    return this.http.get<Response>(url);
   }
 
   /*

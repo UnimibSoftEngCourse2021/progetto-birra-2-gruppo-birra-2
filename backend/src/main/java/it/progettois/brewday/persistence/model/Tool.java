@@ -26,7 +26,7 @@ public class Tool {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_username")
+    @JoinColumn(name = "username")
     private Brewer brewer;
 
 }

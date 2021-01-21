@@ -15,8 +15,6 @@ public class Recipe {
     @Column(name = "recipe_id")
     private Integer recipeId;
 
-    private Integer version;
-
     private String name;
 
     private String description;
@@ -24,7 +22,7 @@ public class Recipe {
     private Boolean shared;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_username")
+    @JoinColumn(name = "username")
     private Brewer brewer;
 
     @OneToMany(mappedBy = "ingredient")

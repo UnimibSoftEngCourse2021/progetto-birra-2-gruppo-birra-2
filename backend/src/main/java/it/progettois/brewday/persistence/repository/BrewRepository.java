@@ -12,4 +12,6 @@ public interface BrewRepository extends JpaRepository<Brew, Integer> {
 
     List<Brew> findAllByBrewer(Brewer brewer);
 
+    void deleteByBrewer(Brewer brewer);
+
 }

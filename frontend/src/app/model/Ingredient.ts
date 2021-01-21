@@ -1,4 +1,5 @@
 export class Ingredient {
+  ingredientId: number;
   name: string;
   description: string;
   unit: string;
@@ -38,12 +39,12 @@ export const ACTIONS = [
   {
     label: 'info',
     actionType: 'GO_TO',
-    getUrl: row => '/editForm/' + row.id,
+    getUrl: row => '/ingredient/' + row.ingredientId,
   },
   {
     label: 'edit',
     actionType: 'GO_TO',
-    getUrl: row => '/editForm/' + row.id,
+    getUrl: row => '/ingredientForm/' + row.ingredientId,
   },
   {
     label: 'delete',

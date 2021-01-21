@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {RecipeService} from '../../service/RecipeService';
 import {ACTIONS, COLUMNS, Recipe} from '../../model/Recipe';
-import {Brewer} from '../../model/Brewer';
 
 @Component({
   selector: 'app-recipe',
@@ -14,15 +13,19 @@ export class RecipeComponent implements OnInit {
   recipes: Recipe[];
   actions = ACTIONS;
 
-  currentUser = new Brewer();
-
   recipeService: RecipeService;
+
+  loading: boolean;
 
   constructor(recipeService: RecipeService) {
     this.recipeService = recipeService;
   }
 
   ngOnInit(): void {
-    this.recipeService.getAll().subscribe(data => this.recipes = data);
+    this.loading = true;
+    this.recipeService.getAll().subscribe(resp => {
+      this.recipes = resp.data;
+      this.loading = false;
+    });
   }
 }

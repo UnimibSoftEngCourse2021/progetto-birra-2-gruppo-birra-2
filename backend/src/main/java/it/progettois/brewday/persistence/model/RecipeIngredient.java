@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Data
-@Entity
+@Entity(name = "recipe_ingredient")
 public class RecipeIngredient {
 
     @Id

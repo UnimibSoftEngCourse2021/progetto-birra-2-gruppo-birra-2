@@ -14,6 +14,7 @@ public class DtoToIngredientConverter implements Converter<IngredientDto, Ingred
 
         ingredient.setName(ingredientDto.getName());
         ingredient.setDescription(ingredientDto.getDescription());
+        ingredient.setQuantity(ingredientDto.getQuantity());
         ingredient.setUnit(ingredientDto.getUnit());
         ingredient.setType(ingredientDto.getType());
         ingredient.setShared(ingredientDto.getShared());
