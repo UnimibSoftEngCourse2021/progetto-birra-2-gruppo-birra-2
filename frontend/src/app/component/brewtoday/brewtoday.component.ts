@@ -10,6 +10,7 @@ import {ACTIONS, BrewToday} from '../../model/BrewToday';
 export class BrewTodayComponent implements OnInit {
 
   brewToday: BrewToday;
+  brewQuantity = null;
   actions = ACTIONS;
 
   loading: boolean;
@@ -21,6 +22,10 @@ export class BrewTodayComponent implements OnInit {
     this.loading = true;
     this.brewTodayService.get().subscribe(response => {
         this.brewToday = response.data;
+        // tslint:disable-next-line:forin
+        for (const index in this.brewToday.ingredientQuantities){
+          this.brewQuantity += this.brewToday.ingredientQuantities[index].quantity;
+        }
         this.loading = false;
       },
       error => {
@@ -28,8 +33,8 @@ export class BrewTodayComponent implements OnInit {
       });
   }
 
-  onSubmit(): void {
+  brew(): void {
     console.log(this.brewToday);
-    // TODO Create Brew
+    // TODO Pass the recipe and create Brew
   }
 }
