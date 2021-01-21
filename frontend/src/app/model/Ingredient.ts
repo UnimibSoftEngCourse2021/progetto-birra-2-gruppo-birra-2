@@ -22,7 +22,7 @@ export const COLUMNS = [
     fieldName: 'type',
   },
   {
-    label: 'Quantity',
+    label: 'Quantity In Storage',
     fieldName: 'quantity',
   },
   {
