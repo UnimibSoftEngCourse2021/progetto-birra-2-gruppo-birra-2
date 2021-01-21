@@ -34,6 +34,8 @@ public class RecipeService {
     private final IngredientRepository ingredientRepository;
     private final IngredientToDtoConverter ingredientToDtoConverter;
 
+    private static final String ITEM_FOR_EXCEPTION = "recipe";
+
     @Autowired
     public RecipeService(RecipeRepository recipeRepository,
                          RecipeIngredientRepository recipeIngredientRepository,
@@ -64,12 +66,12 @@ public class RecipeService {
 
     public List<RecipeDto> getRecipes(String username) throws BrewerNotFoundException {
 
-        return this.recipeRepository
-                .findAllByBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new))
-                .stream()
-                .peek(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)))
-                .map(this.recipeToDtoConverter::convert)
-                .collect(Collectors.toList());
+        List<Recipe> recipes = this.recipeRepository.findAllByBrewer(this.brewerRepository.findByUsername(username)
+                .orElseThrow(BrewerNotFoundException::new));
+
+        recipes.forEach(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)));
+
+        return recipes.stream().map(this.recipeToDtoConverter::convert).collect(Collectors.toList());
     }
 
     public RecipeDto getRecipe(String username, Integer id) throws BrewerNotFoundException, RecipeNotFoundException, AccessDeniedException {
@@ -78,10 +80,9 @@ public class RecipeService {
 
         recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe));
 
-        if (brewerOwnsRecipe(username, recipe) || recipe.getShared()) {
+        if (Boolean.TRUE.equals(brewerOwnsRecipe(username, recipe) || recipe.getShared())) {
             return this.recipeToDtoConverter.convert(recipe);
-        } else throw new AccessDeniedException("You don't have access to view this recipe");
-
+        } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
     }
 
     public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException, ConversionException, IngredientNotFoundException {
@@ -117,69 +118,71 @@ public class RecipeService {
 
     public void deleteRecipe(String username, Integer id) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException {
 
-        if (brewerOwnsRecipe(username, id)) {
+        if (Boolean.TRUE.equals(brewerOwnsRecipe(username, id))) {
 
             List<RecipeIngredient> recipeIngredients = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
 
             this.recipeIngredientRepository.deleteAll(recipeIngredients);
 
             this.recipeRepository.deleteById(id);
-        } else throw new AccessDeniedException("You don't have permission to delete this recipe");
+        } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
 
     }
 
     public void editRecipe(String username, Integer id, RecipeDto recipeDto) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException, IngredientNotFoundException, RecipeIngredientNotFoundException {
 
-        if (brewerOwnsRecipe(username, id)) {
-            Recipe recipe = dtoToRecipeConverter.convert(recipeDto);
+        if (Boolean.FALSE.equals(brewerOwnsRecipe(username, id))) {
+            throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
+        }
 
-            if (recipe == null) {
-                throw new RecipeNotFoundException();
-            }
+        Recipe recipe = dtoToRecipeConverter.convert(recipeDto);
 
-            recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
-            recipe.setRecipeId(id);
-            recipe = this.recipeRepository.save(recipe);
+        if (recipe == null) {
+            throw new RecipeNotFoundException();
+        }
 
-            List<RecipeIngredientDto> recipeIngredientsNew = recipeDto.getIngredients();
-            List<RecipeIngredient> recipeIngredientsOld = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
+        recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
+        recipe.setRecipeId(id);
+        recipe = this.recipeRepository.save(recipe);
 
-            for (RecipeIngredient recipeIngredient : recipeIngredientsOld) {
-                boolean isPresent = false;
-                for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew) {
-                    if (recipeIngredient.getRecipeIngredientId().equals(recipeIngredientDto.getRecipeIngredientId())) {
-                        isPresent = true;
-                        break;
-                    }
-                }
-                if (!isPresent) {
-                    this.recipeIngredientRepository.delete(recipeIngredient);
-                }
-            }
+        List<RecipeIngredientDto> recipeIngredientsNew = recipeDto.getIngredients();
+        List<RecipeIngredient> recipeIngredientsOld = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
 
+        for (RecipeIngredient recipeIngredient : recipeIngredientsOld) {
+            boolean isPresent = false;
             for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew) {
-
-                RecipeIngredient recipeIngredient;
-                if (recipeIngredientDto.getRecipeIngredientId() == null) {
-                    recipeIngredient = new RecipeIngredient();
-                } else {
-                    recipeIngredient = this.recipeIngredientRepository.findById(recipeIngredientDto.getRecipeIngredientId())
-                            .orElseThrow(RecipeIngredientNotFoundException::new);
+                if (recipeIngredient.getRecipeIngredientId().equals(recipeIngredientDto.getRecipeIngredientId())) {
+                    isPresent = true;
+                    break;
                 }
-
-                recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
-                recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
-                        .orElseThrow(IngredientNotFoundException::new));
-                recipeIngredient.setRecipe(recipe);
-
-                this.recipeIngredientRepository.save(recipeIngredient);
             }
-        } else throw new AccessDeniedException("You don't have access to this recipe");
+            if (!isPresent) {
+                this.recipeIngredientRepository.delete(recipeIngredient);
+            }
+        }
+
+        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew) {
+
+            RecipeIngredient recipeIngredient;
+            if (recipeIngredientDto.getRecipeIngredientId() == null) {
+                recipeIngredient = new RecipeIngredient();
+            } else {
+                recipeIngredient = this.recipeIngredientRepository.findById(recipeIngredientDto.getRecipeIngredientId())
+                        .orElseThrow(RecipeIngredientNotFoundException::new);
+            }
+
+            recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
+            recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
+                    .orElseThrow(IngredientNotFoundException::new));
+            recipeIngredient.setRecipe(recipe);
+
+            this.recipeIngredientRepository.save(recipeIngredient);
+        }
     }
 
     public List<IngredientDto> getIngredientsByRecipe(String username, Integer id) throws BrewerNotFoundException, RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
 
-        if (brewerOwnsRecipe(username, id)) {
+        if (Boolean.TRUE.equals(brewerOwnsRecipe(username, id))) {
             List<IngredientDto> ingredientsDto = new ArrayList<>();
             List<RecipeIngredient> recipeIngredients = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
 
@@ -188,8 +191,7 @@ public class RecipeService {
                 ingredientsDto.add(this.ingredientToDtoConverter.convert(ingredient));
             }
 
-
             return ingredientsDto;
-        } else throw new AccessDeniedException("You don't have permission to delete this recipe");
+        } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
     }
 }

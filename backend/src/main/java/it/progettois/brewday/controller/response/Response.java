@@ -7,6 +7,9 @@ public class Response {
 
     private Object data;
 
+    public Response() {
+    }
+
     public Response(Object data) {
         this.data = data;
     }

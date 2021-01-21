@@ -14,4 +14,6 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Integer>
 
     List<Ingredient> findIngredientsByBrewerAndQuantityGreaterThan(Brewer brewer, Double greaterThan);
 
+    void deleteByBrewer(Brewer brewer);
+
 }

@@ -5,10 +5,7 @@ import it.progettois.brewday.common.converter.DtoToBrewConverter;
 import it.progettois.brewday.common.converter.RecipeIngredientToDtoConverter;
 import it.progettois.brewday.common.dto.BrewDto;
 import it.progettois.brewday.common.dto.RecipeIngredientDto;
-import it.progettois.brewday.common.exception.BrewNotFoundException;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.exception.IngredientNotFoundException;
-import it.progettois.brewday.common.exception.RecipeNotFoundException;
+import it.progettois.brewday.common.exception.*;
 import it.progettois.brewday.persistence.model.Brew;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.model.RecipeIngredient;
@@ -65,7 +62,7 @@ public class BrewService {
 
         if (brew.getBrewer().getUsername().equals(username)) {
             return this.brewToDtoConverter.convert(brew);
-        } else throw new AccessDeniedException("You don't have access to this brew");
+        } else throw new AccessDeniedException("brew");
     }
 
     public BrewDto saveBrew(BrewDto brewDto, String username) throws BrewerNotFoundException, AccessDeniedException {
@@ -81,13 +78,13 @@ public class BrewService {
         if (brew.getBrewer().getUsername().equals(username)) {
             return this.brewToDtoConverter.convert(this.brewRepository.save(brew));
 
-        } else throw new AccessDeniedException("You don't have access to this brew");
+        } else throw new AccessDeniedException("brew");
     }
 
     public Boolean editBrew(BrewDto brewDto, Integer id, String username) throws BrewerNotFoundException, AccessDeniedException, BrewNotFoundException {
 
         if (!this.brewRepository.findById(id).orElseThrow(BrewNotFoundException::new).getBrewer().getUsername().equals(username)) {
-            throw new AccessDeniedException("You don't have access to this brew");
+            throw new AccessDeniedException("brew");
         }
 
         brewDto.setBrewerUsername(username);
@@ -110,15 +107,19 @@ public class BrewService {
         if (brew.getBrewer().getUsername().equals(username)) {
             this.brewRepository.deleteById(id);
             return true;
-        } else throw new AccessDeniedException("You don't have permission to delete this brew");
+        } else throw new AccessDeniedException("brew");
     }
 
-    public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username, Integer quantity) throws RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
+    public List<RecipeIngredientDto> getIngredientForBrew(Integer recipeId, String username, Integer quantity) throws RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException, NegativeQuantityException {
+
+        if (quantity <= 0) {
+            throw new NegativeQuantityException();
+        }
 
         Recipe recipe = this.recipeRepository.findById(recipeId).orElseThrow(RecipeNotFoundException::new);
 
         if (!recipe.getBrewer().getUsername().equals(username)) {
-            throw new AccessDeniedException("You don't have permission to brew this recipe");
+            throw new AccessDeniedException("recipe");
         }
 
         List<RecipeIngredient> ingredients = this.recipeIngredientRepository.findAllByRecipe(recipe);

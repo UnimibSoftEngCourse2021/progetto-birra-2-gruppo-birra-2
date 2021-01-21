@@ -22,6 +22,7 @@
             "assets": [
               "src/favicon.ico",
               "src/beer.jpg",
+              "src/logo.PNG",
               "src/assets",
               "src/assets/images"
             ],
@@ -88,6 +89,7 @@
             "assets": [
               "src/favicon.ico",
               "src/beer.jpg",
+              "src/logo.PNG",
               "src/assets"
             ],
             "styles": [

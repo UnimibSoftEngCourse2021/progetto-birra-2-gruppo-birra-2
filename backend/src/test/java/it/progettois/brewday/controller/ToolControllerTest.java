@@ -5,28 +5,28 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class ToolControllerTest {
+class ToolControllerTest {
 
     @Test
-    public void getTools() {
+    void getTools() {
 
     }
 
 
     @Test
-    public void createTool() {
+    void createTool() {
 
     }
 
 
     @Test
-    public void deleteTool() {
+    void deleteTool() {
 
 
     }
 
     @Test
-    public void editTool() {
+    void editTool() {
     }
 
 }

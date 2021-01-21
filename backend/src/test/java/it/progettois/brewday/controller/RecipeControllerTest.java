@@ -5,33 +5,33 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class RecipeControllerTest {
+class RecipeControllerTest {
 
     @Test
-    public void getRecipes() {
+    void getRecipes() {
 
 
     }
 
     @Test
-    public void getRecipe() {
+    void getRecipe() {
 
 
     }
 
     @Test
-    public void saveRecipe() {
+    void saveRecipe() {
 
 
     }
 
     @Test
-    public void deleteRecipe() {
+    void deleteRecipe() {
 
 
     }
 
     @Test
-    public void editRecipe() {
+    void editRecipe() {
     }
 }
