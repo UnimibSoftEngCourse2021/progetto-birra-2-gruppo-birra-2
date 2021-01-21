@@ -31,6 +31,7 @@ import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.compo
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
 import {BrewerService} from './service/BrewerService';
+import {IngredientDetailComponent} from './component/ingredientDetail/ingredientDetail.component';
 
 
 export function tokenGetter(): string {
@@ -48,6 +49,7 @@ export function tokenGetter(): string {
     FilterPipe,
     IngredientComponent,
     IngredientFormComponent,
+    IngredientDetailComponent,
     BrewTodayComponent,
     ToolComponent,
     ToolFormComponent,

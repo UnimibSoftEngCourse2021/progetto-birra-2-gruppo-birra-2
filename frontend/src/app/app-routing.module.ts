@@ -12,6 +12,7 @@ import {HomeComponent} from './component/home/home.component';
 import {RegistrationFormComponent} from './component/forms/RegistrationForm/RegistrationForm.component';
 import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.component';
 import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
+import {IngredientDetailComponent} from './component/ingredientDetail/ingredientDetail.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path: 'recipeForm', component: RecipeFormComponent},
   {path: 'recipeForm/:id', component: RecipeFormComponent},
   {path: 'recipe/:id', component: RecipeDetailComponent},
+  {path: 'ingredient/:id', component: IngredientDetailComponent},
   {path: 'ingredient', component: IngredientComponent},
   {path: 'ingredientForm', component: IngredientFormComponent},
   {path: 'ingredientForm/:id', component: IngredientFormComponent},
