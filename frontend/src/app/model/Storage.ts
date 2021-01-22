@@ -1,4 +1,4 @@
-export class Ingredient {
+export class Storage {
   ingredientId: number;
   name: string;
   description: string;
@@ -22,12 +22,12 @@ export const COLUMNS = [
     fieldName: 'type',
   },
   {
-    label: 'Unit',
-    fieldName: 'unit'
+    label: 'Quantity In Storage',
+    fieldName: 'quantity',
   },
   {
-    label: 'Shared',
-    fieldName: 'shared',
+    label: 'Unit',
+    fieldName: 'unit'
   }
 ];
 
@@ -38,12 +38,7 @@ export const ACTIONS = [
     getUrl: row => '/ingredient/' + row.ingredientId,
   },
   {
-    label: 'edit',
-    actionType: 'GO_TO',
-    getUrl: row => '/ingredientForm/' + row.ingredientId,
-  },
-  {
     label: 'delete',
-    actionType: 'DELETE'
+    actionType: 'DELETE_FROM_STORAGE'
   }
 ];

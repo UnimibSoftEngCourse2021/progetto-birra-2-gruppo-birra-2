@@ -13,6 +13,7 @@ import {RegistrationFormComponent} from './component/forms/RegistrationForm/Regi
 import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.component';
 import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
 import {IngredientDetailComponent} from './component/ingredientDetail/ingredientDetail.component';
+import {StorageComponent} from './component/storage/storage.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'recipe/:id', component: RecipeDetailComponent},
   {path: 'ingredient/:id', component: IngredientDetailComponent},
   {path: 'ingredient', component: IngredientComponent},
+  {path: 'storage', component: StorageComponent},
   {path: 'ingredientForm', component: IngredientFormComponent},
   {path: 'ingredientForm/:id', component: IngredientFormComponent},
   {path: 'today', component: BrewTodayComponent},

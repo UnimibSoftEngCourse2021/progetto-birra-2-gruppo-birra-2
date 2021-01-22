@@ -63,8 +63,11 @@
                            [previousLabel]="'Previous'"
       ></pagination-controls>
     </li>
+    <li *ngIf="indexField === 'ingredientId'">
+      <a routerLink="/storage" class="btn btn-primary">My Storage <i class="material-icons">storage</i></a>
+    </li>
     <li>
-      <a class="btn btn-primary" routerLink="{{formUrl}}"><i class="material-icons">add</i></a>
+      <a class="btn btn-primary" routerLink="{{formUrl}}">New <i class="material-icons">add</i></a>
     </li>
   </ul>
 </div>
