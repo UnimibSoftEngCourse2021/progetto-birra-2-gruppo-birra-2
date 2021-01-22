@@ -59,6 +59,8 @@ export class IngredientFormComponent implements OnInit {
         error => {
           alert(error);
         });
+    } else {
+      this.ingredient.quantity = 0;
     }
   }
 
