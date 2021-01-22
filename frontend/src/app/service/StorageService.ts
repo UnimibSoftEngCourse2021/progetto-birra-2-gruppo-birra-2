@@ -24,14 +24,9 @@ export class StorageService {
     return this.http.put<Response>(URLS[Actions.EDIT_STORAGE].url, ingredient);
   }
 
-  delete(id: number): Observable<Response> {
-    const url = `${URLS[Actions.EDIT_STORAGE].url}/${id}`;
-    let ingredient: Storage = new Storage();
-    this.getById(id).subscribe(resp => {
-      ingredient = resp.data;
-      ingredient.quantity = 0;
-      console.log('DELETED INGREDIENT: ' + ingredient);
-    });
+  delete(ingredient: Storage): Observable<Response> {
+    const url = `${URLS[Actions.EDIT_STORAGE].url}/${ingredient.ingredientId}`;
+    ingredient.quantity = 0;
     return this.http.put<Response>(url, ingredient);
   }
 

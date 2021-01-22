@@ -107,7 +107,7 @@ export class TableComponent implements OnInit {
       const msg = 'delete the ingredient from storage?';
 
       if (confirm(msg) === true) {
-        this.storageService.delete(element.ingredientId)
+        this.storageService.delete(element)
           .subscribe(() => {
               location.reload();
             },
