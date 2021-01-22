@@ -7,12 +7,12 @@ import {Component, OnInit} from '@angular/core';
 })
 export class NavBarComponent implements OnInit {
 
-  username: string = undefined;
+  username = '';
 
   constructor() {
-    this.username = window.localStorage.getItem('username');
   }
 
   ngOnInit(): void {
+    this.username = window.localStorage.getItem('username');
   }
 }

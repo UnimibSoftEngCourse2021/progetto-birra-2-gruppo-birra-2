@@ -2,6 +2,7 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.exception.ConversionException;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.BrewerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class AuthController {
             return ResponseEntity.ok(new Response(this.brewerService.saveBrewer(brewerDto)));
         } catch (ConversionException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
+        } catch (AlreadyPresentException e) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Response(e.getMessage()));
         }
     }
 }

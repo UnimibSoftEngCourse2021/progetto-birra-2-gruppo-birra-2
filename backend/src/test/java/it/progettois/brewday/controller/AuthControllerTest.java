@@ -5,6 +5,7 @@ import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.dto.BrewerFatDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.common.model.Token;
 import it.progettois.brewday.controller.common.model.UsernameAndPassword;
@@ -40,7 +41,7 @@ class AuthControllerTest {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    BrewerFatDto createUser(String username) throws ConversionException {
+    BrewerFatDto createUser(String username) throws ConversionException, AlreadyPresentException {
 
         BrewerDto brewer = new BrewerDto();
         brewer.setUsername(username);

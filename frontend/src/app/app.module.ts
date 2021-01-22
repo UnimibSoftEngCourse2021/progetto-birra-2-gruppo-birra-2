@@ -56,7 +56,7 @@ export function tokenGetter(): string {
     HomeComponent,
     RegistrationFormComponent,
     RecipeDetailComponent,
-    BrewerFormComponent
+    BrewerFormComponent,
   ],
   imports: [
     BrowserModule,
