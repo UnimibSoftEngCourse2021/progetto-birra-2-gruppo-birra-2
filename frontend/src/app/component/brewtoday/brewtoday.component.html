@@ -2,7 +2,7 @@
 <div *ngIf="!brewToday && !loading">
   There is no recipe you can brew.
   Add a recipe now!
-  <a class="btn btn-primary" routerLink="/createRecipe"><i class="material-icons">add</i></a>
+  <a class="btn btn-primary" routerLink="/recipeForm"><i class="material-icons">add</i></a>
 </div>
 <div *ngIf="brewToday && !loading" class="container">
   <h1>Today's Brew</h1>
