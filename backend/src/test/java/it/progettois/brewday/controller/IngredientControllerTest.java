@@ -60,7 +60,7 @@ class IngredientControllerTest {
         brewer.setUsername(username);
         brewer.setPassword("TEST");
         brewer.setName("TEST");
-        brewer.setEmail("TEST");
+        brewer.setEmail(username);
         brewer.setMaxBrew(42);
 
         return this.brewerService.saveBrewer(brewer);
