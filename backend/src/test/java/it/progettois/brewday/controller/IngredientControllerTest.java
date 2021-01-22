@@ -6,10 +6,10 @@ import it.progettois.brewday.common.constant.IngredientUnit;
 import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.dto.BrewerFatDto;
 import it.progettois.brewday.common.dto.IngredientDto;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
 import it.progettois.brewday.common.exception.NegativeQuantityException;
-import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.common.model.Token;
 import it.progettois.brewday.controller.common.model.UsernameAndPassword;
@@ -60,7 +60,7 @@ class IngredientControllerTest {
         brewer.setUsername(username);
         brewer.setPassword("TEST");
         brewer.setName("TEST");
-        brewer.setEmail("TEST");
+        brewer.setEmail(username);
         brewer.setMaxBrew(42);
 
         return this.brewerService.saveBrewer(brewer);

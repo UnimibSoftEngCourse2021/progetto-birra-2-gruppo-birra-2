@@ -45,6 +45,17 @@ export class BrewerFormComponent implements OnInit {
       });
   }
 
+  delete(): void {
+    const msg = 'Are you really sure? You will permanently lost all your data';
+    if (confirm(msg) === true) {
+      this.brewerService.delete(this.brewer.username)
+        .subscribe(() => {
+            this.router.navigate(['login']);
+          },
+          error => console.log(error));
+    }
+  }
+
   goBack(): void {
     this.location.back();
   }

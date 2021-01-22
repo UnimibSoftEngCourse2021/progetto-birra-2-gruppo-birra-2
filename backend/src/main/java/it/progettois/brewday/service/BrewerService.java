@@ -5,9 +5,9 @@ import it.progettois.brewday.common.converter.BrewerToFatDtoConverter;
 import it.progettois.brewday.common.converter.DtoToBrewerConverter;
 import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.dto.BrewerFatDto;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
-import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,10 +125,10 @@ public class BrewerService implements UserDetailsService {
 
         Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
 
-        this.ingredientRepository.deleteByBrewer(brewer);
         this.toolRepository.deleteByBrewer(brewer);
         this.brewRepository.deleteByBrewer(brewer);
         this.recipeIngredientRepository.deleteAllByRecipeIn(this.recipeRepository.findAllByBrewer(brewer));
+        this.ingredientRepository.deleteByBrewer(brewer);
         this.recipeRepository.deleteByBrewer(brewer);
         this.brewerRepository.delete(brewer);
     }
