@@ -1,7 +1,7 @@
 <div class="container">
   <div>
     <h1>Registration</h1>
-    <form #RegistrationForm="ngForm" (ngSubmit)="onSubmit()">
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit()">
 
       <div class="form-group">
         <label for="name">Name</label>
@@ -25,6 +25,10 @@
              class="alert alert-danger">
           Email is required
         </div>
+        <div [hidden]="this.brewer.email === '' || this.brewer.email.match('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')"
+             class="alert alert-danger">
+          Email must be a valid email address
+        </div>
       </div>
 
       <div class="form-group">
@@ -47,7 +51,19 @@
                type="password">
         <div [hidden]="password.valid || password.pristine"
              class="alert alert-danger">
-          Password is required
+          Password is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordConfirm">Confirm password</label>
+        <input #passwordConfirm="ngModel" [(ngModel)]="confirmPassword" class="form-control"
+               id="passwordConfirm"
+               name="passwordConfirm" required
+               type="password">
+        <div [hidden]="password.value === passwordConfirm.value"
+             class="alert alert-danger">
+          Passwords are different
         </div>
       </div>
 
@@ -61,11 +77,21 @@
              class="alert alert-danger">
           Max Brew Capacity is required
         </div>
+        <div [hidden]="maxBrew.value >= 0"
+             class="alert alert-danger">
+          The capacity must be greater than zero.
+        </div>
       </div>
 
-      <button [disabled]="!RegistrationForm.form.valid" class="btn btn-success" style="margin-left: 4px"
+      <button [disabled]="!registrationForm.form.valid" class="btn btn-success" style="margin-left: 4px"
               type="submit">Register
       </button>
+      <div *ngIf="invalidForm" class="alert alert-danger">
+        <div>The fields entered are not valid.</div>
+      </div>
     </form>
+    <button (click)="goBack()" class="btn btn-primary">Go back</button>
   </div>
 </div>
+
+

@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface BrewerRepository extends JpaRepository<Brewer, Integer> {
 
     Optional<Brewer> findByUsername(String username);
+
+    Optional<Brewer> findByEmail(String email);
 }

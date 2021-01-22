@@ -25,4 +25,9 @@ export class BrewerService {
     const url = `${URLS[Actions.EDIT_BREWER].url}/${brewer.username}`;
     return this.http.put<Response>(url, brewer);
   }
+
+  userExist(username: string): Observable<Response> {
+    return undefined;
+  }
 }
+

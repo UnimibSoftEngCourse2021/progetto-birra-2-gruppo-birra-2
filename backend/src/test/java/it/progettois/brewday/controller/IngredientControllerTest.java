@@ -9,6 +9,7 @@ import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
 import it.progettois.brewday.common.exception.NegativeQuantityException;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.common.model.Token;
 import it.progettois.brewday.controller.common.model.UsernameAndPassword;
@@ -53,7 +54,7 @@ class IngredientControllerTest {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    BrewerFatDto createUser(String username) throws ConversionException {
+    BrewerFatDto createUser(String username) throws ConversionException, AlreadyPresentException {
 
         BrewerDto brewer = new BrewerDto();
         brewer.setUsername(username);
@@ -434,9 +435,6 @@ class IngredientControllerTest {
 
         IngredientDto ingredientDto = createIngredient(this.jwtTokenUtil.getUsername(token), false, true, 0.0);
 
-        Response response = new Response(ingredientDto);
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
                 .header("Authorization", token))

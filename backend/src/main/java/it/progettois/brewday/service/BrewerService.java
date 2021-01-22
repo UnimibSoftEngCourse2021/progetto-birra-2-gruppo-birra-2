@@ -7,6 +7,7 @@ import it.progettois.brewday.common.dto.BrewerDto;
 import it.progettois.brewday.common.dto.BrewerFatDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
+import it.progettois.brewday.common.exception.AlreadyPresentException;
 import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,15 @@ public class BrewerService implements UserDetailsService {
         return new User(brewer.getUsername(), brewer.getPassword(), emptyList());
     }
 
-    public BrewerFatDto saveBrewer(BrewerDto brewerDto) throws ConversionException {
+    public BrewerFatDto saveBrewer(BrewerDto brewerDto) throws ConversionException, AlreadyPresentException {
+
+        if (this.brewerRepository.findByUsername(brewerDto.getUsername()).isPresent()) {
+            throw new AlreadyPresentException("username");
+        }
+
+        if (this.brewerRepository.findByEmail(brewerDto.getEmail()).isPresent()) {
+            throw new AlreadyPresentException("email");
+        }
 
         brewerDto.setPassword(bCryptPasswordEncoder.encode(brewerDto.getPassword()));
 
