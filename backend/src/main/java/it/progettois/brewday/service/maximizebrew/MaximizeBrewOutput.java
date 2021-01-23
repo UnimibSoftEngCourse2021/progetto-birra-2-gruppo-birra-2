@@ -8,5 +8,5 @@ import java.util.List;
 public class MaximizeBrewOutput {
 
     private List<MaxedRecipeIngredient> ingredients;
-    private double FO;
+    private double fo;
 }

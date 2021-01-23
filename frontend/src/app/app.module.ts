@@ -32,6 +32,9 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
 import {BrewerService} from './service/BrewerService';
 import {IngredientDetailComponent} from './component/ingredientDetail/ingredientDetail.component';
+import {StorageComponent} from './component/storage/storage.component';
+import {StorageService} from './service/StorageService';
+import {StorageFormComponent} from './component/forms/StorageForm/StorageForm.component';
 
 
 export function tokenGetter(): string {
@@ -50,6 +53,8 @@ export function tokenGetter(): string {
     IngredientComponent,
     IngredientFormComponent,
     IngredientDetailComponent,
+    StorageComponent,
+    StorageFormComponent,
     BrewTodayComponent,
     ToolComponent,
     ToolFormComponent,
@@ -79,6 +84,7 @@ export function tokenGetter(): string {
     BrewTodayService,
     ToolService,
     BrewerService,
+    StorageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

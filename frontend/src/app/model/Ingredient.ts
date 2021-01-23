@@ -22,10 +22,6 @@ export const COLUMNS = [
     fieldName: 'type',
   },
   {
-    label: 'Quantity In Storage',
-    fieldName: 'quantity',
-  },
-  {
     label: 'Unit',
     fieldName: 'unit'
   },
@@ -40,14 +36,22 @@ export const ACTIONS = [
     label: 'info',
     actionType: 'GO_TO',
     getUrl: row => '/ingredient/' + row.ingredientId,
+    hoverText: 'details'
   },
   {
     label: 'edit',
     actionType: 'GO_TO',
     getUrl: row => '/ingredientForm/' + row.ingredientId,
+    hoverText: 'edit ingredient'
   },
   {
     label: 'delete',
-    actionType: 'DELETE'
+    actionType: 'DELETE',
+    hoverText: 'delete ingredient'
+  },
+  {
+    label: 'add_circle_outline',
+    actionType: 'INCREASE_STORAGE',
+    hoverText: 'add to storage'
   }
 ];

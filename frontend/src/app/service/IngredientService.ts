@@ -26,8 +26,9 @@ export class IngredientService implements GenericService {
     return this.http.delete<Response>(url);
   }
 
-  edit(entity: any): Observable<Response> {
-    return undefined;
+  edit(ingredient: Ingredient): Observable<Response> {
+    const url = `${URLS[Actions.DELETE_INGREDIENT].url}/${ingredient.ingredientId}`;
+    return this.http.put<Response>(url, ingredient);
   }
 
   save(ingredient: Ingredient): Observable<Response> {

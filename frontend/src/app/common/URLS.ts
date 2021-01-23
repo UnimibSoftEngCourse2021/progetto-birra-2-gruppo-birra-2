@@ -22,6 +22,9 @@ export enum Actions {
   SAVE_INGREDIENT,
   DELETE_INGREDIENT,
   EDIT_INGREDIENT,
+  GET_STORAGE,
+  GET_STORAGE_INGREDIENT,
+  EDIT_STORAGE,
   BREW_TODAY,
   GET_TOOLS,
   GET_TOOL_BY_ID,
@@ -109,6 +112,18 @@ export const URLS: Url[] = [
   {
     action: Actions.EDIT_INGREDIENT,
     url: BASE_URL + 'ingredient/'
+  },
+  {
+    action: Actions.GET_STORAGE,
+    url: BASE_URL + 'storage'
+  },
+  {
+    action: Actions.GET_STORAGE_INGREDIENT,
+    url: BASE_URL + 'storage'
+  },
+  {
+    action: Actions.EDIT_STORAGE,
+    url: BASE_URL + 'storage'
   },
   {
     action: Actions.BREW_TODAY,

@@ -55,8 +55,6 @@ public class IngredientController {
             return ResponseEntity.ok(new Response(this.ingredientService.createIngredient(ingredientDto, this.jwtTokenUtil.getUsername(request))));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (NegativeQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 
@@ -106,20 +104,18 @@ public class IngredientController {
         }
     }
 
-    // This is actually a setter for the quantity of an owned ingredient
-    // quantity > 0 -> create / update
-    // quantity = 0 -> delete
+    // This endpoint increments or decreases the quantity of an owned ingredient
+    // ingredientDto.quantity > 0 -> (+)
+    // ingredientDto.quantity < 0 -> (-)
     @PutMapping("/storage/{id}")
     public ResponseEntity<Response> modifyStorage(HttpServletRequest request, @PathVariable("id") Integer ingredientId, @RequestBody IngredientDto ingredientDto) {
         try {
-            this.ingredientService.addToStorage(this.jwtTokenUtil.getUsername(request), ingredientId, ingredientDto);
+            this.ingredientService.modifyStoredQuantity(this.jwtTokenUtil.getUsername(request), ingredientId, ingredientDto);
             return ResponseEntity.ok(new Response("The ingredient has been updated"));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (NegativeQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 }
