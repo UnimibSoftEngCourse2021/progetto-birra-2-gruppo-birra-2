@@ -55,8 +55,6 @@ public class IngredientController {
             return ResponseEntity.ok(new Response(this.ingredientService.createIngredient(ingredientDto, this.jwtTokenUtil.getUsername(request))));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (NegativeQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 
@@ -118,8 +116,6 @@ public class IngredientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (NegativeQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 }

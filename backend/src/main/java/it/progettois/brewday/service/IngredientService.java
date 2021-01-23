@@ -70,8 +70,7 @@ public class IngredientService {
 
     }
 
-    public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException,
-            NegativeQuantityException {
+    public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException{
 
         if (ingredientDto.getQuantity() < 0 || ingredientDto.getQuantity() == null) {
             ingredientDto.setQuantity(0.0);
@@ -144,7 +143,7 @@ public class IngredientService {
     }
 
     public void modifyStoredQuantity(String username, Integer ingredientId, IngredientDto ingredientDto) throws AccessDeniedException,
-            IngredientNotFoundException, BrewerNotFoundException, NegativeQuantityException {
+            IngredientNotFoundException, BrewerNotFoundException{
         
         if (ingredientDto == null || ingredientDto.getQuantity() == null)
             throw new NullPointerException();
