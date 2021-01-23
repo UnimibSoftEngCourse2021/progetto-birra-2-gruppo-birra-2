@@ -1,0 +1,21 @@
+<div class="container">
+  <div>
+    <h3>Add ingredient to storage</h3>
+    <div class="form-group">
+
+      <select [(ngModel)]="ingredient.ingredientId" class="form-control" id="ingredient" name="ingredient">
+        <option *ngFor="let ingredient of ingredients" [value]="ingredient.ingredientId">{{ingredient.name}}</option>
+      </select>
+      <br>
+      <label>
+        Quantity:
+        <input [(ngModel)]="ingredient.quantity" type="number">
+      </label>
+    </div>
+
+    <button (click)="onSubmit()" class="btn btn-success"
+            style="margin-left: 4px">Add
+    </button>
+    <button class="btn btn-primary" (click)="goBack()">Go back</button>
+  </div>
+</div>

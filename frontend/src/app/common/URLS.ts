@@ -22,6 +22,9 @@ export enum Actions {
   SAVE_INGREDIENT,
   DELETE_INGREDIENT,
   EDIT_INGREDIENT,
+  GET_STORAGE,
+  GET_STORAGE_INGREDIENT,
+  EDIT_STORAGE,
   BREW_TODAY,
   GET_TOOLS,
   GET_TOOL_BY_ID,
@@ -33,7 +36,7 @@ export enum Actions {
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
 export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
 
-export const BASE_URL = BASE_URL_DEV;
+export const BASE_URL = BASE_URL_LOCALHOST;
 
 export const URLS: Url[] = [
 
@@ -104,6 +107,18 @@ export const URLS: Url[] = [
   {
     action: Actions.EDIT_INGREDIENT,
     url: BASE_URL + 'ingredient/'
+  },
+  {
+    action: Actions.GET_STORAGE,
+    url: BASE_URL + 'storage'
+  },
+  {
+    action: Actions.GET_STORAGE_INGREDIENT,
+    url: BASE_URL + 'storage'
+  },
+  {
+    action: Actions.EDIT_STORAGE,
+    url: BASE_URL + 'storage'
   },
   {
     action: Actions.BREW_TODAY,

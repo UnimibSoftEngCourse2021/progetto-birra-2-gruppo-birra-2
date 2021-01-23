@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IngredientService} from '../../service/IngredientService';
 import {ACTIONS, COLUMNS, Ingredient} from '../../model/Ingredient';
+import {StorageService} from '../../service/StorageService';
 
 @Component({
   selector: 'app-ingredient',
@@ -14,12 +15,15 @@ export class IngredientComponent implements OnInit {
   actions = ACTIONS;
 
   ingredientService: IngredientService;
+  storageService: StorageService;
 
   loading: boolean;
 
 
-  constructor(ingredientService: IngredientService) {
+
+  constructor(ingredientService: IngredientService, storageService: StorageService) {
     this.ingredientService = ingredientService;
+    this.storageService = storageService;
   }
 
   ngOnInit(): void {
