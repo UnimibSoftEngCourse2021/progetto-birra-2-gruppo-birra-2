@@ -106,13 +106,13 @@ public class IngredientController {
         }
     }
 
-    // This is actually a setter for the quantity of an owned ingredient
-    // quantity > 0 -> create / update
-    // quantity = 0 -> delete
+    // This endpoint increments or decreases the quantity of an owned ingredient
+    // quantity > 0 -> (+)
+    // quantity < 0 -> (-)
     @PutMapping("/storage/{id}")
     public ResponseEntity<Response> modifyStorage(HttpServletRequest request, @PathVariable("id") Integer ingredientId, @RequestBody IngredientDto ingredientDto) {
         try {
-            this.ingredientService.addToStorage(this.jwtTokenUtil.getUsername(request), ingredientId, ingredientDto);
+            this.ingredientService.modifyStoredQuantity(this.jwtTokenUtil.getUsername(request), ingredientId, ingredientDto);
             return ResponseEntity.ok(new Response("The ingredient has been updated"));
         } catch (AccessDeniedException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
