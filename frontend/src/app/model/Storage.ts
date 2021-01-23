@@ -33,12 +33,19 @@ export const COLUMNS = [
 
 export const ACTIONS = [
   {
-    label: 'info',
-    actionType: 'GO_TO',
-    getUrl: row => '/ingredient/' + row.ingredientId,
+    label: 'layers_clear',
+    actionType: 'DELETE_FROM_STORAGE',
+    hoverText: 'delete from storage'
   },
   {
-    label: 'delete',
-    actionType: 'DELETE_FROM_STORAGE'
+    label: 'add_box',
+    actionType: 'INCREASE_STORAGE',
+    hoverText: 'add to storage'
+  },
+  {
+    label: 'remove_circle',
+    actionType: 'DECREASE_STORAGE',
+    hoverText: 'remove from storage'
+
   }
 ];

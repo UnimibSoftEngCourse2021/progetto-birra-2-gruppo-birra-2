@@ -107,8 +107,8 @@ public class IngredientController {
     }
 
     // This endpoint increments or decreases the quantity of an owned ingredient
-    // quantity > 0 -> (+)
-    // quantity < 0 -> (-)
+    // ingredientDto.quantity > 0 -> (+)
+    // ingredientDto.quantity < 0 -> (-)
     @PutMapping("/storage/{id}")
     public ResponseEntity<Response> modifyStorage(HttpServletRequest request, @PathVariable("id") Integer ingredientId, @RequestBody IngredientDto ingredientDto) {
         try {

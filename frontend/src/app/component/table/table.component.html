@@ -44,7 +44,7 @@
       </td>
       <td>
         <button class="btn btn-default" *ngFor="let act of actions"
-                (click)="actionFunc(act, row)"><i class="material-icons">{{act.label}}</i></button>
+                (click)="actionFunc(act, row)" title="{{act.hoverText}}"><i class="material-icons">{{act.label}}</i></button>
       </td>
     </tr>
     </tbody>
@@ -64,7 +64,10 @@
       ></pagination-controls>
     </li>
     <li *ngIf="indexField === 'ingredientId'">
-      <a routerLink="/storage" class="btn btn-primary">My Storage <i class="material-icons">storage</i></a>
+      <a routerLink="/storage" class="btn btn-primary">My Storage <i class="material-icons">inventory</i></a>
+    </li>
+    <li *ngIf="indexField === 'storageId'">
+      <a routerLink="/ingredient" class="btn btn-primary">My Ingredients <i class="material-icons">arrow_back</i></a>
     </li>
     <li>
       <a class="btn btn-primary" routerLink="{{formUrl}}">New <i class="material-icons">add</i></a>

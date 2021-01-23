@@ -115,6 +115,36 @@ export class TableComponent implements OnInit {
       }
     }
 
+    if (action.actionType === 'INCREASE_STORAGE') {
+
+      const msg = 'Insert quantity to add in storage';
+      const value = parseFloat(prompt(msg));
+      if (!isNaN(value) && value !== null) {
+        this.storageService.increaseStorage(element, value)
+          .subscribe(() => {
+              location.reload();
+            },
+            error => alert(error));
+      } else {
+        alert('Invalid amount');
+      }
+    }
+
+    if (action.actionType === 'DECREASE_STORAGE') {
+
+      const msg = 'Insert quantity to remove from storage';
+      const value = parseFloat(prompt(msg));
+      if (!isNaN(value) && value !== null) {
+        this.storageService.decreaseStorage(element, value)
+          .subscribe(() => {
+              location.reload();
+            },
+            error => alert(error));
+      } else {
+        alert('Invalid amount');
+      }
+    }
+
     if (action.actionType === 'GO_TO') {
       const url = action.getUrl(element);
       this.router.navigateByUrl(url).then();

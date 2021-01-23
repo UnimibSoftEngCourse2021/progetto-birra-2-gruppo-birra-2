@@ -145,7 +145,7 @@ public class IngredientService {
 
     public void modifyStoredQuantity(String username, Integer ingredientId, IngredientDto ingredientDto) throws AccessDeniedException,
             IngredientNotFoundException, BrewerNotFoundException, NegativeQuantityException {
-
+        
         if (ingredientDto == null || ingredientDto.getQuantity() == null)
             throw new NullPointerException();
 
@@ -155,6 +155,7 @@ public class IngredientService {
          If the operation is 'decrease quantity' the value of ingredientDto.getQuantity() will be negative (-)
         */
         if (Boolean.TRUE.equals(brewerOwnsIngredient(username, ingredientId))) {
+
             Ingredient ingredient = this.ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
             double storedQuantity = ingredient.getQuantity();
             Double newQuantity = storedQuantity + ingredientDto.getQuantity();
