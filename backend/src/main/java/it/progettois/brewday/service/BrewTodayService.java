@@ -109,7 +109,7 @@ public class BrewTodayService {
             } else {
                 //Sets the FO value to 0
                 MaximizeBrewOutput foZero = new MaximizeBrewOutput();
-                foZero.setFO(0.0);
+                foZero.setFo(0.0);
                 brewTodayMap.put(r, foZero);
             }
         }
@@ -118,8 +118,8 @@ public class BrewTodayService {
         double max = 0.0;
         for (Map.Entry<Recipe, MaximizeBrewOutput> set : brewTodayMap.entrySet()) {
 
-            if (set.getValue().getFO() > max) {
-                max = set.getValue().getFO();
+            if (set.getValue().getFo() > max) {
+                max = set.getValue().getFo();
                 key = set.getKey();
             }
 
