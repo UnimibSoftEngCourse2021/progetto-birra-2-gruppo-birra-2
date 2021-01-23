@@ -29,7 +29,8 @@ export class ToolService implements GenericService {
 
 
   edit(toolDTO: Tool): Observable<Response> {
-    return this.http.put<Response>(URLS[Actions.EDIT_TOOL].url, toolDTO);
+    const url = `${URLS[Actions.EDIT_TOOL].url}/${toolDTO.toolId}`;
+    return this.http.put<Response>(url, toolDTO);
   }
 
   save(tool: Tool): Observable<Response> {
