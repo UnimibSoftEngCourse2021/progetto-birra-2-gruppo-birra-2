@@ -1,0 +1,58 @@
+<div class="container">
+  <div>
+    <h1>Add new tool in your Inventory</h1>
+    <form (ngSubmit)="onSubmit()" #ToolForm="ngForm">
+      <div class="form-group">
+        <label for="name">Tool name: </label>
+        <input type="text" class="form-control" id="name" name="name"
+               required
+               [(ngModel)]="tool.name"
+               #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          The tool name is required
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label for="capacity">Capacity: </label>
+        <input class="form-control" id="capacity" name="capacity" required type="text"
+               [(ngModel)]="tool.capacity">
+      </div>
+
+      <div class="form-group">
+        <label for="unit">Unit: </label>
+        <select class="form-control" id="unit" name="unit"
+                [(ngModel)]="tool.unit">
+          <option value="piece">PIECE</option>
+          <option value="volume">VOLUME</option>
+          <option value="ML">MILLILITERS</option>
+          <option value="G">GRAMS</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="quantity">Quantity: </label>
+        <input class="form-control" id="quantity" type="number"
+               required
+               [(ngModel)]="tool.quantity" name="quantity"
+               #quantity="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description: </label>
+        <input type="text" class="form-control" id="description"
+               required
+               [(ngModel)]="tool.description" name="description"
+               #description="ngModel">
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!ToolForm.form.valid"
+              style="margin-left: 4px">Save
+      </button>
+    </form>
+    <button class="btn btn-primary" (click)="goBack()">Go back</button>
+  </div>
+</div>

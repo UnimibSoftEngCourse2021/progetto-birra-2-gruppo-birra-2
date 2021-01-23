@@ -1,0 +1,64 @@
+<div class="container">
+  <div>
+    <h1>Create new Ingredient</h1>
+    <form (ngSubmit)= "onSubmit()" #IngredientForm="ngForm">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="name"
+               required
+               [(ngModel)]="ingredient.name"
+               #name="ngModel">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          The ingredient name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description"
+               required
+               [(ngModel)]="ingredient.description" name="description"
+               #description="ngModel">
+        <div [hidden]="description.valid || description.pristine"
+             class="alert alert-danger">
+          The ingredient description is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select class="form-control" name="type"  id="type" required
+                [(ngModel)]="ingredient.type">
+          <option *ngFor="let type of ingredientType" [ngValue]="type">{{type}}</option>
+        </select>
+      </div>
+
+
+      <div class="form-group">
+        <label for="unit">Unit</label>
+        <select name="unit" class="form-control" id="unit"
+                [(ngModel)]="ingredient.unit">
+          <option value="ML">MILLILITERS</option>
+          <option value="G">GRAMS</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="shared">Public</label>
+        <input type="hidden" class="form-control" name="shared" value="false"
+               [(ngModel)]="ingredient.shared"/>
+        <input type="checkbox" class="form-control" name="shared" id="shared" value="true" checked
+               [(ngModel)]="ingredient.shared">
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!IngredientForm.form.valid"
+              style="margin-left: 4px">Save
+      </button>
+
+
+    </form>
+    <button class="btn btn-primary" (click)="goBack()">Go back</button>
+  </div>
+</div>

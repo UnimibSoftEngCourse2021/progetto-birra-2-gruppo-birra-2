@@ -1,0 +1,97 @@
+<div class="container">
+  <div>
+    <h1>Registration</h1>
+    <form #registrationForm="ngForm" (ngSubmit)="onSubmit()">
+
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input #name="ngModel" [(ngModel)]="brewer.name" class="form-control" id="name"
+               name="name"
+               required
+               type="text">
+        <div [hidden]="name.valid || name.pristine"
+             class="alert alert-danger">
+          Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input #email="ngModel" [(ngModel)]="brewer.email" class="form-control"
+               id="email"
+               name="email" required
+               type="email">
+        <div [hidden]="email.valid || email.pristine"
+             class="alert alert-danger">
+          Email is required
+        </div>
+        <div [hidden]="this.brewer.email === '' || this.brewer.email.match('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')"
+             class="alert alert-danger">
+          Email must be a valid email address
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input #username="ngModel" [(ngModel)]="brewer.username" class="form-control"
+               id="username"
+               name="username" required
+               type="text">
+        <div [hidden]="username.valid || username.pristine"
+             class="alert alert-danger">
+          Username is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input #password="ngModel" [(ngModel)]="brewer.password" class="form-control"
+               id="password"
+               name="password" required
+               type="password">
+        <div [hidden]="password.valid || password.pristine"
+             class="alert alert-danger">
+          Password is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="passwordConfirm">Confirm password</label>
+        <input #passwordConfirm="ngModel" [(ngModel)]="confirmPassword" class="form-control"
+               id="passwordConfirm"
+               name="passwordConfirm" required
+               type="password">
+        <div [hidden]="password.value === passwordConfirm.value"
+             class="alert alert-danger">
+          Passwords are different
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="maxBrew">Max Brew Capacity</label>
+        <input #maxBrew="ngModel" [(ngModel)]="brewer.maxBrew" class="form-control"
+               id="maxBrew"
+               name="maxBrew" required
+               type="number">
+        <div [hidden]="maxBrew.valid || maxBrew.pristine"
+             class="alert alert-danger">
+          Max Brew Capacity is required
+        </div>
+        <div [hidden]="maxBrew.value >= 0"
+             class="alert alert-danger">
+          The capacity must be greater than zero.
+        </div>
+      </div>
+
+      <button [disabled]="!registrationForm.form.valid" class="btn btn-success" style="margin-left: 4px"
+              type="submit">Register
+      </button>
+      <div *ngIf="invalidForm" class="alert alert-danger">
+        <div>The fields entered are not valid.</div>
+      </div>
+    </form>
+    <button (click)="goBack()" class="btn btn-primary">Go back</button>
+  </div>
+</div>
+
+

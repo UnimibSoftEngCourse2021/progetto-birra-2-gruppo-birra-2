@@ -4,6 +4,7 @@ import it.progettois.brewday.common.constant.IngredientType;
 import it.progettois.brewday.common.constant.IngredientUnit;
 import lombok.Data;
 
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class Ingredient {
     @Enumerated(EnumType.STRING)
     private IngredientUnit unit;
 
+    private Double quantity = 0.0;
+
     @Enumerated(EnumType.STRING)
     private IngredientType type;
 
@@ -30,7 +33,9 @@ public class Ingredient {
     private List<RecipeIngredient> recipe;
 
     @ManyToOne
-    @JoinColumn(name = "brewer_id")
+    @JoinColumn(name = "username")
     private Brewer brewer;
+
+    private Boolean shared;
 
 }

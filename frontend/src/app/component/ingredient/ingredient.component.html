@@ -1,0 +1,13 @@
+<h1>MY INGREDIENTS</h1>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading">
+  <app-table
+    [actions]="actions"
+    [data]="ingredients"
+    [formUrl]="'/ingredientForm'"
+    [genericService]="ingredientService"
+    [headers]="header"
+    [indexField]="'ingredientId'"
+  >
+  </app-table>
+</div>
