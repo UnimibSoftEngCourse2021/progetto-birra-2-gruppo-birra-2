@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
 import {GenericService} from '../../service/GenericService';
+import {StorageService} from '../../service/StorageService';
 
 @Component({
   selector: 'app-table',
@@ -27,6 +28,9 @@ export class TableComponent implements OnInit {
 
   @Input()
   genericService: GenericService;
+
+  @Input()
+  storageService: StorageService;
 
   @Input()
   formUrl: string;
@@ -91,6 +95,19 @@ export class TableComponent implements OnInit {
 
       if (confirm(msg) === true) {
         this.genericService.delete(element[this.indexField])
+          .subscribe(() => {
+              location.reload();
+            },
+            error => console.log(error));
+      }
+    }
+
+    if (action.actionType === 'DELETE_FROM_STORAGE') {
+
+      const msg = 'delete the ingredient from storage?';
+
+      if (confirm(msg) === true) {
+        this.storageService.delete(element)
           .subscribe(() => {
               location.reload();
             },
