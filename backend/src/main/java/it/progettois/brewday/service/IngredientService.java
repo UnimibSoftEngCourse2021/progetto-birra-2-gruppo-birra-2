@@ -73,8 +73,8 @@ public class IngredientService {
     public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException,
             NegativeQuantityException {
 
-        if (ingredientDto.getQuantity() < 0) {
-            throw new NegativeQuantityException();
+        if (ingredientDto.getQuantity() < 0 || ingredientDto.getQuantity() == null) {
+            ingredientDto.setQuantity(0.0);
         }
 
         if (ingredientDto.getShared() == null) {
