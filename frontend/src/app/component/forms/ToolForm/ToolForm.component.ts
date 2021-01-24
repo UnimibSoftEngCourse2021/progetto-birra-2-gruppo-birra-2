@@ -21,12 +21,15 @@ export class ToolFormComponent implements OnInit {
           this.router.navigate(['tool']);
         },
         error => {
-          alert(error);
+          alert(error.error.data);
         });
     } else {
       this.toolService.save(this.tool).subscribe(response => {
-
-      });
+          this.router.navigate(['tool']);
+        },
+        error => {
+          alert(error.error.data);
+        });
     }
   }
 

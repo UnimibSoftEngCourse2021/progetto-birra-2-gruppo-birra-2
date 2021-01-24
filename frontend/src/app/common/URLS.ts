@@ -30,13 +30,19 @@ export enum Actions {
   GET_TOOL_BY_ID,
   DELETE_TOOL,
   EDIT_TOOL,
-  SAVE_TOOL
+  SAVE_TOOL,
+  GET_BREW,
+  GET_BREW_BY_ID,
+  SAVE_BREW,
+  EDIT_BREW,
+  DELETE_BREW,
+  GET_INGREDIENT_FOR_BREW
 }
 
 export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
 export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
 
-export const BASE_URL = BASE_URL_LOCALHOST;
+export const BASE_URL = BASE_URL_DEV;
 
 export const URLS: Url[] = [
 
@@ -131,5 +137,41 @@ export const URLS: Url[] = [
   {
     action: Actions.GET_TOOL_BY_ID,
     url: BASE_URL + 'tool'
-  }
+  },
+  {
+    action: Actions.DELETE_TOOL,
+    url: BASE_URL + 'tool'
+  },
+  {
+    action: Actions.EDIT_TOOL,
+    url: BASE_URL + 'tool'
+  },
+  {
+    action: Actions.SAVE_TOOL,
+    url: BASE_URL + 'tool'
+  },
+  {
+    action: Actions.GET_BREW,
+    url: BASE_URL + 'brew/'
+  },
+  {
+    action: Actions.GET_BREW_BY_ID,
+    url: BASE_URL + 'brew'
+  },
+  {
+    action: Actions.SAVE_BREW,
+    url: BASE_URL + 'brew/'
+  },
+  {
+    action: Actions.EDIT_BREW,
+    url: BASE_URL + 'brew'
+  },
+  {
+    action: Actions.DELETE_BREW,
+    url: BASE_URL + 'brew'
+  },
+  {
+    action: Actions.GET_INGREDIENT_FOR_BREW,
+    url: BASE_URL + 'brew'
+  },
 ];
