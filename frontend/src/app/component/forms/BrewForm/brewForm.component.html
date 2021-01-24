@@ -7,12 +7,11 @@
     <div *ngIf="!loading">
 
       <div *ngIf="!isEdit" class="form-group">
-        <label for="recipe">Select a recipe</label><select (ngModelChange)="getIngredient()"
-                                                           [(ngModel)]="selectedRecipeId"
-                                                           class="form-control"
-                                                           id="recipe" name="recipe">
-        <option *ngFor="let recipe of recipes" [value]="recipe.recipeId">{{recipe.name}}</option>
-      </select>
+        <label for="recipe">Select a recipe</label>
+        <select (ngModelChange)="getIngredient()" [(ngModel)]="selectedRecipeId" class="form-control" id="recipe"
+                name="recipe">
+          <option *ngFor="let recipe of recipes" [value]="recipe.recipeId">{{recipe.name}}</option>
+        </select>
       </div>
 
       <div *ngIf="brew.recipe" class="form-group">
