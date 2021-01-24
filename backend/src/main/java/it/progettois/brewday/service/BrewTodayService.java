@@ -80,7 +80,7 @@ public class BrewTodayService {
 
                 ingredientNames.add(i.getIngredient().getName());
                 storageValues.add(i.getIngredient().getQuantity());
-                recipeIngredientQuantityValues.add(Double.valueOf(i.getQuantity()));
+                recipeIngredientQuantityValues.add(i.getQuantity());
                 recipeTotQuantity += i.getQuantity();
             }
 
