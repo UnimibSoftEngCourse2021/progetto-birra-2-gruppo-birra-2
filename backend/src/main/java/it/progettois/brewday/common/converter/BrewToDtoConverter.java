@@ -33,7 +33,7 @@ public class BrewToDtoConverter implements Converter<Brew, BrewDto> {
                 .startDate(brew.getStartDate())
                 .duration(brew.getDuration())
                 .note(brew.getNote())
-                .recipeId(recipeDto.getRecipeId())
+                .recipe(recipeDto)
                 .brewerUsername(brew.getBrewer().getUsername())
                 .build();
     }

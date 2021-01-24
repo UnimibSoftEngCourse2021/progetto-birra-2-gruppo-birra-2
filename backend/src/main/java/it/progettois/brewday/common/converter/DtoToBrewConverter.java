@@ -55,7 +55,7 @@ public class DtoToBrewConverter implements Converter<BrewDto, Brew> {
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Recipe recipe = this.recipeRepository.findById(brewDto.getRecipeId()).orElse(null);
+            Recipe recipe = this.recipeRepository.findById(brewDto.getRecipe().getRecipeId()).orElse(null);
             if (recipe == null) {
                 return null;
             }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,11 @@ public class BrewService {
     public BrewDto saveBrew(BrewDto brewDto, String username) throws BrewerNotFoundException, AccessDeniedException {
 
         brewDto.setBrewerUsername(username);
+
+        if(brewDto.getStartDate() == null) {
+            brewDto.setStartDate(new Timestamp(System.currentTimeMillis()));
+        }
+
         Brew brew = this.dtoToBrewConverter.convert(brewDto);
 
 
