@@ -212,25 +212,6 @@ class IngredientControllerTest {
     }
 
     @Test
-    void createIngredientNegativeQuantityTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST");
-        String token = performLogin("TEST");
-
-        IngredientDto ingredientDto = createIngredient(this.jwtTokenUtil.getUsername(token), false, false, -42.0);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        this.mockMvc.perform(post("/ingredient")
-                .contentType("application/json")
-                .content(objectMapper.writeValueAsString(ingredientDto))
-                .header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-
-        deleteBrewer(brewerFatDto, token);
-    }
-
-    @Test
     void deleteIngredientTest() throws Exception {
 
         BrewerFatDto brewerFatDto = createUser("TEST");
@@ -497,7 +478,10 @@ class IngredientControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
 
+        // Salvo la vecchia quantità per verificare successivamente che la somma sia corretta
+        double temp = ingredientDto.getQuantity();
         ingredientDto.setQuantity(36.0);
+        double sum = temp + ingredientDto.getQuantity();
 
         // Modifico l'ingrediente
         this.mockMvc.perform(put("/storage/" + ingredientDto.getIngredientId())
@@ -507,6 +491,8 @@ class IngredientControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("The ingredient has been updated")));
+
+        ingredientDto.setQuantity(sum);
 
         // Mi assicuro che l'ingrediente sia stato modificato correttamente
         this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
@@ -547,15 +533,8 @@ class IngredientControllerTest {
                 .content(objectMapper.writeValueAsString(ingredientDto))
                 .header("Authorization", token))
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("The quantity must be greater than zero.")));
-
-        // Mi assicuro che l'ingrediente sia rimasto invariato
-        this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
-                .header("Authorization", token))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response1))));
+                .andExpect(content().string(containsString("The ingredient has been updated")));
 
         deleteBrewer(brewerFatDto, token);
     }
