@@ -51,7 +51,6 @@ public class BrewTodayService {
         //Maximize Brew Input
         List<String> ingredientNames = new ArrayList<>();
         List<Double> storageValues = new ArrayList<>();
-        List<Double> proportionValues = new ArrayList<>();
 
         //Proportion Input Variables
         List<Double> recipeIngredientQuantityValues = new ArrayList<>();
@@ -67,7 +66,6 @@ public class BrewTodayService {
             recipeIngredientQuantityValues.clear();
             ingredientNames.clear();
             storageValues.clear();
-            proportionValues.clear();
             List<RecipeIngredient> recipeIngredients = this.recipeIngredientRepository.findAllByRecipe(r);
 
             for (RecipeIngredient i : recipeIngredients) {
@@ -84,27 +82,12 @@ public class BrewTodayService {
                 recipeTotQuantity += i.getQuantity();
             }
 
-            if (compatible) {
+            if (compatible && recipeTotQuantity != 0.0) {
 
-                if (recipeTotQuantity != 0.0) {
-
-                    //Proportions elaboration
-                    for (Double ingredientQuantity : recipeIngredientQuantityValues) {
-                        Double ingredientProportion = ingredientQuantity / recipeTotQuantity;
-                        proportionValues.add(ingredientProportion);
-                    }
-
-                    MaximizeBrewInput input = MaximizeBrewInput.builder()
-                            .capacity(maxCapacity)
-                            .ingredientNames(ingredientNames)
-                            .proportions(proportionValues)
-                            .storage(storageValues)
-                            .build();
-
-                    MaximizeBrewOutput result = this.maximizeBrewService.getMaxBrew(input);
-
-                    brewTodayMap.put(r, result);
-                }
+                //The next 3 lines find the best ingredient combination for the current recipe
+                List<Double> proportionValues = calculateRatio(recipeIngredientQuantityValues, recipeTotQuantity);
+                MaximizeBrewOutput result = maximizeBrew(proportionValues, maxCapacity, ingredientNames, storageValues);
+                brewTodayMap.put(r, result);
 
             } else {
                 //Sets the FO value to 0
@@ -114,6 +97,7 @@ public class BrewTodayService {
             }
         }
 
+        //Find recipe with max storage usage
         Recipe key = null;
         double max = 0.0;
         for (Map.Entry<Recipe, MaximizeBrewOutput> set : brewTodayMap.entrySet()) {
@@ -135,4 +119,30 @@ public class BrewTodayService {
                 .ingredientQuantities(brewTodayMap.get(key).getIngredients())
                 .build();
     }
+
+    //Calculates the recipe ingredient ratio
+    private List<Double> calculateRatio(List<Double> recipeIngredientQuantityValues, Double recipeTotQuantity) {
+
+        List<Double> proportionValues = new ArrayList<>();
+
+        for (Double ingredientQuantity : recipeIngredientQuantityValues) {
+            Double ingredientProportion = ingredientQuantity / recipeTotQuantity;
+            proportionValues.add(ingredientProportion);
+        }
+        return proportionValues;
+    }
+
+    //Returns the best quantity combination
+    private MaximizeBrewOutput maximizeBrew(List<Double> proportionValues, Integer maxCapacity, List<String> ingredientNames, List<Double> storageValues ) {
+
+        MaximizeBrewInput input = MaximizeBrewInput.builder()
+                .capacity(maxCapacity)
+                .ingredientNames(ingredientNames)
+                .proportions(proportionValues)
+                .storage(storageValues)
+                .build();
+
+        return this.maximizeBrewService.getMaxBrew(input);
+    }
+
 }
