@@ -15,9 +15,8 @@ Is Public: {{recipe.shared}} <br>
     Ingredient name: {{recipeIngredient.ingredientName}} <br>
     Ingredient description: {{ingredients[i].description}} <br>
     Ingredient type: {{ingredients[i].type}} <br>
-    Ingredient unit: {{ingredients[i].unit}} <br>
 
-    Quantity required for this recipe: {{recipeIngredient.quantity}} <br>
+    Quantity per litre: {{recipeIngredient.quantity*1000 | number: '1.0-0'}} {{ingredients[i].unit}}<br>
     <br>
   </div>
   <button (click)="goBack()" class="btn btn-primary">Go back</button>

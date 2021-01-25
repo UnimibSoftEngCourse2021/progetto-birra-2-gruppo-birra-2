@@ -112,7 +112,7 @@ class RecipeControllerTest {
     }
 
     RecipeDto createRecipe(String username, boolean shared, boolean save, List<RecipeIngredientDto> ingredients) throws BrewerNotFoundException,
-            ConversionException, IngredientNotFoundException {
+            ConversionException, IngredientNotFoundException, NegativeQuantityException {
 
         RecipeDto recipeDto = RecipeDto.builder()
                 .name("TEST")
@@ -153,24 +153,14 @@ class RecipeControllerTest {
         BrewerFatDto brewerFatDto = createBrewer("TEST");
         String token = performLogin("TEST");
 
-
+        // Creates recipe with 1 ingredient
         List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
+        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
+                "TEST1",false,true,23.0 ));
         RecipeDto recipeDto = createRecipe(brewerFatDto.getUsername(), false, true, recipeIngredientDtoList);
         Response response = new Response(recipeDto);
 
         ObjectMapper objectMapper = new ObjectMapper();
-
-        // Test recipe with empty ingredient list
-        this.mockMvc.perform(get("/recipe/" + recipeDto.getRecipeId())
-                .header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
-
-        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
-                "TEST1",false,true,23.0 ));
-        recipeDto = createRecipe(brewerFatDto.getUsername(), false, true, recipeIngredientDtoList);
-        response = new Response(recipeDto);
 
         // Test recipe with 1 ingredient
         this.mockMvc.perform(get("/recipe/" + recipeDto.getRecipeId())
@@ -189,12 +179,26 @@ class RecipeControllerTest {
 
 
         List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
-        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
-                "TEST1",false,true,23.0 ));
-        RecipeDto recipeDto = createRecipe(brewerFatDto.getUsername(), false, true, recipeIngredientDtoList);
 
+        RecipeDto recipeDto = createRecipe(brewerFatDto.getUsername(), false, false, recipeIngredientDtoList);
         ObjectMapper objectMapper = new ObjectMapper();
 
+        // Submits an empty recipe
+        this.mockMvc.perform(post("/recipe")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(recipeDto))
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
+                "TEST1",false,true,23.0 ));
+        recipeDto = createRecipe(brewerFatDto.getUsername(), false, false, recipeIngredientDtoList);
+
+
+
+        // Submits a non empty recipe
         this.mockMvc.perform(post("/recipe")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(recipeDto))
