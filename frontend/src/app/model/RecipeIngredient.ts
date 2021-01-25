@@ -3,4 +3,5 @@ export class RecipeIngredient {
   ingredientId: number;
   ingredientName: string;
   quantity: number;
+  originalTotQuantity: number;
 }

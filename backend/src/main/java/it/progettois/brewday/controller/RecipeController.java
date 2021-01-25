@@ -3,6 +3,7 @@ package it.progettois.brewday.controller;
 import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.ConversionException;
 import it.progettois.brewday.common.exception.GenericNotFoundException;
+import it.progettois.brewday.common.exception.NegativeQuantityException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.RecipeService;
@@ -53,7 +54,7 @@ public class RecipeController {
             return ResponseEntity.ok(new Response(this.recipeService.saveRecipe(recipeDto, this.jwtTokenUtil.getUsername(request))));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (ConversionException e) {
+        } catch (ConversionException|NegativeQuantityException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
@@ -79,6 +80,8 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
+        } catch (NegativeQuantityException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 

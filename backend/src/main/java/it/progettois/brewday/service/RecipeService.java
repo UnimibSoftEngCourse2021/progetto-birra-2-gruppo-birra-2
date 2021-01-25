@@ -85,7 +85,7 @@ public class RecipeService {
         } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
     }
 
-    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException, ConversionException, IngredientNotFoundException {
+    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException, ConversionException, IngredientNotFoundException, NegativeQuantityException {
 
         if (recipeDto.getShared() == null) {
             recipeDto.setShared(false);
@@ -98,22 +98,37 @@ public class RecipeService {
         }
 
         recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
-
+        // Saves the recipe without ingredients
         recipe = this.recipeRepository.save(recipe);
 
         List<RecipeIngredientDto> recipeIngredientsDto = recipeDto.getIngredients();
-        List<RecipeIngredient> recipeIngredientsNew = new ArrayList<>();
-
-        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
-            RecipeIngredient recipeIngredient = new RecipeIngredient();
-            recipeIngredient.setRecipe(recipe);
-            recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
-                    .orElseThrow(IngredientNotFoundException::new));
-            recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
-            recipeIngredientsNew.add(this.recipeIngredientRepository.save(recipeIngredient));
+        Double totQuantity = 0.0;
+        // Recipe Ingredients total quantity
+        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto){
+            totQuantity += recipeIngredientDto.getQuantity();
         }
-        recipe.setIngredients(recipeIngredientsNew);
-        return this.recipeToDtoConverter.convert(recipe);
+
+        if(totQuantity > 0) {
+
+            List<RecipeIngredient> recipeIngredientsNew = new ArrayList<>();
+
+            for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
+                if (recipeIngredientDto.getIngredientId() == null)
+                    throw new ConversionException();
+                RecipeIngredient recipeIngredient = new RecipeIngredient();
+                recipeIngredient.setRecipe(recipe);
+                recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
+                        .orElseThrow(IngredientNotFoundException::new));
+                Double ingredientRatio = recipeIngredientDto.getQuantity()/totQuantity;
+                recipeIngredient.setQuantity(ingredientRatio);
+                recipeIngredient.setOriginalTotQuantity(totQuantity);
+                recipeIngredientsNew.add(this.recipeIngredientRepository.save(recipeIngredient));
+            }
+            recipe.setIngredients(recipeIngredientsNew);
+            return this.recipeToDtoConverter.convert(recipe);
+        } else {
+            throw new NegativeQuantityException();
+        }
     }
 
     public void deleteRecipe(String username, Integer id) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException {
@@ -129,7 +144,7 @@ public class RecipeService {
 
     }
 
-    public void editRecipe(String username, Integer id, RecipeDto recipeDto) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException, IngredientNotFoundException, RecipeIngredientNotFoundException {
+    public void editRecipe(String username, Integer id, RecipeDto recipeDto) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException, IngredientNotFoundException, RecipeIngredientNotFoundException, NegativeQuantityException {
 
         if (Boolean.FALSE.equals(brewerOwnsRecipe(username, id))) {
             throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
@@ -146,8 +161,15 @@ public class RecipeService {
         recipe = this.recipeRepository.save(recipe);
 
         List<RecipeIngredientDto> recipeIngredientsNew = recipeDto.getIngredients();
+        Double totQuantity = 0.0;
+        // Recipe Ingredients total quantity
+        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew){
+            totQuantity += recipeIngredientDto.getQuantity();
+        }
+
         List<RecipeIngredient> recipeIngredientsOld = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
 
+        // Removes old ingredients from recipe
         for (RecipeIngredient recipeIngredient : recipeIngredientsOld) {
             boolean isPresent = false;
             for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew) {
@@ -161,7 +183,13 @@ public class RecipeService {
             }
         }
 
-        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsNew) {
+        if (totQuantity > 0) {
+            saveRecipeIngredients(recipeIngredientsNew, totQuantity, recipe);
+        } else throw new NegativeQuantityException();
+    }
+
+    private void saveRecipeIngredients(List<RecipeIngredientDto> recipeIngredients, Double totQuantity, Recipe recipe) throws RecipeIngredientNotFoundException, IngredientNotFoundException {
+        for (RecipeIngredientDto recipeIngredientDto : recipeIngredients) {
 
             RecipeIngredient recipeIngredient;
             if (recipeIngredientDto.getRecipeIngredientId() == null) {
@@ -170,13 +198,15 @@ public class RecipeService {
                 recipeIngredient = this.recipeIngredientRepository.findById(recipeIngredientDto.getRecipeIngredientId())
                         .orElseThrow(RecipeIngredientNotFoundException::new);
             }
-
-            recipeIngredient.setQuantity(recipeIngredientDto.getQuantity());
+            Double ingredientRatio = recipeIngredientDto.getQuantity()/totQuantity;
+            recipeIngredient.setQuantity(ingredientRatio);
+            recipeIngredient.setOriginalTotQuantity(totQuantity);
             recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
                     .orElseThrow(IngredientNotFoundException::new));
             recipeIngredient.setRecipe(recipe);
 
             this.recipeIngredientRepository.save(recipeIngredient);
+
         }
     }
 

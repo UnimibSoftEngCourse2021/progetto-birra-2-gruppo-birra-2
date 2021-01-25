@@ -4,19 +4,28 @@
   Add a recipe now!
   <a class="btn btn-primary" routerLink="/recipeForm"><i class="material-icons">add</i></a>
 </div>
-<div *ngIf="brewToday && !loading" class="container">
+
+<div *ngIf="!loading && !createBrew" class="container">
   <h1>Today's Brew</h1>
   <h3>{{brewToday.recipeName}}</h3>
   <br>
   <h5>{{brewToday.recipeDescription}}</h5>
   <br>
   <ul name="ingredient" id="ingredient">
-    <li *ngFor='let in of brewToday.ingredientQuantities ;let i = index'>
+    <li *ngFor='let ing of brewToday.ingredientQuantities ;let i = index'>
       {{brewToday.ingredientQuantities[i].ingredientName}} = {{brewToday.ingredientQuantities[i].quantity}} </li>
   </ul>
-  <br *ngFor='let in of brewToday.ingredientQuantities'>
-  <p>Today's brew will produce {{brewQuantity}} litres of beer! </p>
+  <br *ngFor='let ing of brewToday.ingredientQuantities'>
+  <p>Today's brew will produce {{brewQuantity/1000 | number}} L of beer! </p>
   <button (click)="brew()" class="btn btn-success"
           style="margin-left: 4px">Brew!
   </button>
+</div>
+
+<div *ngIf="createBrew" class="container">
+  <app-form-brew
+    [brewToday]="true"
+    [brewQuantity]="brewQuantity"
+    [recipeId]="brewToday.recipeId"
+  ></app-form-brew>
 </div>

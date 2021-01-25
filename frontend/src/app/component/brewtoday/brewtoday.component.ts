@@ -10,6 +10,7 @@ import {ACTIONS, BrewToday} from '../../model/BrewToday';
 export class BrewTodayComponent implements OnInit {
 
   brewToday: BrewToday;
+  createBrew = false;
   brewQuantity = null;
   actions = ACTIONS;
 
@@ -34,7 +35,7 @@ export class BrewTodayComponent implements OnInit {
   }
 
   brew(): void {
-    console.log(this.brewToday);
+    this.createBrew = true;
     // TODO Pass the recipe and create Brew
   }
 }

@@ -51,7 +51,7 @@ export class StorageService {
   }
 
   /*
-   This method passes passes the negative value of the ingredient's stored quantity
+   This method passes the negative value of the ingredient's stored quantity
    so that the new quantity will be zero
   */
   delete(ingredient: Storage): Observable<Response> {

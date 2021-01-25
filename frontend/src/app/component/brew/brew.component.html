@@ -1,0 +1,13 @@
+<h1>MY BREWS</h1>
+<mat-spinner *ngIf="loading"></mat-spinner>
+<div *ngIf="!loading">
+  <app-table
+    [actions]="actions"
+    [data]="brews"
+    [formUrl]="'/brewForm'"
+    [genericService]="brewService"
+    [headers]="header"
+    [indexField]="'brewId'"
+  >
+  </app-table>
+</div>
