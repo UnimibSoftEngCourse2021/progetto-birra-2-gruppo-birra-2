@@ -1,6 +1,7 @@
 <div class="container">
   <div>
-    <h1>Create new Recipe</h1>
+    <h1 *ngIf="!isEdit">Create new Recipe</h1>
+    <h1 *ngIf="isEdit">Edit Recipe</h1>
       <div class="form-group">
         <label for="name">Recipe name</label>
         <input type="text" class="form-control" id="name" name="name"
@@ -41,7 +42,7 @@
         This recipe has no ingredient.
       </div>
       <div *ngFor="let ri of recipeIngredients">
-        Ingredient: {{getIngredientName(ri.ingredientId)}} quantity: {{ri.quantity}}
+        {{getIngredientName(ri.ingredientId)}}: {{ri.quantity}}
         <button (click)="removeIngredient(ri)" class="btn btn-default"><i class="material-icons">close</i></button>
       </div>
 

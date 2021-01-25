@@ -46,7 +46,7 @@
             Description: {{ingredients[i].description}} <br>
             Type: {{ingredients[i].type}} <br>
             Quantity required for this
-            recipe: {{(brew.recipe.ingredients[i].quantity/ingredientsTotQuantity*brew.quantity)| number : '1.0-0'}}  {{ingredients[i].unit}}<br>
+            recipe: {{(brew.recipe.ingredients[i].quantity*brew.quantity)| number : '1.0-0'}}  {{ingredients[i].unit}}<br>
             Available in your storage: {{ingredients[i].quantity}} {{ingredients[i].unit}}<br>
             <br>
           </div>

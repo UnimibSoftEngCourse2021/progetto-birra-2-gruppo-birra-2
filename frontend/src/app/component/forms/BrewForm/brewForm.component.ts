@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {Brew} from '../../../model/Brew';
@@ -15,12 +15,20 @@ import {StorageService} from '../../../service/StorageService';
   templateUrl: './brewForm.component.html',
   styleUrls: ['./brewForm.component.css']
 })
+
 export class BrewFormComponent implements OnInit {
 
+  @Input()
+  brewToday = false;
+
+  @Input()
+  brewQuantity: number;
+
+  @Input()
+  recipeId: number;
 
   brew: Brew = new Brew();
   ingredients: Ingredient[] = [];
-  ingredientsTotQuantity: number;
   recipes: Recipe[] = [];
   brewer: Brewer = new Brewer();
   selectedRecipeId: number;
@@ -40,36 +48,45 @@ export class BrewFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+
     // tslint:disable-next-line:radix
     const brewId = Number.parseInt(this.route.snapshot.paramMap.get('id'));
 
     if (brewId) {
       this.isEdit = true;
+        this.brewService.getById(brewId).subscribe(resp => {
+          this.brew = resp.data;
+          this.selectedRecipeId = this.brew.recipe.recipeId;
+          this.getIngredient();
+          this.brewerService.getByUsername(localStorage.getItem('username')).subscribe(resp2 => {
+            this.brewer = resp2.data;
+          });
+          this.loading = false;
+        }, error => {
+          alert(error.error.data);
+          this.loading = false;
+          this.router.navigate(['brew']);
+        });
+      } else {
+        this.recipeService.getAll().subscribe(resp => {
+          this.recipes = resp.data;
+          this.brewerService.getByUsername(localStorage.getItem('username')).subscribe(resp2 => {
+            this.brewer = resp2.data;
+            this.brew.quantity = this.brewer.maxBrew;
 
-      this.brewService.getById(brewId).subscribe(resp => {
-        this.brew = resp.data;
-        this.selectedRecipeId = this.brew.recipe.recipeId;
-        this.getIngredient();
-        this.brewerService.getByUsername(localStorage.getItem('username')).subscribe(resp2 => {
-          this.brewer = resp2.data;
+            if (this.brewToday){
+              this.selectedRecipeId = this.recipeId;
+              this.brew.quantity = this.brewQuantity;
+              this.getIngredient();
+            }
+          });
+          this.loading = false;
         });
-        this.loading = false;
-      }, error => {
-        alert(error.error.data);
-        this.loading = false;
-        this.router.navigate(['brew']);
-      });
-    } else {
-      this.recipeService.getAll().subscribe(resp => {
-        this.recipes = resp.data;
-        this.brewerService.getByUsername(localStorage.getItem('username')).subscribe(resp2 => {
-          this.brewer = resp2.data;
-          this.brew.quantity = this.brewer.maxBrew;
-        });
-        this.loading = false;
-      });
-    }
+      }
+
+
   }
+
 
   setRecipe(): void {
     for (const r of this.recipes) {
@@ -79,7 +96,6 @@ export class BrewFormComponent implements OnInit {
         break;
       }
     }
-    this.calculateRecipeIngredientsTotQuantity();
   }
 
   getIngredient(): void {
@@ -90,27 +106,8 @@ export class BrewFormComponent implements OnInit {
     }
     this.recipeService.getIngredientsByRecipeId(this.selectedRecipeId).subscribe(resp => {
       this.ingredients = resp.data;
-      this.calculateRecipeIngredientsTotQuantity();
       this.loading = false;
     });
-  }
-
-  calculateRecipeIngredientsTotQuantity(): void {
-    if (!this.isEdit) {
-      this.recipeService.getById(this.selectedRecipeId).subscribe(resp => {
-        const selectedRecipe: Recipe = resp.data;
-        this.ingredientsTotQuantity = 0;
-        for (const ingredient of selectedRecipe.ingredients) {
-          this.ingredientsTotQuantity += ingredient.quantity;
-        }
-        this.loading = false;
-      });
-    } else {
-      this.ingredientsTotQuantity = 0;
-      for (const ingredient of this.brew.recipe.ingredients) {
-        this.ingredientsTotQuantity += ingredient.quantity;
-      }
-    }
   }
 
   getStorage(ingredientId: number): Ingredient {
@@ -181,6 +178,11 @@ export class BrewFormComponent implements OnInit {
   }
 
   goBack(): void {
-    this.location.back();
+    if (!this.brewToday){
+      this.location.back();
+    } else {
+      window.location.reload();
+    }
+
   }
 }

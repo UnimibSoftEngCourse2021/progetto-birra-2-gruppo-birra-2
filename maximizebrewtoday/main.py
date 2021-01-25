@@ -29,7 +29,7 @@ def maximize_brew():
 
     # VARIABLES
 
-    x = (pulp.LpVariable(str(payload["ingredientNames"][i]), 0, payload["storage"][i]) for i in range(n))
+    x = (pulp.LpVariable("x" + str(i), 0, payload["storage"][i]) for i in range(n))
 
     model.addVariables(x)
 
@@ -63,11 +63,12 @@ def maximize_brew():
     # OPTIMAL VALUE
 
     optimalRecipes = []
-
+    index = 0
     for var in model.variables():
         print(var.name, "=", var.varValue)
-        optimalRecipe = OptimalRecipe(ingredientName=var.name, quantity=round(var.varValue, 1))
+        optimalRecipe = OptimalRecipe(ingredientName=str(payload["ingredientNames"][index]), quantity=round(var.varValue, 1))
         optimalRecipes.append(optimalRecipe)
+        index = index + 1
     print()
     FO = pulp.value(model.objective)
     print("FO =", FO)
