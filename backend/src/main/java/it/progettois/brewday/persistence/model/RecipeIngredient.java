@@ -21,5 +21,10 @@ public class RecipeIngredient {
     @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
+    //absolute value
     private Double quantity;
+
+    // This value is the sum of all the recipe ingredient's relative quantities and is used to convert
+    // back to relative quantity
+    private Double originalTotQuantity;
 }

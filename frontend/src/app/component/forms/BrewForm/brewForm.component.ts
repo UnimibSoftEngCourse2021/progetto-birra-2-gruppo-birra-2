@@ -79,7 +79,6 @@ export class BrewFormComponent implements OnInit {
         break;
       }
     }
-    this.calculateRecipeIngredientsTotQuantity();
   }
 
   getIngredient(): void {
@@ -90,27 +89,8 @@ export class BrewFormComponent implements OnInit {
     }
     this.recipeService.getIngredientsByRecipeId(this.selectedRecipeId).subscribe(resp => {
       this.ingredients = resp.data;
-      this.calculateRecipeIngredientsTotQuantity();
       this.loading = false;
     });
-  }
-
-  calculateRecipeIngredientsTotQuantity(): void {
-    if (!this.isEdit) {
-      this.recipeService.getById(this.selectedRecipeId).subscribe(resp => {
-        const selectedRecipe: Recipe = resp.data;
-        this.ingredientsTotQuantity = 0;
-        for (const ingredient of selectedRecipe.ingredients) {
-          this.ingredientsTotQuantity += ingredient.quantity;
-        }
-        this.loading = false;
-      });
-    } else {
-      this.ingredientsTotQuantity = 0;
-      for (const ingredient of this.brew.recipe.ingredients) {
-        this.ingredientsTotQuantity += ingredient.quantity;
-      }
-    }
   }
 
   getStorage(ingredientId: number): Ingredient {
