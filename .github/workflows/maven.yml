@@ -16,6 +16,7 @@ on:
 
 env:
   SONAR_TOKEN: 42990b8f57387714ba3e1d30f3b4d3d374fa5f54
+  GITHUB_TOKEN: d4d0ea24d166f0f5ae4124a6692ea7afca6db150  
 
 jobs:
   build:
