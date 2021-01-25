@@ -67,7 +67,7 @@ jobs:
 
           push: true
 
-          tags: gruppobirra2/brewday:dev
+          tags: gruppobirra2/brewday:latest
     -
 
         name: Build and push
@@ -83,7 +83,7 @@ jobs:
 
           push: true
 
-          tags: gruppobirra2/brewday-frontend:dev
+          tags: gruppobirra2/brewday-frontend:latest
     -
 
         name: Build and push
@@ -99,4 +99,27 @@ jobs:
 
           push: true
 
-          tags: gruppobirra2/maximizebrewtoday:dev
+          tags: gruppobirra2/maximizebrewtoday:latest
+  
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ec2-18-156-174-69.eu-central-1.compute.amazonaws.com
+        username: ubuntu
+        password: progetto-is
+        port: 22
+        script: |
+          docker stop brewday
+          docker rm brewday
+          docker image rm gruppobirra2/brewday
+          docker run -p 8080:8080 -d --name brewday gruppobirra2/brewday:latest
+
+          docker stop maximizebrewtoday
+          docker rm maximizebrewtoday
+          docker image rm gruppobirra2/maximizebrewtoday
+          docker run -p 5000:5000 -d --name maximizebrewtoday gruppobirra2/maximizebrewtoday:latest
+
+          docker stop brewday-frontend
+          docker rm brewday-frontend
+          docker image rm gruppobirra2/brewday-frontend
+          docker run -p 80:4200 -d --name brewday-frontend gruppobirra2/brewday-frontend:latest
