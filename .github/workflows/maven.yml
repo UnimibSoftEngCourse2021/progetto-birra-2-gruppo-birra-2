@@ -62,7 +62,7 @@ jobs:
 
         with:
 
-          file: ./Dockerfile-dev
+          file: ./Dockerfile
 
           push: true
 
