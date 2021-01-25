@@ -48,6 +48,10 @@ jobs:
           username: gruppobirra2
 
           password: 85835093-a510-4f6d-8667-d91134f69860
+    -
+        name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
 
     -
 
