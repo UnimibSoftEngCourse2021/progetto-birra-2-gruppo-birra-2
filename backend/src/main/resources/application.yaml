@@ -10,6 +10,10 @@ spring:
     username: root
     password: progetto-is
 
+MaximizeBrewService:
+  ribbon:
+    listOfServers : http://localhost:5000
+
 
 
 

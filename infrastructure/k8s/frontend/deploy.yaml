@@ -21,4 +21,4 @@ spec:
         imagePullPolicy: "Always"
         name: brewday-frontend
         ports:
-            - containerPort: 4200
+            - containerPort: 80
