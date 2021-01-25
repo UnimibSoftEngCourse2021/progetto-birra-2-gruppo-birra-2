@@ -20,6 +20,7 @@ export class BrewFormComponent implements OnInit {
 
   brew: Brew = new Brew();
   ingredients: Ingredient[] = [];
+  ingredientsTotQuantity: number;
   recipes: Recipe[] = [];
   brewer: Brewer = new Brewer();
   selectedRecipeId: number;
@@ -75,8 +76,10 @@ export class BrewFormComponent implements OnInit {
       // tslint:disable-next-line:triple-equals
       if (r.recipeId == this.selectedRecipeId) {
         this.brew.recipe = r;
+        break;
       }
     }
+    this.calculateRecipeIngredientsTotQuantity();
   }
 
   getIngredient(): void {
@@ -87,8 +90,27 @@ export class BrewFormComponent implements OnInit {
     }
     this.recipeService.getIngredientsByRecipeId(this.selectedRecipeId).subscribe(resp => {
       this.ingredients = resp.data;
+      this.calculateRecipeIngredientsTotQuantity();
       this.loading = false;
     });
+  }
+
+  calculateRecipeIngredientsTotQuantity(): void {
+    if (!this.isEdit) {
+      this.recipeService.getById(this.selectedRecipeId).subscribe(resp => {
+        const selectedRecipe: Recipe = resp.data;
+        this.ingredientsTotQuantity = 0;
+        for (const ingredient of selectedRecipe.ingredients) {
+          this.ingredientsTotQuantity += ingredient.quantity;
+        }
+        this.loading = false;
+      });
+    } else {
+      this.ingredientsTotQuantity = 0;
+      for (const ingredient of this.brew.recipe.ingredients) {
+        this.ingredientsTotQuantity += ingredient.quantity;
+      }
+    }
   }
 
   getStorage(ingredientId: number): Ingredient {
@@ -125,7 +147,8 @@ export class BrewFormComponent implements OnInit {
 
     if (!this.isEdit) {
       for (const recipeIngredient of this.brew.recipe.ingredients) {
-        if (this.brew.quantity / recipeIngredient.quantity > this.getStorage(recipeIngredient.ingredientId).quantity) {
+        if (this.brew.quantity / recipeIngredient.quantity > this.getStorage(recipeIngredient.ingredientId).quantity
+            && this.subtractIngredient) {
           alert('The amount of ingredients in your storage are not enough to make this quantity of beer');
           return;
         }

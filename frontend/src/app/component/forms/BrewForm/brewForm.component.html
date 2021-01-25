@@ -7,12 +7,28 @@
     <div *ngIf="!loading">
 
       <div *ngIf="!isEdit" class="form-group">
-        <label for="recipe">Select a recipe</label><select (ngModelChange)="getIngredient()"
-                                                           [(ngModel)]="selectedRecipeId"
-                                                           class="form-control"
-                                                           id="recipe" name="recipe">
-        <option *ngFor="let recipe of recipes" [value]="recipe.recipeId">{{recipe.name}}</option>
-      </select>
+        <label for="recipe">Select a recipe</label>
+        <select [(ngModel)]="selectedRecipeId" (ngModelChange)="getIngredient()"  class="form-control" id="recipe"
+                name="recipe">
+          <option *ngFor="let recipe of recipes" [value]="recipe.recipeId">{{recipe.name}}</option>
+        </select>
+      </div>
+
+      <div>
+        Your max brew capacity: {{brewer.maxBrew}} ML
+      </div>
+
+
+      <div class="form-group">
+        <label for="quantity">How much beer you want to brew?</label>
+        <input #quantity="ngModel" [(ngModel)]="brew.quantity" class="form-control"
+               id="quantity"
+               name="quantity" required
+               type="number">
+        <div [hidden]="quantity.valid || quantity.pristine"
+             class="alert alert-danger">
+          Brew quantity is required
+        </div>
       </div>
 
       <div *ngIf="brew.recipe" class="form-group">
@@ -30,27 +46,10 @@
             Description: {{ingredients[i].description}} <br>
             Type: {{ingredients[i].type}} <br>
             Quantity required for this
-            recipe: {{brew.quantity / brew.recipe.ingredients[i].quantity}}  {{ingredients[i].unit}}<br>
+            recipe: {{(brew.recipe.ingredients[i].quantity/ingredientsTotQuantity*brew.quantity)| number : '1.0-0'}}  {{ingredients[i].unit}}<br>
             Available in your storage: {{ingredients[i].quantity}} {{ingredients[i].unit}}<br>
             <br>
           </div>
-        </div>
-      </div>
-
-      <div>
-        Your max brew capacity: {{brewer.maxBrew}} L
-      </div>
-
-
-      <div class="form-group">
-        <label for="quantity">How much beer you want to brew?</label>
-        <input #quantity="ngModel" [(ngModel)]="brew.quantity" class="form-control"
-               id="quantity"
-               name="quantity" required
-               type="number">
-        <div [hidden]="quantity.valid || quantity.pristine"
-             class="alert alert-danger">
-          Brew quantity is required
         </div>
       </div>
 
