@@ -108,7 +108,7 @@ class BrewTodayControllerTest {
     }
 
     RecipeDto createRecipe(String username, String name, boolean shared, boolean save, List<RecipeIngredientDto> ingredients) throws BrewerNotFoundException,
-            ConversionException, IngredientNotFoundException {
+            ConversionException, IngredientNotFoundException, NegativeQuantityException {
 
         RecipeDto recipeDto = RecipeDto.builder()
                 .name(name)

@@ -38,6 +38,9 @@ export class RecipeFormComponent implements OnInit {
       this.recipeService.getById(recipeId).subscribe(resp => {
           this.recipe = resp.data;
           this.recipeIngredients = this.recipe.ingredients;
+          for (const recipeIngredient of this.recipeIngredients){
+            recipeIngredient.quantity = recipeIngredient.quantity * recipeIngredient.originalTotQuantity;
+          }
         },
         error => {
           alert(error);
@@ -53,14 +56,14 @@ export class RecipeFormComponent implements OnInit {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert(error);
+          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
         });
     } else {
       this.recipeService.save(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert(error);
+          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
         });
     }
   }
