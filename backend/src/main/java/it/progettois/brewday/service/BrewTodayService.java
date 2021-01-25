@@ -129,7 +129,6 @@ public class BrewTodayService {
                 .proportions(proportionValues)
                 .storage(storageValues)
                 .build();
-
         return this.maximizeBrewService.getMaxBrew(input);
     }
 
