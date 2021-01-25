@@ -39,7 +39,8 @@ public class IngredientService {
         this.dtoToIngredientConverter = dtoToIngredientConverter;
     }
 
-    private Boolean brewerOwnsIngredient(String username, Integer id) throws BrewerNotFoundException, IngredientNotFoundException {
+    private Boolean brewerOwnsIngredient(String username, Integer id) throws BrewerNotFoundException,
+            IngredientNotFoundException {
         Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
         return this.ingredientRepository.findById(id).orElseThrow(IngredientNotFoundException::new).getBrewer().equals(brewer);
     }
@@ -58,7 +59,8 @@ public class IngredientService {
                 .collect(Collectors.toList());
     }
 
-    public IngredientDto getIngredient(String username, Integer id) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException {
+    public IngredientDto getIngredient(String username, Integer id) throws BrewerNotFoundException,
+            IngredientNotFoundException, AccessDeniedException {
 
         Ingredient ingredient = this.ingredientRepository.findById(id).orElseThrow(IngredientNotFoundException::new);
 
@@ -68,10 +70,10 @@ public class IngredientService {
 
     }
 
-    public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException, NegativeQuantityException {
+    public IngredientDto createIngredient(IngredientDto ingredientDto, String username) throws BrewerNotFoundException{
 
-        if (ingredientDto.getQuantity() < 0) {
-            throw new NegativeQuantityException();
+        if (ingredientDto.getQuantity() < 0 || ingredientDto.getQuantity() == null) {
+            ingredientDto.setQuantity(0.0);
         }
 
         if (ingredientDto.getShared() == null) {
@@ -85,7 +87,8 @@ public class IngredientService {
 
     }
 
-    public void deleteIngredient(String username, Integer id) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException {
+    public void deleteIngredient(String username, Integer id) throws AccessDeniedException, IngredientNotFoundException,
+            BrewerNotFoundException {
 
         if (Boolean.TRUE.equals(brewerOwnsIngredient(username, id))) {
             this.ingredientRepository.deleteById(id);
@@ -93,7 +96,8 @@ public class IngredientService {
 
     }
 
-    public void editIngredient(String username, Integer id, IngredientDto ingredientDto) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException, NegativeQuantityException {
+    public void editIngredient(String username, Integer id, IngredientDto ingredientDto) throws AccessDeniedException,
+            IngredientNotFoundException, BrewerNotFoundException, NegativeQuantityException {
 
         if (ingredientDto.getQuantity() < 0) {
             throw new NegativeQuantityException();
@@ -122,7 +126,8 @@ public class IngredientService {
 
     }
 
-    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException, IngredientNotFoundException, AccessDeniedException, EmptyStorageException {
+    public IngredientDto getStorageIngredient(String username, Integer ingredientId) throws BrewerNotFoundException,
+            IngredientNotFoundException, AccessDeniedException, EmptyStorageException {
 
         IngredientDto ingredientDto = getIngredient(username, ingredientId);
 
@@ -137,14 +142,23 @@ public class IngredientService {
 
     }
 
-    public void addToStorage(String username, Integer ingredientId, IngredientDto ingredientDto) throws AccessDeniedException, IngredientNotFoundException, BrewerNotFoundException, NegativeQuantityException {
+    public void modifyStoredQuantity(String username, Integer ingredientId, IngredientDto ingredientDto) throws AccessDeniedException,
+            IngredientNotFoundException, BrewerNotFoundException{
+        
+        if (ingredientDto == null || ingredientDto.getQuantity() == null)
+            throw new NullPointerException();
 
-        if (ingredientDto == null || ingredientDto.getQuantity() == null || ingredientDto.getQuantity() < 0.0)
-            throw new NegativeQuantityException();
-
+        /*
+         If the brewer owns the ingredient this is retrieved from the repository and the quantity is
+         modified accordingly to the type of operation that the user wants to make (increment quantity or decrease quantity)
+         If the operation is 'decrease quantity' the value of ingredientDto.getQuantity() will be negative (-)
+        */
         if (Boolean.TRUE.equals(brewerOwnsIngredient(username, ingredientId))) {
+
             Ingredient ingredient = this.ingredientRepository.findById(ingredientId).orElseThrow(IngredientNotFoundException::new);
-            ingredient.setQuantity(ingredientDto.getQuantity());
+            double storedQuantity = ingredient.getQuantity();
+            Double newQuantity = storedQuantity + ingredientDto.getQuantity();
+            ingredient.setQuantity(newQuantity);
             this.ingredientRepository.save(ingredient);
         } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
 

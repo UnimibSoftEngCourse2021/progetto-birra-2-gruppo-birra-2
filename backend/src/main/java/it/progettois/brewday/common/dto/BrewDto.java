@@ -14,6 +14,6 @@ public class BrewDto {
     private Timestamp startDate;
     private String duration;
     private String note;
-    private Integer recipeId;
+    private RecipeDto recipe;
     private String brewerUsername;
 }

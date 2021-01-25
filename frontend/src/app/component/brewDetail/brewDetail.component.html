@@ -1,0 +1,29 @@
+<h1>BREW DETAIL</h1>
+
+<button (click)="edit()" class="btn btn-default"><i class="material-icons">edit</i></button>
+
+<mat-spinner *ngIf="loading"></mat-spinner>
+
+<div *ngIf="!loading">
+  <h2>Recipe Description</h2>
+  Name: {{brew.recipe.name}} <br>
+  Description: {{brew.recipe.description}} <br>
+  <h2>Ingredients: </h2><br>
+  <div *ngFor="let recipeIngredient of brew.recipe.ingredients; let i = index">
+    Name: {{recipeIngredient.ingredientName}} <br>
+    Description: {{ingredients[i].description}} <br>
+    Type: {{ingredients[i].type}} <br>
+    Quantity required for this recipe: {{(brew.recipe.ingredients[i].quantity/ingredientsTotQuantity*brew.quantity)| number : '1.0-0'}}  {{ingredients[i].unit}}
+    <br>
+    <br>
+  </div>
+
+  Beer brewed: {{brew.quantity}} <br>
+  Brew start date: {{brew.startDate}} <br>
+  Brew duration: {{brew.duration}} <br>
+  note: {{brew.note}} <br>
+
+
+  <button (click)="goBack()" class="btn btn-primary">Go back</button>
+</div>
+

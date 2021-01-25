@@ -1,0 +1,91 @@
+<div class="container">
+  <div>
+    <h1 *ngIf="!isEdit">Create new Brew</h1>
+    <h1 *ngIf="isEdit">Edit Brew</h1>
+    <mat-spinner *ngIf="loading"></mat-spinner>
+
+    <div *ngIf="!loading">
+
+      <div *ngIf="!isEdit" class="form-group">
+        <label for="recipe">Select a recipe</label>
+        <select [(ngModel)]="selectedRecipeId" (ngModelChange)="getIngredient()"  class="form-control" id="recipe"
+                name="recipe">
+          <option *ngFor="let recipe of recipes" [value]="recipe.recipeId">{{recipe.name}}</option>
+        </select>
+      </div>
+
+      <div>
+        Your max brew capacity: {{brewer.maxBrew}} ML
+      </div>
+
+
+      <div class="form-group">
+        <label for="quantity">How much beer you want to brew?</label>
+        <input #quantity="ngModel" [(ngModel)]="brew.quantity" class="form-control"
+               id="quantity"
+               name="quantity" required
+               type="number">
+        <div [hidden]="quantity.valid || quantity.pristine"
+             class="alert alert-danger">
+          Brew quantity is required
+        </div>
+      </div>
+
+      <div *ngIf="brew.recipe" class="form-group">
+        <h2>Recipe Description</h2>
+        Name: {{brew.recipe.name}} <br>
+        Description: {{brew.recipe.description}} <br>
+
+        <h2>Ingredients: </h2><br>
+
+        <mat-spinner *ngIf="loading"></mat-spinner>
+        <div *ngIf="!loading">
+          <div *ngFor="let recipeIngredient of brew.recipe.ingredients; let i = index">
+
+            Name: {{recipeIngredient.ingredientName}} <br>
+            Description: {{ingredients[i].description}} <br>
+            Type: {{ingredients[i].type}} <br>
+            Quantity required for this
+            recipe: {{(brew.recipe.ingredients[i].quantity/ingredientsTotQuantity*brew.quantity)| number : '1.0-0'}}  {{ingredients[i].unit}}<br>
+            Available in your storage: {{ingredients[i].quantity}} {{ingredients[i].unit}}<br>
+            <br>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Duration</label>
+        <input #duration="ngModel" [(ngModel)]="brew.duration" class="form-control"
+               id="duration"
+               name="duration" required
+               type="number">
+        <div [hidden]="duration.valid || duration.pristine"
+             class="alert alert-danger">
+          Brew duration is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="note">Note</label>
+        <textarea [(ngModel)]="brew.note"
+                  class="form-control"
+                  id="note" name="note"
+                  required></textarea>
+      </div>
+
+      <div *ngIf="!isEdit" class="form-group">
+        <label for="subtractIngredient">Automatically subtract used ingredients from the storage</label>
+        <input [(ngModel)]="subtractIngredient" class="form-control" name="subtractIngredient" type="hidden"
+               value="false"/>
+        <input [(ngModel)]="subtractIngredient" checked class="form-control" id="subtractIngredient"
+               name="subtractIngredient" type="checkbox"
+               value="true">
+      </div>
+
+      <button (click)="onSubmit()" class="btn btn-success"
+              style="margin-left: 4px">Save
+      </button>
+      <button (click)="goBack()" class="btn btn-primary">Go back</button>
+    </div>
+  </div>
+</div>

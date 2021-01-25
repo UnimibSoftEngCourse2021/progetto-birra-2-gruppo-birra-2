@@ -13,6 +13,11 @@ import {RegistrationFormComponent} from './component/forms/RegistrationForm/Regi
 import {RecipeDetailComponent} from './component/recipeDetail/recipeDetail.component';
 import {BrewerFormComponent} from './component/forms/BrewerForm/brewerForm.component';
 import {IngredientDetailComponent} from './component/ingredientDetail/ingredientDetail.component';
+import {BrewComponent} from './component/brew/brew.component';
+import {BrewFormComponent} from './component/forms/BrewForm/brewForm.component';
+import {StorageComponent} from './component/storage/storage.component';
+import {StorageFormComponent} from './component/forms/StorageForm/StorageForm.component';
+import {BrewDetailComponent} from './component/brewDetail/brewDetail.component';
 
 const routes: Routes = [
   {path: '', redirectTo: 'index', pathMatch: 'full'},
@@ -25,6 +30,8 @@ const routes: Routes = [
   {path: 'recipe/:id', component: RecipeDetailComponent},
   {path: 'ingredient/:id', component: IngredientDetailComponent},
   {path: 'ingredient', component: IngredientComponent},
+  {path: 'storage', component: StorageComponent},
+  {path: 'storageForm', component: StorageFormComponent},
   {path: 'ingredientForm', component: IngredientFormComponent},
   {path: 'ingredientForm/:id', component: IngredientFormComponent},
   {path: 'today', component: BrewTodayComponent},
@@ -32,6 +39,10 @@ const routes: Routes = [
   {path: 'toolForm/:id', component: ToolFormComponent},
   {path: 'tool', component: ToolComponent},
   {path: 'brewerForm', component: BrewerFormComponent},
+  {path: 'brew', component: BrewComponent},
+  {path: 'brewForm', component: BrewFormComponent},
+  {path: 'brewForm/:id', component: BrewFormComponent},
+  {path: 'brew/:id', component: BrewDetailComponent},
 
 ];
 

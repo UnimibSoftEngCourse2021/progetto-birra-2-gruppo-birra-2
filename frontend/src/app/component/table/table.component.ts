@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import * as _ from 'lodash';
 import {Router} from '@angular/router';
 import {GenericService} from '../../service/GenericService';
+import {StorageService} from '../../service/StorageService';
 
 @Component({
   selector: 'app-table',
@@ -27,6 +28,9 @@ export class TableComponent implements OnInit {
 
   @Input()
   genericService: GenericService;
+
+  @Input()
+  storageService: StorageService;
 
   @Input()
   formUrl: string;
@@ -95,6 +99,49 @@ export class TableComponent implements OnInit {
               location.reload();
             },
             error => console.log(error));
+      }
+    }
+
+    if (action.actionType === 'DELETE_FROM_STORAGE') {
+
+      const msg = 'delete the ingredient from storage?';
+
+      if (confirm(msg) === true) {
+        this.storageService.delete(element)
+          .subscribe(() => {
+              location.reload();
+            },
+            error => console.log(error));
+      }
+    }
+
+    if (action.actionType === 'INCREASE_STORAGE') {
+
+      const msg = 'Insert quantity to add in storage';
+      const value = parseFloat(prompt(msg));
+      if (!isNaN(value) && value !== null) {
+        this.storageService.increaseStorage(element, value)
+          .subscribe(() => {
+              location.reload();
+            },
+            error => alert(error));
+      } else {
+        alert('Invalid amount');
+      }
+    }
+
+    if (action.actionType === 'DECREASE_STORAGE') {
+
+      const msg = 'Insert quantity to remove from storage';
+      const value = parseFloat(prompt(msg));
+      if (!isNaN(value) && value !== null) {
+        this.storageService.decreaseStorage(element, value)
+          .subscribe(() => {
+              location.reload();
+            },
+            error => alert(error));
+      } else {
+        alert('Invalid amount');
       }
     }
 
