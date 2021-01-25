@@ -35,7 +35,6 @@ jobs:
       run: |
         cd backend
         mvn clean install -DskipTests=true
-        mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2
         
     -
 
@@ -62,8 +61,6 @@ jobs:
         uses: docker/build-push-action@v2
 
         with:
-
-          context: ./backend
 
           file: ./Dockerfile-dev
 
