@@ -4,7 +4,8 @@
   Add a recipe now!
   <a class="btn btn-primary" routerLink="/recipeForm"><i class="material-icons">add</i></a>
 </div>
-<div *ngIf="brewToday && !loading" class="container">
+
+<div *ngIf="!loading && !createBrew" class="container">
   <h1>Today's Brew</h1>
   <h3>{{brewToday.recipeName}}</h3>
   <br>
@@ -19,4 +20,12 @@
   <button (click)="brew()" class="btn btn-success"
           style="margin-left: 4px">Brew!
   </button>
+</div>
+
+<div *ngIf="createBrew" class="container">
+  <app-form-brew
+    [brewToday]="true"
+    [brewQuantity]="brewQuantity"
+    [recipeId]="brewToday.recipeId"
+  ></app-form-brew>
 </div>
