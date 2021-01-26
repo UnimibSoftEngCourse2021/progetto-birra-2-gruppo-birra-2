@@ -12,6 +12,7 @@ export class RecipeComponent implements OnInit {
   header = COLUMNS;
   recipes: Recipe[];
   actions = ACTIONS;
+  brew = false;
 
   recipeService: RecipeService;
 

@@ -54,7 +54,7 @@ export class BrewFormComponent implements OnInit {
 
     if (brewId) {
       this.isEdit = true;
-        this.brewService.getById(brewId).subscribe(resp => {
+      this.brewService.getById(brewId).subscribe(resp => {
           this.brew = resp.data;
           this.selectedRecipeId = this.brew.recipe.recipeId;
           this.getIngredient();
@@ -144,7 +144,7 @@ export class BrewFormComponent implements OnInit {
 
     if (!this.isEdit) {
       for (const recipeIngredient of this.brew.recipe.ingredients) {
-        if (this.brew.quantity / recipeIngredient.quantity > this.getStorage(recipeIngredient.ingredientId).quantity
+        if (this.brew.quantity * recipeIngredient.quantity > this.getStorage(recipeIngredient.ingredientId).quantity
             && this.subtractIngredient) {
           alert('The amount of ingredients in your storage are not enough to make this quantity of beer');
           return;
@@ -155,7 +155,7 @@ export class BrewFormComponent implements OnInit {
           if (this.subtractIngredient) {
             for (const recipeIngredient of this.brew.recipe.ingredients) {
               this.storageService.decreaseStorage(this.getStorage(recipeIngredient.ingredientId),
-                this.brew.quantity / recipeIngredient.quantity).subscribe(resp2 => {
+                this.brew.quantity * recipeIngredient.quantity).subscribe(resp2 => {
                 this.router.navigate(['brew']);
               }, error => {
                 alert(error.error.data);
