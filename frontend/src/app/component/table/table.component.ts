@@ -44,6 +44,10 @@ export class TableComponent implements OnInit {
 
   searchText = '';
 
+  // Brew action variables
+  brew = false;
+  recipeId: number;
+
   constructor(private router: Router) {
   }
 
@@ -128,6 +132,11 @@ export class TableComponent implements OnInit {
       } else {
         alert('Invalid amount');
       }
+    }
+
+    if (action.actionType === 'BREW') {
+      this.recipeId = element[this.indexField];
+      this.brew = true;
     }
 
     if (action.actionType === 'DECREASE_STORAGE') {

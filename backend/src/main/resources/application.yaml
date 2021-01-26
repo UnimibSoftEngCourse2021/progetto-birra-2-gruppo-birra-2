@@ -4,15 +4,13 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
-  profiles:
-        active: "@profileActive@"
-
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/progetto-is?createDatabaseIfNotExist=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
     username: root
     password: progetto-is
 
-
-
-
+feign:
+  client:
+    url:
+      serviceUrl: http://localhost:5000

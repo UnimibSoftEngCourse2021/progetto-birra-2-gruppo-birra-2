@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: maximizebrewtoday
+  name: maximizebrewtoday
+  namespace: brewday
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: maximizebrewtoday
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: maximizebrewtoday
+    spec:
+      containers:
+      - image: gruppobirra2/maximizebrewtoday:prod
+        imagePullPolicy: "Always"
+        name: brewday
+        ports:
+            - containerPort: 5000

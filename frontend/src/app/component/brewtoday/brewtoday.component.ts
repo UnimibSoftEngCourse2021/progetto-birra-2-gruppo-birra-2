@@ -36,6 +36,5 @@ export class BrewTodayComponent implements OnInit {
 
   brew(): void {
     this.createBrew = true;
-    // TODO Pass the recipe and create Brew
   }
 }

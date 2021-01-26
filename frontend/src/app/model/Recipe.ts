@@ -43,5 +43,10 @@ export const ACTIONS = [
   {
     label: 'delete',
     actionType: 'DELETE'
+  },
+  {
+    label: 'science',
+    actionType: 'BREW',
+    hoverText: 'brew this recipe'
   }
 ];

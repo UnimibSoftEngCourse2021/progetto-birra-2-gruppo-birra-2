@@ -33,7 +33,7 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "prod": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -59,6 +59,14 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
           }
         },
@@ -68,8 +76,11 @@
             "browserTarget": "frontend:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "frontend:build:production"
+            "prod": {
+              "browserTarget": "frontend:build:prod"
+            },
+            "dev": {
+              "browserTarget": "frontend:build:dev"
             }
           }
         },
@@ -118,8 +129,11 @@
             "devServerTarget": "frontend:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "frontend:serve:production"
+            "prod": {
+              "devServerTarget": "frontend:serve:prod"
+            },
+            "dev": {
+              "devServerTarget": "frontend:serve:dev"
             }
           }
         }

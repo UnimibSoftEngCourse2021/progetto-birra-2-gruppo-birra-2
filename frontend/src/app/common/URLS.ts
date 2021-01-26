@@ -1,3 +1,5 @@
+import {environment} from '../../environments/environment';
+
 interface Url {
   action: Actions;
   url: string;
@@ -39,10 +41,7 @@ export enum Actions {
   GET_INGREDIENT_FOR_BREW
 }
 
-export const BASE_URL_DEV = 'http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com:8080/';
-export const BASE_URL_LOCALHOST = 'http://localhost:8080/';
-
-export const BASE_URL = BASE_URL_LOCALHOST;
+export const BASE_URL = environment.serverUrl;
 
 export const URLS: Url[] = [
 
