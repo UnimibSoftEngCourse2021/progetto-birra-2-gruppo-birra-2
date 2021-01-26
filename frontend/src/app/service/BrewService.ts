@@ -34,9 +34,4 @@ export class BrewService implements GenericService {
   save(brew: Brew): Observable<Response> {
     return this.http.post<Response>(URLS[Actions.SAVE_BREW].url, brew);
   }
-
-  getIngredientsforBrew(id: number, quantity: number): Observable<Response> {
-    const url = `${URLS[Actions.GET_INGREDIENT_FOR_BREW].url}/${id}/ingredient/?quantity=${quantity}`;
-    return this.http.get<Response>(url);
-  }
 }
