@@ -83,7 +83,7 @@ class IngredientControllerTest {
         return objectMapper.readValue(result.getResponse().getContentAsString(), Token.class).getToken();
     }
 
-    IngredientDto createIngredient(String username, boolean shared, boolean save, double quantity) throws BrewerNotFoundException, NegativeQuantityException {
+    IngredientDto createIngredient(String username, boolean shared, boolean save, double quantity) throws BrewerNotFoundException {
 
         IngredientDto ingredientDto = IngredientDto.builder()
                 .name("TEST")
@@ -380,20 +380,11 @@ class IngredientControllerTest {
     }
 
     @Test
-    void getStorageNotFoundTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST");
-        String token = performLogin("TEST");
-        this.mockMvc.perform(get("/storage/0")
-                .header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-        deleteBrewer(brewerFatDto, token);
-    }
-
-    @Test
     void getStorageIngredientTest() throws Exception {
         BrewerFatDto brewerFatDto = createUser("TEST");
         String token = performLogin("TEST");
+        BrewerFatDto brewerFatDto2 = createUser("TEST2");
+        String token2 = performLogin("TEST2");
 
         IngredientDto ingredientDto = createIngredient(this.jwtTokenUtil.getUsername(token), false, true, 42.0);
 
@@ -406,55 +397,34 @@ class IngredientControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
-        deleteBrewer(brewerFatDto, token);
-    }
 
-    @Test
-    void getStorageIngredientQuantityZeroTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST");
-        String token = performLogin("TEST");
-
-        IngredientDto ingredientDto = createIngredient(this.jwtTokenUtil.getUsername(token), false, true, 0.0);
-
-
+        // Other brewers' storage
         this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
+                .header("Authorization", token2))
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        // Non existing ingredient
+        this.mockMvc.perform(get("/storage/0")
                 .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-        deleteBrewer(brewerFatDto, token);
-    }
 
-    @Test
-    void getStorageFromAnotherUserTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST");
-        BrewerFatDto brewerFatDto2 = createUser("TEST2");
-        String token = performLogin("TEST");
-        String token2 = performLogin("TEST2");
+        IngredientDto ingredientDto2 = createIngredient("TEST2", true, true, 42.0);
 
-        IngredientDto ingredientDto = createIngredient("TEST2", false, true, 42.0);
-
-        this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
+        //Other brewers' shared storage ingredient
+        this.mockMvc.perform(get("/storage/" + ingredientDto2.getIngredientId())
                 .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isForbidden());
 
-        deleteBrewer(brewerFatDto, token);
-        deleteBrewer(brewerFatDto2, token2);
-    }
+        IngredientDto ingredientDto3 = createIngredient(this.jwtTokenUtil.getUsername(token), false, true, 0.0);
 
-    @Test
-    void getStorageFromAnotherUserSharedTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST");
-        BrewerFatDto brewerFatDto2 = createUser("TEST2");
-        String token = performLogin("TEST");
-        String token2 = performLogin("TEST2");
-
-        IngredientDto ingredientDto = createIngredient("TEST2", true, true, 42.0);
-
-        this.mockMvc.perform(get("/storage/" + ingredientDto.getIngredientId())
+        //Zero quantity
+        this.mockMvc.perform(get("/storage/" + ingredientDto3.getIngredientId())
                 .header("Authorization", token))
                 .andDo(print())
-                .andExpect(status().isForbidden());
+                .andExpect(status().isNotFound());
 
         deleteBrewer(brewerFatDto, token);
         deleteBrewer(brewerFatDto2, token2);

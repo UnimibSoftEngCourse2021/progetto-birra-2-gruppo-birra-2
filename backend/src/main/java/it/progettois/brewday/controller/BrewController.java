@@ -2,7 +2,6 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.BrewDto;
 import it.progettois.brewday.common.exception.GenericNotFoundException;
-import it.progettois.brewday.common.exception.NegativeQuantityException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.BrewService;
@@ -88,16 +87,4 @@ public class BrewController {
         }
     }
 
-    @GetMapping("/brew/{recipeId}/ingredient")
-    public ResponseEntity<Response> getIngredientForBrew(HttpServletRequest request, @PathVariable("recipeId") Integer recipeId, @RequestParam Integer quantity) {
-        try {
-            return ResponseEntity.ok(new Response(this.brewService.getIngredientForBrew(recipeId, this.jwtTokenUtil.getUsername(request), quantity)));
-        } catch (GenericNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
-        } catch (NegativeQuantityException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
-        }
-    }
 }

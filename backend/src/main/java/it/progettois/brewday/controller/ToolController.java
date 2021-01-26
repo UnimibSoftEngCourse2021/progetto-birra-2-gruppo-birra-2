@@ -2,6 +2,8 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.ToolDto;
 import it.progettois.brewday.common.exception.GenericNotFoundException;
+import it.progettois.brewday.common.exception.NegativeCapacityException;
+import it.progettois.brewday.common.exception.NegativeQuantityException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.ToolService;
@@ -78,6 +80,8 @@ public class ToolController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
+        } catch (NegativeQuantityException | NegativeCapacityException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 }
