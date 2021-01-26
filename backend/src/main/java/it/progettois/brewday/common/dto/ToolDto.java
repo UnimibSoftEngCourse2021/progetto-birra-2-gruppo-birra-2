@@ -12,7 +12,7 @@ public class ToolDto {
     public ToolDto(){
 
     }
-    public ToolDto(Integer toolId, String name, Integer capacity, ToolUnit unit, Integer quantity, String Description,
+    public ToolDto(Integer toolId, String name, Integer capacity, ToolUnit unit, Integer quantity, String description,
                    String username) {
         this.toolId = toolId;
         this.name = name;
