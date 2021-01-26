@@ -2,7 +2,7 @@
   No elements found, add something now!
   <a class="btn btn-primary" routerLink="{{formUrl}}"><i class="material-icons">add</i></a>
 </div>
-<div *ngIf="data && data.length > 0" align="center">
+<div *ngIf="!brew && data && data.length > 0" align="center">
   <div class="form-group float-label-control">
     <input #search [(ngModel)]="searchText" style="width: 15%"
            placeholder="Search">
@@ -18,7 +18,7 @@
   </div>
 </div>
 
-<div *ngIf="data && data.length > 0">
+<div *ngIf="!brew && data && data.length > 0">
   <table class="table table-striped" align="center" style="width: 75%">
     <thead class="thead-dark">
     <tr>
@@ -70,7 +70,7 @@
       <a routerLink="/ingredient" class="btn btn-primary">My Ingredients <i class="material-icons">arrow_back</i></a>
     </li>
     <li *ngIf="indexField === 'recipeId'">
-      <a class="btn btn-primary" routerLink="/brew">My Brews <i class="material-icons">inventory</i></a>
+      <a class="btn btn-primary" routerLink="/brew">My Brews <i class="material-icons">science</i></a>
     </li>
     <li *ngIf="indexField === 'brewId'">
       <a class="btn btn-primary" routerLink="/recipe">My Recipes <i class="material-icons">arrow_back</i></a>
@@ -79,4 +79,11 @@
       <a class="btn btn-primary" routerLink="{{formUrl}}">New <i class="material-icons">add</i></a>
     </li>
   </ul>
+</div>
+
+<div *ngIf="brew" class="container">
+  <app-form-brew
+    [brewToday]="true"
+    [recipeId]="recipeId"
+  ></app-form-brew>
 </div>

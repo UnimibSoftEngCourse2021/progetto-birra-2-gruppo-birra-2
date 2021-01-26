@@ -5,7 +5,7 @@
   <a class="btn btn-primary" routerLink="/recipeForm"><i class="material-icons">add</i></a>
 </div>
 
-<div *ngIf="!loading && !createBrew" class="container">
+<div *ngIf="brewToday && !loading && !createBrew" class="container">
   <h1>Today's Brew</h1>
   <h3>{{brewToday.recipeName}}</h3>
   <br>
