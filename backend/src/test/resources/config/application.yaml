@@ -2,13 +2,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
 
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-dev.cvmoznlqcyge.eu-central-1.rds.amazonaws.com:3306/progetto-is?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
-    username: root
-    password: progetto-is
+    url: jdbc:h2:mem:progetto-is
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
 
 feign:
   client:
