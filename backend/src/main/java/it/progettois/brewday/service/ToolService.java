@@ -5,6 +5,8 @@ import it.progettois.brewday.common.converter.DtoToToolConverter;
 import it.progettois.brewday.common.converter.ToolToDtoConverter;
 import it.progettois.brewday.common.dto.ToolDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
+import it.progettois.brewday.common.exception.NegativeCapacityException;
+import it.progettois.brewday.common.exception.NegativeQuantityException;
 import it.progettois.brewday.common.exception.ToolNotFoundException;
 import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.model.Tool;
@@ -74,7 +76,14 @@ public class ToolService {
         } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
     }
 
-    public void editTool(String username, Integer id, ToolDto toolDto) throws AccessDeniedException, ToolNotFoundException, BrewerNotFoundException {
+    public void editTool(String username, Integer id, ToolDto toolDto) throws AccessDeniedException, ToolNotFoundException, BrewerNotFoundException,
+            NegativeQuantityException, NegativeCapacityException {
+        if (toolDto.getQuantity() < 0) {
+            throw new NegativeQuantityException();
+        }
+        if (toolDto.getCapacity()<0){
+            throw new NegativeCapacityException();
+        }
 
         if (Boolean.TRUE.equals(brewerOwnsTool(username, id))) {
             Tool tool = dtoToToolConverter.convert(toolDto);
