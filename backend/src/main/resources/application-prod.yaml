@@ -10,6 +10,7 @@ spring:
     username: root
     password: progetto-is
 
-
-
-
+feign:
+  client:
+    url:
+      serviceUrl: http://maximizebrew.progetto-is.com
