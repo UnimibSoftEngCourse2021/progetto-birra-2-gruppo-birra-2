@@ -59,7 +59,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         context: ./maximizebrewtoday 
-        file: ./maximizebrewtoday/Dockerfile-dev
+        file: ./maximizebrewtoday/Dockerfile
         push: true
         tags: gruppobirra2/maximizebrewtoday:dev
   
