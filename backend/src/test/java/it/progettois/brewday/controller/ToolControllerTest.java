@@ -55,8 +55,8 @@ class ToolControllerTest {
 
         BrewerDto brewer = new BrewerDto();
         brewer.setUsername(username);
-        brewer.setPassword("TEST92");
-        brewer.setName("TEST92");
+        brewer.setPassword("TEST");
+        brewer.setName("TEST");
         brewer.setEmail(username);
         brewer.setMaxBrew(42);
 
@@ -71,7 +71,7 @@ class ToolControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         UsernameAndPassword usernameAndPassword = new UsernameAndPassword();
         usernameAndPassword.setUsername(username);
-        usernameAndPassword.setPassword("TEST92");
+        usernameAndPassword.setPassword("TEST");
 
         MvcResult result = this.mockMvc.perform(post("/login")
                 .content(objectMapper.writeValueAsString(usernameAndPassword)))
@@ -85,10 +85,10 @@ class ToolControllerTest {
 
         ToolDto toolDto = ToolDto.builder()
                 .name("TEST92")
-                .description("TEST92")
                 .capacity(capacity)
                 .unit(ToolUnit.PIECE)
                 .quantity(quantity)
+                .description("TEST92")
                 .username(username)
                 .build();
 
@@ -97,8 +97,8 @@ class ToolControllerTest {
 
     @Test
     void getToolsTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
         this.mockMvc.perform(get("/tool")
                 .header("Authorization", token))
                 .andDo(print())
@@ -109,8 +109,8 @@ class ToolControllerTest {
 
     @Test
     void getToolNotFoundTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
         this.mockMvc.perform(get("/tool/0")
                 .header("Authorization", token))
                 .andDo(print())
@@ -120,8 +120,8 @@ class ToolControllerTest {
 
     @Test
     void getToolTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
 
         ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 10, true);
 
@@ -139,12 +139,12 @@ class ToolControllerTest {
 
     @Test
     void getToolFromAnotherUserTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST92A");
-        BrewerFatDto brewerFatDto2 = createUser("TEST92B");
-        String token = performLogin("TEST92A");
-        String token2 = performLogin("TEST92B");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        BrewerFatDto brewerFatDto2 = createUser("TEST2");
+        String token = performLogin("TEST");
+        String token2 = performLogin("TEST2");
 
-        ToolDto toolDto = createTool("TEST92B", 100, 3, false);
+        ToolDto toolDto = createTool("TEST2", 100, 3, true);
 
         this.mockMvc.perform(get("/tool/" + toolDto.getToolId())
                 .header("Authorization", token))
@@ -158,10 +158,10 @@ class ToolControllerTest {
 
     @Test
     void createToolTest() throws Exception {
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
 
-        ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
+        ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, false);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -189,8 +189,8 @@ class ToolControllerTest {
     @Test
     void deleteToolTest() throws Exception {
 
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
 
         ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
 
@@ -224,10 +224,10 @@ class ToolControllerTest {
     @Test
     void deleteToolFromAnotherUserTest() throws Exception {
 
-        BrewerFatDto brewerFatDto = createUser("TEST92A");
-        BrewerFatDto brewerFatDto2 = createUser("TEST92B");
-        String token = performLogin("TEST92A");
-        String token2 = performLogin("TEST292B");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        BrewerFatDto brewerFatDto2 = createUser("TEST2");
+        String token = performLogin("TEST");
+        String token2 = performLogin("TEST2");
 
         ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
 
@@ -262,8 +262,8 @@ class ToolControllerTest {
     @Test
     void editToolTest() throws Exception {
 
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
 
         ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
 
@@ -278,7 +278,7 @@ class ToolControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
 
-        toolDto.setDescription("DESCRIPTION MODIFICATA");
+        toolDto.setCapacity(300);
 
         //Modificazione tool
         this.mockMvc.perform(put("/tool/" + toolDto.getToolId())
@@ -287,7 +287,8 @@ class ToolControllerTest {
                 .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("The tool has been updated")));
+                .andExpect(content().string(containsString("The tool in your inventory has been updated")));
+
 
         //Test per la corretta modifica della tool
         this.mockMvc.perform(get("/tool/" + toolDto.getToolId())
@@ -302,8 +303,8 @@ class ToolControllerTest {
     @Test
     void editToolNegativeQuantityTest() throws Exception {
 
-        BrewerFatDto brewerFatDto = createUser("TEST92");
-        String token = performLogin("TEST92");
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
 
         ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
 
@@ -341,4 +342,45 @@ class ToolControllerTest {
         deleteBrewer(brewerFatDto, token);
     }
 
+    @Test
+    void editToolNegativeCapacityTest() throws Exception {
+
+        BrewerFatDto brewerFatDto = createUser("TEST");
+        String token = performLogin("TEST");
+
+        ToolDto toolDto = createTool(this.jwtTokenUtil.getUsername(token), 1, 3, true);
+
+        Response response = new Response(toolDto);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //Test per la coretta modifica tool
+        this.mockMvc.perform(get("/tool/" + toolDto.getToolId())
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
+
+        ToolDto toolDto1 = new ToolDto();
+        BeanUtils.copyProperties(toolDto, toolDto1);
+        Response response1 = new Response(toolDto1);
+        toolDto.setCapacity(-20);
+
+        // Modificazione tool
+        this.mockMvc.perform(put("/tool/" + toolDto.getToolId())
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(toolDto))
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        //Test affinchè la tool rimane invariate
+        this.mockMvc.perform(get("/tool/" + toolDto.getToolId())
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response1))));
+
+        deleteBrewer(brewerFatDto, token);
+    }
 }
