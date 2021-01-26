@@ -71,9 +71,9 @@ jobs:
         password: progetto-is
         port: 22
         script: |
-          kubectl scale deploy brewday --recplica=0 -n brewday
-          kubectl scale deploy brewday --recplica=2 -n brewday
-          kubectl scale deploy brewday-frontend --recplica=0 -n brewday
-          kubectl scale deploy brewday-frontend --recplica=2 -n brewday
-          kubectl scale deploy maximizebrewtoday --recplica=0 -n brewday
-          kubectl scale deploy maximizebrewtoday --recplica=4 -n brewday
+          kubectl scale --replicas=0 deploy brewday -n brewday
+          kubectl scale --replicas=2 deploy brewday -n brewday
+          kubectl scale --replicas=0 deploy brewday-frontend -n brewday
+          kubectl scale --replicas=2 deploy brewday-frontend -n brewday
+          kubectl scale --replicas=0 deploy maximizebrewtoday -n brewday
+          kubectl scale --replicas=4 deploy maximizebrewtoday -n brewday
