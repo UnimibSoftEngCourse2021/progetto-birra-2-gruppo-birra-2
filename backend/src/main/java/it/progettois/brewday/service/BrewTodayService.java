@@ -85,7 +85,7 @@ public class BrewTodayService {
 
             if (compatible) {
 
-                //The next 3 lines find the best ingredient combination for the current recipe
+                //Find the best ingredient combination for the current recipe
                 MaximizeBrewOutput result = maximizeBrew(ingredientsRatio, maxCapacity, ingredientNames, storageValues);
                 brewTodayMap.put(r, result);
 
