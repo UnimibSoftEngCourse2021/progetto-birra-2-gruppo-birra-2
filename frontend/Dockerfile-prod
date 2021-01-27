@@ -1,9 +1,4 @@
-#############
-### build ###
-#############
-
-# base image
-FROM node:15.2.1 as build
+FROM node:15.2.1
 
 # install chrome for protractor tests
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
@@ -24,21 +19,7 @@ RUN npm install -g @angular/cli
 # add app
 COPY . /app
 
-# generate build
-RUN ng build --output-path=dist --configuration=prod
+# start app
+CMD ng serve --configuration=prod --host 0.0.0.0 --disable-host-check
 
-############
-### prod ###
-############
-
-# base image
-FROM nginx:1.16.0-alpine
-
-# copy artifact build from the 'build environment'
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# expose port 80
-EXPOSE 80
-
-# run nginx
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80:4200
