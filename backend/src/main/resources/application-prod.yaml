@@ -6,9 +6,9 @@ spring:
 
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://database-dev.cvmoznlqcyge.eu-central-1.rds.amazonaws.com:3306/progetto-is?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
-    username: root
-    password: progetto-is
+    url: jdbc:mysql://database-prod.cvmoznlqcyge.eu-central-1.rds.amazonaws.com:3306/progetto_is?useLegacyDatetimeCode=false&serverTimezone=Europe/Rome
+    username: admin
+    password: progetto-is-prod
 
 feign:
   client:
