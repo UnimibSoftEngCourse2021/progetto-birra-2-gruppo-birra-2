@@ -18,6 +18,7 @@ export enum Actions {
   SAVE_RECIPE,
   EDIT_RECIPE,
   DELETE_RECIPE,
+  GET_PUBLIC_RECIPES,
   GET_INGREDIENTS_BY_RECIPE,
   GET_INGREDIENT,
   GET_INGREDIENT_BY_ID,
@@ -88,6 +89,10 @@ export const URLS: Url[] = [
   {
     action: Actions.DELETE_RECIPE,
     url: BASE_URL + 'recipe'
+  },
+  {
+    action: Actions.GET_PUBLIC_RECIPES,
+    url: BASE_URL + 'recipe/shared'
   },
   {
     action: Actions.GET_INGREDIENTS_BY_RECIPE,
