@@ -89,6 +89,9 @@ export class TableComponent implements OnInit {
         return result;
       }
     }
+    if (_.get(row, col.fieldName).length > 100){
+      return _.get(row, col.fieldName).substring(0, 150) + '...';
+    }
     return _.get(row, col.fieldName);
   }
 

@@ -20,6 +20,7 @@ export class RecipeFormComponent implements OnInit {
   ingredients: Ingredient[] = [];
   recipeIngredient: RecipeIngredient = new RecipeIngredient();
   recipeIngredients: RecipeIngredient[] = [];
+  localTot = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,6 +42,7 @@ export class RecipeFormComponent implements OnInit {
           for (const recipeIngredient of this.recipeIngredients){
             recipeIngredient.quantity = recipeIngredient.quantity * recipeIngredient.originalTotQuantity;
           }
+          this.localTot = this.recipeIngredients[0].originalTotQuantity;
         },
         error => {
           alert(error);
@@ -50,20 +52,19 @@ export class RecipeFormComponent implements OnInit {
 
   onSubmit(): void {
     this.recipe.ingredients = this.recipeIngredients;
-
     if (this.isEdit) {
       this.recipeService.edit(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
+          alert('The recipe is not valid.');
         });
     } else {
       this.recipeService.save(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
+          alert('The recipe is not valid.');
         });
     }
   }
@@ -81,12 +82,23 @@ export class RecipeFormComponent implements OnInit {
     }
   }
 
+  getIngredientUnit(id: number): string {
+    for (const ingredient of this.ingredients) {
+      // tslint:disable-next-line:triple-equals
+      if (ingredient.ingredientId == id) {
+        return ingredient.unit;
+      }
+    }
+  }
+
   addIngredient(): void {
+    this.localTot += this.recipeIngredient.quantity;
     this.recipeIngredients.push(this.recipeIngredient);
     this.recipeIngredient = new RecipeIngredient();
   }
 
   removeIngredient(recipeIngredient: RecipeIngredient): void {
+    this.localTot = this.localTot - recipeIngredient.quantity;
     this.recipeIngredients.splice(this.recipeIngredients.indexOf(recipeIngredient), 1);
   }
 }

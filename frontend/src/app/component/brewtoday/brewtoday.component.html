@@ -13,7 +13,7 @@
   <br>
   <ul name="ingredient" id="ingredient">
     <li *ngFor='let ing of brewToday.ingredientQuantities ;let i = index'>
-      {{brewToday.ingredientQuantities[i].ingredientName}} = {{brewToday.ingredientQuantities[i].quantity}} </li>
+      {{brewToday.ingredientQuantities[i].ingredientName}}: {{brewToday.ingredientQuantities[i].quantity}} </li>
   </ul>
   <br *ngFor='let ing of brewToday.ingredientQuantities'>
   <p>Today's brew will produce {{brewQuantity/1000 | number}} L of beer! </p>
