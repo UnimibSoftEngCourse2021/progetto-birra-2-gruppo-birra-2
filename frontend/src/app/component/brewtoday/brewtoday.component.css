@@ -1,0 +1,10 @@
+body{
+ text-align: center;
+}
+
+#ingredient{
+  margin-bottom: 30px;
+  display: inline-block;
+  text-align: justify;
+  text-justify: inter-word;
+}

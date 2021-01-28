@@ -1,15 +1,17 @@
-<h1>WELCOME HOME!</h1>
+<body>
+  <h1>WELCOME HOME!</h1>
 
-<mat-spinner *ngIf="loading"></mat-spinner>
-<div *ngIf="!loading" id="recipes">
-  <h6>shared recipes from fellow brewers</h6>
-  <app-table
-    [actions]="actions"
-    [data]="recipes"
-    [formUrl]="'/recipeForm'"
-    [genericService]="recipeService"
-    [headers]="header"
-    [indexField]="'recipeId'"
-  >
-  </app-table>
-</div>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" id="recipes">
+    <h6>shared recipes from fellow brewers</h6>
+    <app-table
+      [actions]="actions"
+      [data]="recipes"
+      [formUrl]="'/recipeForm'"
+      [genericService]="recipeService"
+      [headers]="header"
+      [indexField]="'recipeId'"
+    >
+    </app-table>
+  </div>
+</body>
