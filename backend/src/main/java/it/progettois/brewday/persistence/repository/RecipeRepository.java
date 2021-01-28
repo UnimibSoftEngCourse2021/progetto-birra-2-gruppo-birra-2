@@ -13,7 +13,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
     List<Recipe> findAllByBrewer(Brewer brewer);
 
-    List<Recipe> findByShared(boolean shared);
+    List<Recipe> findBySharedIsTrue();
 
     void deleteByBrewer(Brewer brewer);
 

@@ -82,7 +82,7 @@ class RecipeControllerTest {
         return objectMapper.readValue(result.getResponse().getContentAsString(), Token.class).getToken();
     }
 
-    IngredientDto createIngredient(String username, String name, boolean shared, boolean save, double quantity) throws BrewerNotFoundException, NegativeQuantityException {
+    IngredientDto createIngredient(String username, String name, boolean shared, boolean save, double quantity) throws BrewerNotFoundException{
 
         IngredientDto ingredientDto = IngredientDto.builder()
                 .name(name)
@@ -98,8 +98,7 @@ class RecipeControllerTest {
     }
 
     // This method saves a new ingredient which is then used to create the recipeIngredientDto
-    RecipeIngredientDto createRecipeIngredient(String username, String name, boolean shared, boolean save, Double quantity) throws NegativeQuantityException,
-            BrewerNotFoundException {
+    RecipeIngredientDto createRecipeIngredient(String username, String name, boolean shared, boolean save, Double quantity) throws BrewerNotFoundException {
 
         IngredientDto ingredientDto = createIngredient(username, name, shared, save, quantity);
 
@@ -306,5 +305,29 @@ class RecipeControllerTest {
 
         deleteBrewer(brewerFatDto, token);
 
+    }
+
+    @Test
+    void getPublicRecipesTest() throws Exception {
+        BrewerFatDto brewerFatDto = createBrewer("TEST");
+        String token = performLogin("TEST");
+
+        this.mockMvc.perform(get("/recipe/shared")
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
+        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
+                "TEST1",false,true,23.0 ));
+
+        createRecipe(brewerFatDto.getUsername(), true, true, recipeIngredientDtoList);
+
+        this.mockMvc.perform(get("/recipe/shared")
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("data")));
+        deleteBrewer(brewerFatDto, token);
     }
 }
