@@ -1,5 +1,10 @@
 package it.progettois.brewday.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.progettois.brewday.common.dto.ToolDto;
 import it.progettois.brewday.common.exception.GenericNotFoundException;
 import it.progettois.brewday.common.exception.NegativeCapacityException;
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 
 @RestController
@@ -29,6 +35,13 @@ public class ToolController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
+    @Operation(summary = "Get a list of user tools")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of tools",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = List.class))}),
+            @ApiResponse(responseCode = "404", description = "Brewer not found",
+                    content = @Content)})
     @GetMapping("/tool")
     public ResponseEntity<Response> getTools(HttpServletRequest request) {
         try {
