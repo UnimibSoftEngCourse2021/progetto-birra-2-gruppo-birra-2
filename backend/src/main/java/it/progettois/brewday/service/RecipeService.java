@@ -88,7 +88,7 @@ public class RecipeService {
     public List<RecipeDto> getPublicRecipes() throws RecipeNotFoundException {
 
         List<Recipe> recipes = this.recipeRepository.findBySharedIsTrue();
-        if (recipes.size() == 0) throw new RecipeNotFoundException("There are no public recipes... YET");
+        if (recipes.isEmpty()) throw new RecipeNotFoundException("There are no public recipes... YET");
         recipes.forEach(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)));
         return recipes.stream().map(this.recipeToDtoConverter::convert).collect(Collectors.toList());
 
