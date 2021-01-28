@@ -52,8 +52,6 @@ export class RecipeFormComponent implements OnInit {
 
   onSubmit(): void {
     this.recipe.ingredients = this.recipeIngredients;
-    console.log('RICETTA: ' + this.recipe.description);
-
     if (this.isEdit) {
       this.recipeService.edit(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
