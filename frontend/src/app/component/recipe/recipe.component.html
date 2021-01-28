@@ -1,13 +1,15 @@
-<h1>MY RECIPES</h1>
-<mat-spinner *ngIf="loading"></mat-spinner>
-<div *ngIf="!loading">
-  <app-table
-    [actions]="actions"
-    [data]="recipes"
-    [formUrl]="'/recipeForm'"
-    [genericService]="recipeService"
-    [headers]="header"
-    [indexField]="'recipeId'"
-  >
-  </app-table>
-</div>
+<body>
+  <h1>MY RECIPES</h1>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <app-table
+      [actions]="actions"
+      [data]="recipes"
+      [formUrl]="'/recipeForm'"
+      [genericService]="recipeService"
+      [headers]="header"
+      [indexField]="'recipeId'"
+    >
+    </app-table>
+  </div>
+</body>
