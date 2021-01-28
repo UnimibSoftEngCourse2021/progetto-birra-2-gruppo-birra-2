@@ -55,9 +55,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource() {
         final CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200",
-                "http://ec2-18-156-174-69.eu-central-1.compute.amazonaws.com",
-                "http://brewday.progetto-is.com",
-                "http://brewday-dev.progetto-is.com"));
+                "https://brewday.progetto-is.com",
+                "https://brewday-dev.progetto-is.com"));
         configuration.setAllowedMethods(Arrays.asList("HEAD",
                 "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         // setAllowCredentials(true) is important, otherwise:
