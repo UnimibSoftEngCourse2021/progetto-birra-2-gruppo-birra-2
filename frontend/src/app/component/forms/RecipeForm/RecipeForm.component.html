@@ -42,7 +42,7 @@
         This recipe has no ingredient.
       </div>
       <div *ngFor="let ri of recipeIngredients">
-        {{getIngredientName(ri.ingredientId)}}: {{ri.quantity}}
+        {{getIngredientName(ri.ingredientId)}}: {{ri.quantity}} {{getIngredientUnit(ri.ingredientId)}} ({{ri.quantity/localTot*100 | number: '1.0-0'}}%)
         <button (click)="removeIngredient(ri)" class="btn btn-default"><i class="material-icons">close</i></button>
       </div>
 
