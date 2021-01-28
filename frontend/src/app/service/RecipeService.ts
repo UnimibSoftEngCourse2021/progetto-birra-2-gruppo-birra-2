@@ -40,6 +40,11 @@ export class RecipeService implements GenericService {
     return this.http.get<Response>(url);
   }
 
+  getPublicRecipes(): Observable<Response> {
+    const url = `${URLS[Actions.GET_PUBLIC_RECIPES].url}`;
+    return this.http.get<Response>(url);
+  }
+
   /*
 
     save(recipe: Recipe): Observable<Recipe> {
