@@ -10,6 +10,10 @@ spring:
     username: admin
     password: progetto-is-prod
 
+springdoc:
+  api-docs:
+    path: /api-docs
+
 feign:
   client:
     url:
