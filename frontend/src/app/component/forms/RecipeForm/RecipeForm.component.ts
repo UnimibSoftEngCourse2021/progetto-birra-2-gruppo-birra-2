@@ -52,20 +52,21 @@ export class RecipeFormComponent implements OnInit {
 
   onSubmit(): void {
     this.recipe.ingredients = this.recipeIngredients;
+    console.log('RICETTA: ' + this.recipe.description);
 
     if (this.isEdit) {
       this.recipeService.edit(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
+          alert('The recipe is not valid.');
         });
     } else {
       this.recipeService.save(this.recipe).subscribe(response => {
           this.router.navigate(['recipe']);
         },
         error => {
-          alert('The recipe is not valid, make sure the ingredients are selected correctly.');
+          alert('The recipe is not valid.');
         });
     }
   }

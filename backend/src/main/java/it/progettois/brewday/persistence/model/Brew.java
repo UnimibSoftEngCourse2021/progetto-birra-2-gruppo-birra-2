@@ -20,10 +20,11 @@ public class Brew {
 
     private String duration;
 
+    @Column(length = 1500)
     private String note;
 
     //Json representation of the recipe
-    @Column(length = 1000)
+    @Column(length = 2000)
     private String recipe;
 
     @ManyToOne
