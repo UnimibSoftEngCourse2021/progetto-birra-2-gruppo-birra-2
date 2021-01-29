@@ -22,10 +22,6 @@ export const COLUMNS = [
     label: 'Ingredients',
     fieldName: 'ingredientName',
     arrayField: 'ingredients'
-  },
-  {
-    label: 'Public',
-    fieldName: 'shared',
   }
 ];
 

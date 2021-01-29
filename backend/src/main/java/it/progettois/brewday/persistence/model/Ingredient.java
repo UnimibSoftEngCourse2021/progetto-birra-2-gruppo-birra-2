@@ -19,6 +19,7 @@ public class Ingredient {
 
     private String name;
 
+    @Column(length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)

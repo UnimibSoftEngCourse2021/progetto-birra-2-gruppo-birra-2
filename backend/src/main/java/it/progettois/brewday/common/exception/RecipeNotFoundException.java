@@ -9,4 +9,8 @@ public class RecipeNotFoundException extends GenericNotFoundException {
     public RecipeNotFoundException(int recipeId) {
         super("The recipe with id: " + recipeId + " does not exist.");
     }
+
+    public RecipeNotFoundException(String message) {
+        super(message);
+    }
 }

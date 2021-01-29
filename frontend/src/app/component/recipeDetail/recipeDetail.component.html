@@ -1,24 +1,23 @@
-<h1>RECIPE DETAIL</h1>
+<body>
+<button (click)="edit()" title="edit recipe" class="btn btn-default"><i class="material-icons">edit</i></button>
 
-<button (click)="edit()" class="btn btn-default"><i class="material-icons">edit</i></button>
+  <h1> {{recipe.name}} </h1> <br>
+  <h6> {{recipe.description}} </h6> <br>
+  Is Public: {{recipe.shared}} <br>
 
-Name: {{recipe.name}} <br>
-Description: {{recipe.description}} <br>
-Is Public: {{recipe.shared}} <br>
+  <h2>Ingredients: </h2><br>
 
-<h2>Ingredients: </h2><br>
+  <mat-spinner *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading">
+    <div *ngFor="let recipeIngredient of recipe.ingredients; let i = index">
 
-<mat-spinner *ngIf="loading"></mat-spinner>
-<div *ngIf="!loading">
-  <div *ngFor="let recipeIngredient of recipe.ingredients; let i = index">
+      Ingredient name: {{recipeIngredient.ingredientName}} <br>
+      Ingredient description: {{ingredients[i].description}} <br>
+      Ingredient type: {{ingredients[i].type}} <br>
 
-    Ingredient name: {{recipeIngredient.ingredientName}} <br>
-    Ingredient description: {{ingredients[i].description}} <br>
-    Ingredient type: {{ingredients[i].type}} <br>
-
-    Quantity per litre: {{recipeIngredient.quantity*1000 | number: '1.0-0'}} {{ingredients[i].unit}}<br>
-    <br>
+      Quantity per litre: {{recipeIngredient.quantity*1000 | number: '1.0-0'}} {{ingredients[i].unit}}<br>
+      <br>
+    </div>
+    <button (click)="goBack()" class="btn btn-primary">Go back</button>
   </div>
-  <button (click)="goBack()" class="btn btn-primary">Go back</button>
-</div>
-
+</body>

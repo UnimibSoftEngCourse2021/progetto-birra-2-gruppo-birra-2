@@ -1,3 +1,7 @@
 .txt:hover {
   text-decoration: underline !important;
 }
+
+.container {
+  text-align: center;
+}

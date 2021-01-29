@@ -72,13 +72,13 @@ jobs:
         script: |
           docker stop brewday
           docker rm brewday
-          docker image rm gruppobirra2/brewday
+          docker image rm gruppobirra2/brewday:dev
           docker run -p 8080:8080 -d --name brewday gruppobirra2/brewday:dev
           docker stop maximizebrewtoday
           docker rm maximizebrewtoday
-          docker image rm gruppobirra2/maximizebrewtoday
+          docker image rm gruppobirra2/maximizebrewtoday:dev
           docker run -p 5000:5000 -d --name maximizebrewtoday gruppobirra2/maximizebrewtoday:dev
           docker stop brewday-frontend
           docker rm brewday-frontend
-          docker image rm gruppobirra2/brewday-frontend
+          docker image rm gruppobirra2/brewday-frontend:dev
           docker run -p 80:4200 -d --name brewday-frontend gruppobirra2/brewday-frontend:dev

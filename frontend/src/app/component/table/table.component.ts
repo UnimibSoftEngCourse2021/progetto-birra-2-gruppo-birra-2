@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import {Router} from '@angular/router';
 import {GenericService} from '../../service/GenericService';
 import {StorageService} from '../../service/StorageService';
+import {Recipe} from '../../model/Recipe';
 
 @Component({
   selector: 'app-table',
@@ -44,9 +45,11 @@ export class TableComponent implements OnInit {
 
   searchText = '';
 
-  // Brew action variables
+  // Action variables
   brew = false;
   recipeId: number;
+  saveRecipe = false;
+
 
   constructor(private router: Router) {
   }
@@ -88,6 +91,9 @@ export class TableComponent implements OnInit {
         _.get(row, col.arrayField).forEach((element) => result += _.get(element, col.fieldName) + ',');
         return result;
       }
+    }
+    if (_.get(row, col.fieldName).length > 100){
+      return _.get(row, col.fieldName).substring(0, 150) + '...';
     }
     return _.get(row, col.fieldName);
   }
@@ -137,6 +143,17 @@ export class TableComponent implements OnInit {
     if (action.actionType === 'BREW') {
       this.recipeId = element[this.indexField];
       this.brew = true;
+    }
+
+    if (action.actionType === 'COPY_RECIPE') {
+      this.recipeId = element[this.indexField];
+      this.genericService.getById(this.recipeId).subscribe(response => {
+        const recipe: Recipe = response.data;
+        recipe.shared = 'false';
+        this.genericService.save(response.data).subscribe(() => {
+          alert('The recipe has been saved.');
+        });
+      });
     }
 
     if (action.actionType === 'DECREASE_STORAGE') {
