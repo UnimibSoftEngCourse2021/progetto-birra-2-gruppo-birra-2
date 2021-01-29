@@ -312,11 +312,6 @@ class RecipeControllerTest {
         BrewerFatDto brewerFatDto = createBrewer("TEST");
         String token = performLogin("TEST");
 
-        this.mockMvc.perform(get("/recipe/shared")
-                .header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-
         List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
         recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
                 "TEST1",false,true,23.0 ));
