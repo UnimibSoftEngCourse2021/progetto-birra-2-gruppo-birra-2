@@ -24,6 +24,8 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    window.localStorage.removeItem('token');
+    window.localStorage.removeItem('username');
     this.brewer.password = this.confirmPassword = this.brewer.email = '';
     this.brewer.maxBrew = 0;
   }
