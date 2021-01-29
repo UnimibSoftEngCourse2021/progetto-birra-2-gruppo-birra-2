@@ -39,6 +39,7 @@ import {StorageComponent} from './component/storage/storage.component';
 import {StorageService} from './service/StorageService';
 import {StorageFormComponent} from './component/forms/StorageForm/StorageForm.component';
 import {BrewDetailComponent} from './component/brewDetail/brewDetail.component';
+import {HttpErrorInterceptor} from './service/httperrorinterceptor.service';
 
 
 export function tokenGetter(): string {
@@ -96,6 +97,11 @@ export function tokenGetter(): string {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true
     }
   ],

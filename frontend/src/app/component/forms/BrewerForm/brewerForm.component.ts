@@ -31,7 +31,8 @@ export class BrewerFormComponent implements OnInit {
         this.brewer = resp.data;
       },
       error => {
-        alert(error);
+        alert(error.error.data);
+        window.location.href = '/login';
       });
 
   }
