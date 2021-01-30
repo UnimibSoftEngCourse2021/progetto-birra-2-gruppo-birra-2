@@ -26,7 +26,7 @@ L’applicazione permette in modo semplice ed intuitivo ad ogni utente registrat
 Per come si sta evolvendo il mondo dell’informatica e dell’ormai onnipresenza di software forniti come servizi, abbiamo deciso di implementare il nostro progetto secondo questa filosofia SAAS.
 
 La maniera più semplice e intuitiva quindi per poter fruire della nostra applicazione è quella di sfruttare la sua versione in cloud e accederci tramite l’url: https://brewday.progetto-is.com che porta direttamente alla nostra infrastruttura di produzione su AWS; è anche il modo principale con cui ci aspettiamo che i nostri ipotetici clienti utlizzeranno la nostra applicazione.
-
+E' disponibile un'utenza di servizio accessibile tramite username: admin, password: admin
 
 A scopo di test o di sviluppo è possibile eseguire in locale l’applicazione o parte di essa seguendo queste istruzioni:
  
