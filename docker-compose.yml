@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  database:
+    image: mysql:8.0.20
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=progetto-is
+      - MYSQL_DATABASE=progetto-is
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+  maximizebrew:
+    image: gruppobirra2/maximizebrewtoday:local
+    restart: always
+    ports:
+      - "5000:5000"
+  backend:
+    image: gruppobirra2/brewday:local
+    restart: always
+    depends_on:
+      - database
+      - maximizebrew
+    ports:
+      - "8080:8080"
+  frontend:
+    image: gruppobirra2/brewday-frontend:local
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+
+volumes:
+  db_data:
