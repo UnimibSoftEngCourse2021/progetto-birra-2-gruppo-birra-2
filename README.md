@@ -35,9 +35,9 @@ A scopo di test o di sviluppo è possibile eseguire in locale l’applicazione o
 
 ### Requisiti:
 
-Docker
+- Docker
 
-docker-compose
+- docker-compose
 
 Dalla root del progetto eseguire il comando 
 `docker-compose up`
@@ -54,9 +54,9 @@ Il database inzialmente sarà vuoto quindi la prima operazione da fare sarà que
 
 ### Requisiti: 
 
-Docker
+- Docker
 
-Maven
+- Maven
 
 ### Backend:
 
