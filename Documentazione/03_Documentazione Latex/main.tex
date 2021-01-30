@@ -375,4 +375,12 @@ Dalla root del progetto
 \item cd frontend
 \item docker build -t gruppobirra2/brewday-frontend:local .
 \end{enumerate}
+\subsection{Lanciare l'analisi della qualità del codice con SonarCloud}
+Dalla root del progetto
+\begin{enumerate}
+
+\item cd backend
+
+\item mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar\\ -Dsonar.projectKey=UnimibSoftEngCourse2021$_$progetto-birra-2-gruppo-birra-2`
+\end{enumerate}
 \end{document}
