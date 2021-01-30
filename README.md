@@ -50,7 +50,7 @@ Il database inzialmente sarà vuoto quindi la prima operazione da fare sarà que
 
  
 
-## Effettuare il build delle immagini docker direttamente dai sorgenti:
+## Effettuare il build delle immagini docker direttamente dai sorgenti (opzionale):
 
 ### Requisiti: 
 
