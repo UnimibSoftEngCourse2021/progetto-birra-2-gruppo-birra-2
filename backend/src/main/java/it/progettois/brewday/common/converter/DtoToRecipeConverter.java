@@ -2,7 +2,6 @@ package it.progettois.brewday.common.converter;
 
 import it.progettois.brewday.common.dto.RecipeDto;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.persistence.model.Brew;
 import it.progettois.brewday.persistence.model.Recipe;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
 import lombok.SneakyThrows;
