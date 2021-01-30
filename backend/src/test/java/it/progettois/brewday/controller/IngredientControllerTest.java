@@ -3,19 +3,15 @@ package it.progettois.brewday.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.progettois.brewday.common.constant.IngredientType;
 import it.progettois.brewday.common.constant.IngredientUnit;
-import it.progettois.brewday.common.dto.BrewerDto;
-import it.progettois.brewday.common.dto.BrewerFatDto;
-import it.progettois.brewday.common.dto.IngredientDto;
-import it.progettois.brewday.common.exception.AlreadyPresentException;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.exception.ConversionException;
-import it.progettois.brewday.common.exception.NegativeQuantityException;
+import it.progettois.brewday.common.dto.*;
+import it.progettois.brewday.common.exception.*;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.common.model.Token;
 import it.progettois.brewday.controller.common.model.UsernameAndPassword;
 import it.progettois.brewday.controller.response.Response;
 import it.progettois.brewday.service.BrewerService;
 import it.progettois.brewday.service.IngredientService;
+import it.progettois.brewday.service.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsString;
@@ -53,6 +51,9 @@ class IngredientControllerTest {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private RecipeService recipeService;
 
     BrewerFatDto createUser(String username) throws ConversionException, AlreadyPresentException {
 
@@ -83,7 +84,7 @@ class IngredientControllerTest {
         return objectMapper.readValue(result.getResponse().getContentAsString(), Token.class).getToken();
     }
 
-    IngredientDto createIngredient(String username, boolean shared, boolean save, double quantity) throws BrewerNotFoundException {
+    IngredientDto createIngredient(String username, boolean shared, boolean save, Double quantity) throws BrewerNotFoundException {
 
         IngredientDto ingredientDto = IngredientDto.builder()
                 .name("TEST")
@@ -96,6 +97,33 @@ class IngredientControllerTest {
                 .build();
 
         return save ? this.ingredientService.createIngredient(ingredientDto, username) : ingredientDto;
+    }
+
+    // This method saves a new ingredient which is then used to create the recipeIngredientDto
+    RecipeIngredientDto createRecipeIngredient(String username, String name, boolean shared, boolean save, Double quantity) throws BrewerNotFoundException {
+
+        IngredientDto ingredientDto = createIngredient(username, shared, save, quantity);
+
+        return RecipeIngredientDto.builder()
+                .ingredientId(ingredientDto.getIngredientId())
+                .ingredientName(name)
+                .quantity(quantity)
+                .build();
+
+    }
+
+    RecipeDto createRecipe(String username, boolean shared, boolean save, List<RecipeIngredientDto> ingredients) throws BrewerNotFoundException,
+            ConversionException, IngredientNotFoundException, NegativeQuantityException, RecipeIngredientNotFoundException {
+
+        RecipeDto recipeDto = RecipeDto.builder()
+                .name("TEST")
+                .description("TEST")
+                .username(username)
+                .shared(shared)
+                .ingredients(ingredients)
+                .build();
+
+        return save ? this.recipeService.saveRecipe(recipeDto, username) : recipeDto;
     }
 
     @Test
@@ -242,6 +270,27 @@ class IngredientControllerTest {
                 .header("Authorization", token))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+
+        List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
+        recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),
+                "TEST1", false, true, 23.0));
+        RecipeDto recipeDto = createRecipe(brewerFatDto.getUsername(), false, true, recipeIngredientDtoList);
+
+        response = new Response(recipeDto);
+
+        // Mi assicuro che la ricetta sia stata creata correttamente
+        this.mockMvc.perform(get("/recipe/" + recipeDto.getRecipeId())
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(equalTo(objectMapper.writeValueAsString(response))));
+
+        // Elimino l'ingrediente che è in una ricetta
+        this.mockMvc.perform(delete("/ingredient/" + recipeDto.getIngredients().get(0).getIngredientId())
+                .header("Authorization", token))
+                .andDo(print())
+                .andExpect(content().string(containsString("The ingredient is part of existing recipes.")));
 
         deleteBrewer(brewerFatDto, token);
     }

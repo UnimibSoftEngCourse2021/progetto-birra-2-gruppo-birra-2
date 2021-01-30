@@ -67,6 +67,10 @@ public class RecipeService {
         return recipe.getBrewer().equals(brewer);
     }
 
+    private Boolean brewerOwnsRecipe(String username, RecipeDto recipeDto) {
+        return recipeDto.getUsername().equals(username);
+    }
+
 
     public List<RecipeDto> getRecipes(String username) throws BrewerNotFoundException {
 
@@ -118,7 +122,7 @@ public class RecipeService {
         }
 
         //Copy ingredients from another brewers' recipe
-        if (Boolean.FALSE.equals(brewerOwnsRecipe(username, recipe))) {
+        if (Boolean.FALSE.equals(brewerOwnsRecipe(username, recipeDto))) {
             for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
                 recipe.setShared(false);
                 Ingredient notMyIngredient = this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
