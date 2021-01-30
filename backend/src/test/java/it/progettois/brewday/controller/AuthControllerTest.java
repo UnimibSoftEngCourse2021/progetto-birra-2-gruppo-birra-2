@@ -1,8 +1,7 @@
 package it.progettois.brewday.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.progettois.brewday.common.dto.BrewerDto;
-import it.progettois.brewday.common.dto.BrewerFatDto;
+import it.progettois.brewday.common.dto.*;
 import it.progettois.brewday.common.exception.BrewerNotFoundException;
 import it.progettois.brewday.common.exception.ConversionException;
 import it.progettois.brewday.common.exception.AlreadyPresentException;
@@ -20,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -94,8 +95,43 @@ class AuthControllerTest {
     }
 
     @Test
-    void registrationTest() {
+    void registrationTest() throws Exception {
 
+        BrewerDto brewer = new BrewerDto();
+        brewer.setUsername("TEST");
+        brewer.setPassword("TEST");
+        brewer.setName("TEST");
+        brewer.setEmail("TEST");
+        brewer.setMaxBrew(42);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        UsernameAndPassword usernameAndPassword = new UsernameAndPassword();
+        usernameAndPassword.setUsername("TEST");
+        usernameAndPassword.setPassword("TEST");
+
+        this.mockMvc.perform(post("/login")
+                .content(objectMapper.writeValueAsString(usernameAndPassword)))
+                .andExpect(status().isUnauthorized());
+
+        this.mockMvc.perform(post("/brewer")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(brewer)))
+                .andExpect(status().isOk());
+
+        String token = this.performLogin("TEST");
+
+        BrewerFatDto brewerFatDto = BrewerFatDto.builder()
+                .username(brewer.getUsername())
+                .name(brewer.getName())
+                .email(brewer.getEmail())
+                .maxBrew(brewer.getMaxBrew())
+                .tools(new ArrayList<>())
+                .recipes(new ArrayList<>())
+                .storage(new ArrayList<>())
+                .ingredients(new ArrayList<>())
+                .build();
+
+        deleteBrewer(brewerFatDto, token);
     }
 
 }
