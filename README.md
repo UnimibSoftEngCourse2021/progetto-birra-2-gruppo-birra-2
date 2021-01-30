@@ -4,4 +4,4 @@ Brew Day! è un’applicazione fornita in cloud secondo il modello SAAS (Softwar
 
 L’applicazione permette in modo semplice ed intuitivo ad ogni utente registrato di salvare, organizzare e tenere traccia delle proprie ricette, degli ingredienti utilizzati e della loro disponibilità nella propria dispensa e degli strumenti che ha a disposizione per produrre la propria birra.
 
-URL: https://brewday.progetto-is.com/
+URL: 
