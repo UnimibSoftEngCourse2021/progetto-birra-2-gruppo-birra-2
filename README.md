@@ -28,7 +28,7 @@ Per come si sta evolvendo il mondo dell’informatica e dell’ormai onnipresenz
 La maniera più semplice e intuitiva quindi per poter fruire della nostra applicazione è quella di sfruttare la sua versione in cloud e accederci tramite l’url: https://brewday.progetto-is.com che porta direttamente alla nostra infrastruttura di produzione su AWS; è anche il modo principale con cui ci aspettiamo che i nostri ipotetici clienti utlizzeranno la nostra applicazione.
 
 
-A scopo di test o di sviluppo è possibile eseguire in locale l’applicazione o parte di essa seguendo una delle seguenti modalità.
+A scopo di test o di sviluppo è possibile eseguire in locale l’applicazione o parte di essa seguendo queste istruzioni:
  
 
 ## Docker Compose
