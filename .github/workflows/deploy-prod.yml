@@ -54,7 +54,7 @@ jobs:
         push: true
         tags: gruppobirra2/brewday-frontend:prod
 
-    - name: Build and push
+    - name: Build and push maximizebrew
       id: docker_build_maximizebrew
       uses: docker/build-push-action@v2
       with:
@@ -63,7 +63,7 @@ jobs:
         push: true
         tags: gruppobirra2/maximizebrewtoday:prod
   
-    - name: ssh deploy dev
+    - name: ssh deploy prod
       uses: appleboy/ssh-action@master
       with:
         host: ec2-18-156-174-69.eu-central-1.compute.amazonaws.com
