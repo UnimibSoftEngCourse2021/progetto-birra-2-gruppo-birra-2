@@ -10,7 +10,7 @@
     </parent>
     <groupId>it.progettois</groupId>
     <artifactId>brewday</artifactId>
-    <version>0.0.1</version>
+    <version>1.1</version>
     <name>brewday</name>
     <description>brewday</description>
 

@@ -3,14 +3,15 @@ package it.progettois.brewday.service;
 import it.progettois.brewday.common.converter.DtoToIngredientConverter;
 import it.progettois.brewday.common.converter.IngredientToDtoConverter;
 import it.progettois.brewday.common.dto.IngredientDto;
-import it.progettois.brewday.common.exception.BrewerNotFoundException;
-import it.progettois.brewday.common.exception.EmptyStorageException;
-import it.progettois.brewday.common.exception.IngredientNotFoundException;
-import it.progettois.brewday.common.exception.NegativeQuantityException;
+import it.progettois.brewday.common.exception.*;
 import it.progettois.brewday.persistence.model.Brewer;
 import it.progettois.brewday.persistence.model.Ingredient;
+import it.progettois.brewday.persistence.model.Recipe;
+import it.progettois.brewday.persistence.model.RecipeIngredient;
 import it.progettois.brewday.persistence.repository.BrewerRepository;
 import it.progettois.brewday.persistence.repository.IngredientRepository;
+import it.progettois.brewday.persistence.repository.RecipeIngredientRepository;
+import it.progettois.brewday.persistence.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,18 +26,25 @@ public class IngredientService {
     private final BrewerRepository brewerRepository;
     private final IngredientToDtoConverter ingredientToDtoConverter;
     private final DtoToIngredientConverter dtoToIngredientConverter;
+    private final RecipeRepository recipeRepository;
+    private RecipeIngredientRepository recipeIngredientRepository;
 
     private static final String ITEM_FOR_EXCEPTION = "ingredient";
+
 
     @Autowired
     public IngredientService(IngredientRepository ingredientRepository,
                              BrewerRepository brewerRepository,
                              IngredientToDtoConverter ingredientToDtoConverter,
-                             DtoToIngredientConverter dtoToIngredientConverter) {
+                             DtoToIngredientConverter dtoToIngredientConverter,
+                             RecipeRepository recipeRepository,
+                             RecipeIngredientRepository recipeIngredientRepository) {
         this.ingredientRepository = ingredientRepository;
         this.brewerRepository = brewerRepository;
         this.ingredientToDtoConverter = ingredientToDtoConverter;
         this.dtoToIngredientConverter = dtoToIngredientConverter;
+        this.recipeRepository = recipeRepository;
+        this.recipeIngredientRepository = recipeIngredientRepository;
     }
 
     private Boolean brewerOwnsIngredient(String username, Integer id) throws BrewerNotFoundException,
@@ -48,6 +56,20 @@ public class IngredientService {
     private Boolean brewerOwnsIngredient(String username, Ingredient ingredient) throws BrewerNotFoundException {
         Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
         return ingredient.getBrewer().equals(brewer);
+    }
+
+    private Boolean ingredientInRecipe(String username, Integer ingredientId) throws BrewerNotFoundException {
+        Brewer brewer = this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new);
+        List<Recipe> brewerRecipes = this.recipeRepository.findAllByBrewer(brewer);
+        brewerRecipes.forEach(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)));
+        for (Recipe recipe : brewerRecipes) {
+            for (RecipeIngredient recipeIngredient : recipe.getIngredients()) {
+                if (recipeIngredient.getIngredient().getIngredientId().equals(ingredientId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public List<IngredientDto> getIngredients(String username) throws BrewerNotFoundException {
@@ -88,10 +110,14 @@ public class IngredientService {
     }
 
     public void deleteIngredient(String username, Integer id) throws AccessDeniedException, IngredientNotFoundException,
-            BrewerNotFoundException {
+            BrewerNotFoundException, IngredientNonDeletableException {
 
         if (Boolean.TRUE.equals(brewerOwnsIngredient(username, id))) {
-            this.ingredientRepository.deleteById(id);
+            if (Boolean.TRUE.equals(ingredientInRecipe(username, id))) {
+                throw new IngredientNonDeletableException("The ingredient is part of existing recipes.");
+            } else {
+                this.ingredientRepository.deleteById(id);
+            }
         } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
 
     }
