@@ -38,12 +38,8 @@ public class RecipeController {
     }
 
     @GetMapping("/recipe/shared")
-    public ResponseEntity<Response> getPublicRecipes(HttpServletRequest request) {
-        try {
+    public ResponseEntity<Response> getPublicRecipes() {
             return ResponseEntity.ok(new Response(this.recipeService.getPublicRecipes()));
-        } catch (GenericNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
-        }
     }
 
     @GetMapping("/recipe/{id}")

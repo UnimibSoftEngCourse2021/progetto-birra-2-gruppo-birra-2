@@ -111,7 +111,7 @@ class RecipeControllerTest {
     }
 
     RecipeDto createRecipe(String username, boolean shared, boolean save, List<RecipeIngredientDto> ingredients) throws BrewerNotFoundException,
-            ConversionException, IngredientNotFoundException, NegativeQuantityException {
+            ConversionException, IngredientNotFoundException, NegativeQuantityException, RecipeIngredientNotFoundException {
 
         RecipeDto recipeDto = RecipeDto.builder()
                 .name("TEST")
@@ -175,6 +175,8 @@ class RecipeControllerTest {
     void saveRecipe() throws Exception {
         BrewerFatDto brewerFatDto = createBrewer("TEST");
         String token = performLogin("TEST");
+        BrewerFatDto brewerFatDto2 = createBrewer("TEST2");
+        String token2 = performLogin("TEST2");
 
 
         List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
@@ -206,7 +208,17 @@ class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        // Submits other user recipe
+        this.mockMvc.perform(post("/recipe")
+                .contentType("application/json")
+                .content(objectMapper.writeValueAsString(recipeDto))
+                .header("Authorization", token2))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
         deleteBrewer(brewerFatDto, token);
+        deleteBrewer(brewerFatDto2, token2);
     }
 
     @Test
@@ -311,11 +323,6 @@ class RecipeControllerTest {
     void getPublicRecipesTest() throws Exception {
         BrewerFatDto brewerFatDto = createBrewer("TEST");
         String token = performLogin("TEST");
-
-        this.mockMvc.perform(get("/recipe/shared")
-                .header("Authorization", token))
-                .andDo(print())
-                .andExpect(status().isNotFound());
 
         List<RecipeIngredientDto> recipeIngredientDtoList = new ArrayList<>();
         recipeIngredientDtoList.add(createRecipeIngredient(brewerFatDto.getUsername(),

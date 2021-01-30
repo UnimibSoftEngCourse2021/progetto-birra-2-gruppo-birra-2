@@ -42,7 +42,7 @@ https://github.com/UnimibSoftEngCourse2021/progetto-birra-2-gruppo-birra-2/
 \subsubsection{Sviluppo}
 \item Frontend: https://brewday-dev.progetto-is.com/
 \item Backend: https://api-dev.progetto-is.com/
-\item MaximizeBrew: https://maximizebrew-dev.progetto-is.com/
+\item MaximizeBrew: http://maximizebrew-dev.progetto-is.com/
 \subsubsection{Produzione:}
 \item Frontend: https://brewday.progetto-is.com/
 \item Backend: https://api.progetto-is.com/
@@ -257,22 +257,42 @@ Il pattern repository viene utilizzato nel backend per implementare la separazio
 \subsection{MVC}
 Abbiamo costruito l'architettura sul modello MVC. Abbiamo scelto questo design pattern perchè può essere sviluppato contemporaneamente e consente il raggruppamento logico delle azioni correlate su un controller insieme. Le viste per uno specifico modello sono raggruppati insieme, il che ha una coesione davvero elevata quindi è molto stabile. È facile da sviluppare e modificare in futuro, a causa della separazione delle responsabilità. I componenti del sistema sono anche riusabili e possono essere utilizzate altrove senza e/o con poche modifiche.
 
-\subsection{Interceptor?}
+\subsection{Interceptor}
 Abbiamo utilizzato il pattern interceptor nella parte del frontend per poter interecettare ogni chiamata http effettuata dai vari service e inserire nella chiamata il token JWT necessario per l’autenticazione.\\
-L’utilizzo di questo pattern ci ha permesso di non dover ripetere la stessa logica in ogni chiamata e ci ha dato la possibilità di esegiure automaticamente e in maniera transaparente questa operazione su ogni servizio.
-\Section{Principi SOLID}
-\begin{itemize}
+L’utilizzo di questo pattern ci ha permesso di non dover ripetere la stessa logica in ogni chiamata e ci ha dato la possibilità di eseguire automaticamente e in maniera transaparente questa operazione su ogni servizio.  \\
+\\
+\section{Overview - Principi}
+Per la creazione della web application ci siamo basati su alcuni principi tra cui alcuni riportati qui sotto.
+\subsection{Principi SOLID}
+Abbiamo utilizzato i principi SOLID affinchè lo sviluppo della nostra web application fosse estendibile e manutenibile, in particolare nel contesto di  uno sviluppo agile e fondata sull’identificazione di code smell e sul refactoring.\\
+La parola SOLID è un acronimo che serve a ricordare tali principi (Single responsibility, Open-closed, Liskov substitution, Interface segregation, Dependency inversion).
+\subsubsection{Single-responsiblity principle}
+\textit{"A class should have one and only one reason to change, meaning that a class should have only one job."} \\
+Il principio afferma che ogni classe dovrebbe avere una ed una sola responsabilità, interamente incapsulata al suo interno. Non avendo delle istruzioni precise su come implementare questo principio, abbiamo dato un interpretazione personale sulle responsabilità di ciascuna classe. Esempio la classe Tool gestisce SOLO gli strumenti che ha il brewer nel suo inventario oppure la classe Ricetta che gestisce SOLO le ricette possedute.
+\subsubsection{Open-closed principle}
+\textit{"Objects or entities should be open for extension, but closed for modification."}
+Questo principio è stata utilizzata molto durante la progettazione, un esempio può essere la creazione di un eccezione universale "GenericNotFoundException" che è aperta alle estensioni (quali: NoBestRecipeException, IngredientNotFoundException, ToolNotFoundException,...) ma chiusa alle modifiche.
+\subsubsection{Liskov substitution principle}
+\textit{"Let q(x) be a property provable about objects of x of type T. Then q(y) should be provable for objects y of type S where S is a subtype of T.}
+\subsubsection{Interface segregation principle}
+\textit{"A client should never be forced to implement an interface that it doesn’t use or clients shouldn’t be forced to depend on methods they do not use."}\\
+Ci siamo basati su questo principio creando un interfaccia dinamica personale per il brewer a seconda delle sue esigenze.
+\subsubsection{Dependency Inversion Principle}
+\textit{"Entities must depend on abstractions not on concretions. It states that the high level module must not depend on the low level module, but they should depend on abstractions."}\\
+Abbiamo creato moduli di alto livello che non devono dipendere da quelli di basso livello, ad esempio, abbiamo creato una classe BrewerService che implementa i metodi findByUsername() e findbyEmail(), che recuperano le informazioni dell'utente dal livello di persistenza utilizzando una semplice implementazione repository. In questo caso, il tipo BrewerRepository è l'astrazione che BrewerService utilizza per consumare il componente di basso livello.
 
-\item Single Responsibility Principle
-\item Open/Closed Principle
-\item Liskov Substitution Principle
-\item Interface Segregation Principle
-\item Dependency Inversion
-\end{itemize}
-
-PHAME (Principles of Hierarchy, Abstraction, Modularisation, and Encapsulation)
-
- 
-
-Procedura di installazione (On-premises o saas)
+\subsection{PHAME} 
+Ci siamo anche appoggiati ai principi di progettazione del software PHAME, quali i principi di gerarchia, astrazione, modularizazzione e incapsulamento riassunta nella foto sottostante.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{PHAME.jpg}
+\label{fig:PHAME}
+\caption{Design Principles PHAME}
+\end{figure}
+\\
+\\
+\\
+\\
+\\
+****Procedura di installazione (On-premises o saas)***** - DA CONTINUARE
 \end{document}

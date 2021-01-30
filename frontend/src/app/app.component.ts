@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
 
 @Component({
@@ -6,29 +6,31 @@ import {NavigationStart, Router} from '@angular/router';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Brew Day!';
-  navBarVisible: boolean;
+  navBarVisible = false;
 
   constructor(private router: Router) {
+  }
 
-    router.events.subscribe((event) => {
+  ngOnInit(): void {
 
-      if (router.getCurrentNavigation().extractedUrl.toString() === '/register') {
+    this.router.events.subscribe((event) => {
+
+      if (this.router.getCurrentNavigation().extractedUrl.toString() === '/register') {
         return;
       }
 
-      if (router.getCurrentNavigation().extractedUrl.toString() !== '/login') {
+      if (this.router.getCurrentNavigation().extractedUrl.toString() !== '/login') {
         if (event instanceof NavigationStart) {
-          if (!window.localStorage.getItem('token')) {
+          if (!window.localStorage.getItem('token') || !window.localStorage.getItem('username')) {
+            this.navBarVisible = false;
             this.router.navigate(['login']);
             return;
           } else {
             this.navBarVisible = true;
           }
         }
-      } else {
-        this.navBarVisible = false;
       }
     });
   }

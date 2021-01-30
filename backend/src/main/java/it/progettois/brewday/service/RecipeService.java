@@ -33,8 +33,10 @@ public class RecipeService {
     private final DtoToRecipeConverter dtoToRecipeConverter;
     private final IngredientRepository ingredientRepository;
     private final IngredientToDtoConverter ingredientToDtoConverter;
+    private final IngredientService ingredientService;
 
     private static final String ITEM_FOR_EXCEPTION = "recipe";
+
 
     @Autowired
     public RecipeService(RecipeRepository recipeRepository,
@@ -43,7 +45,8 @@ public class RecipeService {
                          DtoToRecipeConverter dtoToRecipeConverter,
                          BrewerRepository brewerRepository,
                          IngredientRepository ingredientRepository,
-                         IngredientToDtoConverter ingredientToDtoConverter) {
+                         IngredientToDtoConverter ingredientToDtoConverter,
+                         IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
         this.recipeToDtoConverter = recipeToDtoConverter;
@@ -51,6 +54,7 @@ public class RecipeService {
         this.brewerRepository = brewerRepository;
         this.ingredientRepository = ingredientRepository;
         this.ingredientToDtoConverter = ingredientToDtoConverter;
+        this.ingredientService = ingredientService;
     }
 
     private Boolean brewerOwnsRecipe(String username, Integer id) throws BrewerNotFoundException, RecipeNotFoundException {
@@ -85,16 +89,15 @@ public class RecipeService {
         } else throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
     }
 
-    public List<RecipeDto> getPublicRecipes() throws RecipeNotFoundException {
+    public List<RecipeDto> getPublicRecipes(){
 
         List<Recipe> recipes = this.recipeRepository.findBySharedIsTrue();
-        if (recipes.isEmpty()) throw new RecipeNotFoundException("There are no public recipes... YET");
         recipes.forEach(recipe -> recipe.setIngredients(this.recipeIngredientRepository.findAllByRecipe(recipe)));
         return recipes.stream().map(this.recipeToDtoConverter::convert).collect(Collectors.toList());
 
     }
 
-    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException, ConversionException, IngredientNotFoundException, NegativeQuantityException {
+    public RecipeDto saveRecipe(RecipeDto recipeDto, String username) throws BrewerNotFoundException, ConversionException, IngredientNotFoundException, NegativeQuantityException, RecipeIngredientNotFoundException {
 
         if (recipeDto.getShared() == null) {
             recipeDto.setShared(false);
@@ -106,34 +109,35 @@ public class RecipeService {
             throw new ConversionException();
         }
 
-        recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
-        // Saves the recipe without ingredients
-        recipe = this.recipeRepository.save(recipe);
-
         List<RecipeIngredientDto> recipeIngredientsDto = recipeDto.getIngredients();
+
         Double totQuantity = 0.0;
         // Recipe Ingredients total quantity
         for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto){
             totQuantity += recipeIngredientDto.getQuantity();
         }
 
-        if(totQuantity > 0) {
-
-            List<RecipeIngredient> recipeIngredientsNew = new ArrayList<>();
-
+        //Copy ingredients from another brewers' recipe
+        if (Boolean.FALSE.equals(brewerOwnsRecipe(username, recipe))) {
             for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
-                if (recipeIngredientDto.getIngredientId() == null)
-                    throw new ConversionException();
-                RecipeIngredient recipeIngredient = new RecipeIngredient();
-                recipeIngredient.setRecipe(recipe);
-                recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
-                        .orElseThrow(IngredientNotFoundException::new));
-                Double ingredientRatio = recipeIngredientDto.getQuantity()/totQuantity;
-                recipeIngredient.setQuantity(ingredientRatio);
-                recipeIngredient.setOriginalTotQuantity(totQuantity);
-                recipeIngredientsNew.add(this.recipeIngredientRepository.save(recipeIngredient));
+                recipe.setShared(false);
+                Ingredient notMyIngredient = this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
+                        .orElseThrow(IngredientNotFoundException::new);
+                IngredientDto notMyIngredientDto = this.ingredientToDtoConverter.convert(notMyIngredient);
+                notMyIngredientDto.setIngredientId(null);
+                IngredientDto copiedIngredient = this.ingredientService.createIngredient(notMyIngredientDto, username);
+                recipeIngredientDto.setRecipeIngredientId(null);
+                recipeIngredientDto.setIngredientId(copiedIngredient.getIngredientId());
             }
-            recipe.setIngredients(recipeIngredientsNew);
+        }
+
+        recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
+
+        // Saves the recipe without ingredients
+        recipe = this.recipeRepository.save(recipe);
+
+        if(totQuantity > 0) {
+            recipe.setIngredients(saveRecipeIngredients(recipeIngredientsDto, totQuantity, recipe));
             return this.recipeToDtoConverter.convert(recipe);
         } else {
             throw new NegativeQuantityException();
@@ -153,7 +157,8 @@ public class RecipeService {
 
     }
 
-    public void editRecipe(String username, Integer id, RecipeDto recipeDto) throws AccessDeniedException, RecipeNotFoundException, BrewerNotFoundException, IngredientNotFoundException, RecipeIngredientNotFoundException, NegativeQuantityException {
+    public void editRecipe(String username, Integer id, RecipeDto recipeDto) throws AccessDeniedException, RecipeNotFoundException,
+            BrewerNotFoundException, IngredientNotFoundException, RecipeIngredientNotFoundException, NegativeQuantityException {
 
         if (Boolean.FALSE.equals(brewerOwnsRecipe(username, id))) {
             throw new AccessDeniedException(ITEM_FOR_EXCEPTION);
@@ -193,13 +198,13 @@ public class RecipeService {
         }
 
         if (totQuantity > 0) {
-            saveRecipeIngredients(recipeIngredientsNew, totQuantity, recipe);
+            recipe.setIngredients(saveRecipeIngredients(recipeIngredientsNew, totQuantity, recipe));
         } else throw new NegativeQuantityException();
     }
 
-    private void saveRecipeIngredients(List<RecipeIngredientDto> recipeIngredients, Double totQuantity, Recipe recipe) throws RecipeIngredientNotFoundException, IngredientNotFoundException {
-        for (RecipeIngredientDto recipeIngredientDto : recipeIngredients) {
-
+    private List<RecipeIngredient> saveRecipeIngredients(List<RecipeIngredientDto> recipeIngredientsDto, Double totQuantity, Recipe recipe) throws RecipeIngredientNotFoundException, IngredientNotFoundException {
+        List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+        for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
             RecipeIngredient recipeIngredient;
             if (recipeIngredientDto.getRecipeIngredientId() == null) {
                 recipeIngredient = new RecipeIngredient();
@@ -207,21 +212,25 @@ public class RecipeService {
                 recipeIngredient = this.recipeIngredientRepository.findById(recipeIngredientDto.getRecipeIngredientId())
                         .orElseThrow(RecipeIngredientNotFoundException::new);
             }
+
             Double ingredientRatio = recipeIngredientDto.getQuantity()/totQuantity;
             recipeIngredient.setQuantity(ingredientRatio);
             recipeIngredient.setOriginalTotQuantity(totQuantity);
             recipeIngredient.setIngredient(this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
                     .orElseThrow(IngredientNotFoundException::new));
+            if (Boolean.TRUE.equals(recipe.getShared())) {
+                Ingredient ingredient = recipeIngredient.getIngredient();
+                ingredient.setShared(true);
+            }
             recipeIngredient.setRecipe(recipe);
-
-            this.recipeIngredientRepository.save(recipeIngredient);
-
+            recipeIngredients.add(this.recipeIngredientRepository.save(recipeIngredient));
         }
+        return recipeIngredients;
     }
 
     public List<IngredientDto> getIngredientsByRecipe(String username, Integer id) throws BrewerNotFoundException, RecipeNotFoundException, AccessDeniedException, IngredientNotFoundException {
-
-        if (Boolean.TRUE.equals(brewerOwnsRecipe(username, id))) {
+        Recipe recipe = this.recipeRepository.findById(id).orElseThrow(RecipeNotFoundException::new);
+        if (Boolean.TRUE.equals(brewerOwnsRecipe(username, id)) || Boolean.TRUE.equals(recipe.getShared())) {
             List<IngredientDto> ingredientsDto = new ArrayList<>();
             List<RecipeIngredient> recipeIngredients = this.recipeIngredientRepository.findAllByRecipe_RecipeId(id);
 

@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     this.authService.login(loginPayload).subscribe(data => {
       window.localStorage.setItem('token', data.token);
       window.localStorage.setItem('username', this.loginForm.controls.username.value);
-      this.router.navigate(['index']);
+      window.location.href = '/';
 
     }, err => {
       this.invalidLogin = true;
