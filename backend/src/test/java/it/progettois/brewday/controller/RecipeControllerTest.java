@@ -111,7 +111,7 @@ class RecipeControllerTest {
     }
 
     RecipeDto createRecipe(String username, boolean shared, boolean save, List<RecipeIngredientDto> ingredients) throws BrewerNotFoundException,
-            ConversionException, IngredientNotFoundException, NegativeQuantityException {
+            ConversionException, IngredientNotFoundException, NegativeQuantityException, RecipeIngredientNotFoundException {
 
         RecipeDto recipeDto = RecipeDto.builder()
                 .name("TEST")
