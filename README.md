@@ -87,3 +87,12 @@ Dalla root del progetto
 `cd frontend`
 
 `docker build -t gruppobirra2/brewday-frontend:local .`
+
+
+## Lanciare l'analisi della qualità del codice con SonarCloud
+
+Dalla root del progetto
+
+`cd backend`
+
+`mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=UnimibSoftEngCourse2021_progetto-birra-2-gruppo-birra-2`
