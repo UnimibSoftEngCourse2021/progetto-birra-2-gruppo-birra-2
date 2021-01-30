@@ -2,6 +2,7 @@ package it.progettois.brewday.controller;
 
 import it.progettois.brewday.common.dto.IngredientDto;
 import it.progettois.brewday.common.exception.GenericNotFoundException;
+import it.progettois.brewday.common.exception.IngredientNonDeletableException;
 import it.progettois.brewday.common.exception.NegativeQuantityException;
 import it.progettois.brewday.common.util.JwtTokenUtil;
 import it.progettois.brewday.controller.response.Response;
@@ -67,6 +68,8 @@ public class IngredientController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new Response(e.getMessage()));
         } catch (GenericNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(e.getMessage()));
+        } catch (IngredientNonDeletableException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response(e.getMessage()));
         }
     }
 

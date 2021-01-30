@@ -108,7 +108,7 @@ export class TableComponent implements OnInit {
           .subscribe(() => {
               location.reload();
             },
-            error => console.log(error));
+            error => alert(error.error.data));
       }
     }
 
