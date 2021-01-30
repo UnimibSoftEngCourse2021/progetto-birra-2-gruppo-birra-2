@@ -33,6 +33,7 @@ public class RecipeService {
     private final DtoToRecipeConverter dtoToRecipeConverter;
     private final IngredientRepository ingredientRepository;
     private final IngredientToDtoConverter ingredientToDtoConverter;
+    private final IngredientService ingredientService;
 
     private static final String ITEM_FOR_EXCEPTION = "recipe";
 
@@ -44,7 +45,8 @@ public class RecipeService {
                          DtoToRecipeConverter dtoToRecipeConverter,
                          BrewerRepository brewerRepository,
                          IngredientRepository ingredientRepository,
-                         IngredientToDtoConverter ingredientToDtoConverter) {
+                         IngredientToDtoConverter ingredientToDtoConverter,
+                         IngredientService ingredientService) {
         this.recipeRepository = recipeRepository;
         this.recipeIngredientRepository = recipeIngredientRepository;
         this.recipeToDtoConverter = recipeToDtoConverter;
@@ -52,6 +54,7 @@ public class RecipeService {
         this.brewerRepository = brewerRepository;
         this.ingredientRepository = ingredientRepository;
         this.ingredientToDtoConverter = ingredientToDtoConverter;
+        this.ingredientService = ingredientService;
     }
 
     private Boolean brewerOwnsRecipe(String username, Integer id) throws BrewerNotFoundException, RecipeNotFoundException {
@@ -108,14 +111,30 @@ public class RecipeService {
 
         List<RecipeIngredientDto> recipeIngredientsDto = recipeDto.getIngredients();
 
-        recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
-        // Saves the recipe without ingredients
-        recipe = this.recipeRepository.save(recipe);
         Double totQuantity = 0.0;
         // Recipe Ingredients total quantity
         for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto){
             totQuantity += recipeIngredientDto.getQuantity();
         }
+
+        //Copy ingredients from another brewers' recipe
+        if (Boolean.FALSE.equals(brewerOwnsRecipe(username, recipe))) {
+            for (RecipeIngredientDto recipeIngredientDto : recipeIngredientsDto) {
+                recipe.setShared(false);
+                Ingredient notMyIngredient = this.ingredientRepository.findById(recipeIngredientDto.getIngredientId())
+                        .orElseThrow(IngredientNotFoundException::new);
+                IngredientDto notMyIngredientDto = this.ingredientToDtoConverter.convert(notMyIngredient);
+                notMyIngredientDto.setIngredientId(null);
+                IngredientDto copiedIngredient = this.ingredientService.createIngredient(notMyIngredientDto, username);
+                recipeIngredientDto.setRecipeIngredientId(null);
+                recipeIngredientDto.setIngredientId(copiedIngredient.getIngredientId());
+            }
+        }
+
+        recipe.setBrewer(this.brewerRepository.findByUsername(username).orElseThrow(BrewerNotFoundException::new));
+
+        // Saves the recipe without ingredients
+        recipe = this.recipeRepository.save(recipe);
 
         if(totQuantity > 0) {
             recipe.setIngredients(saveRecipeIngredients(recipeIngredientsDto, totQuantity, recipe));
